@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.oryxos</groupId>
+        <artifactId>oryxos</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>oryxos-memory</artifactId>
+    <name>OryxOS :: Memory</name>
+    <description>核心能力三：MemoryService 统一门面、LongTermMemory 可插拔后端、MemoryTools（save_memory / recall_memory）</description>
+
+    <dependencies>
+        <!-- Internal -->
+        <dependency>
+            <groupId>com.oryxos</groupId>
+            <artifactId>oryxos-core</artifactId>
+        </dependency>
+
+        <!-- Spring Boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+</project>

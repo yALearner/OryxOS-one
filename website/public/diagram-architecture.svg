@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 720" fill="none" font-family="'Inter', 'Segoe UI', system-ui, sans-serif">
+  <defs>
+    <linearGradient id="oryx-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#2dd4bf"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="720" fill="#ffffff"/>
+
+  <!-- ── Top: Orchestration Layer ── -->
+  <rect x="40" y="24" width="880" height="70" rx="10" fill="#fafafa" stroke="#e5e5e5" stroke-width="1.5"/>
+  <text x="480" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="#999999" letter-spacing="0.1em">编排层 · ORCHESTRATION（OryxOS 不做 · not our scope）</text>
+  <text x="480" y="74" text-anchor="middle" font-size="11" fill="#bbbbbb">Dify · Coze · 扣子 — 可视化 Workflow / 拖拽编排</text>
+
+  <!-- Arrow: Orchestration → OryxOS -->
+  <line x1="480" y1="94" x2="480" y2="118" stroke="#d4d4d4" stroke-width="1.5" marker-end="url(#arrow-gray)"/>
+  <defs><marker id="arrow-gray" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#d4d4d4"/></marker></defs>
+
+  <!-- ── Middle: OryxOS Runtime ── -->
+  <rect x="40" y="120" width="880" height="450" rx="12" fill="#f0fdfa" stroke="#2dd4bf" stroke-width="2"/>
+  <text x="480" y="148" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">OryxOS · Agent 运行时 · RUNTIME</text>
+
+  <!-- Trigger sources (left side) -->
+  <rect x="64" y="168" width="180" height="50" rx="8" fill="#ffffff" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="154" y="190" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a">💻 CLI（人推）</text>
+  <text x="154" y="207" text-anchor="middle" font-size="10" fill="#999999">oryxos chat</text>
+
+  <rect x="64" y="230" width="180" height="50" rx="8" fill="#ffffff" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="154" y="252" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a">🔗 REST API（人推）</text>
+  <text x="154" y="269" text-anchor="middle" font-size="10" fill="#999999">POST /api/v1/sessions/{id}/messages</text>
+
+  <rect x="64" y="292" width="180" height="50" rx="8" fill="#ffffff" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="154" y="314" text-anchor="middle" font-size="12" font-weight="600" fill="#0f172a">⏰ AgentScheduler（钟推）</text>
+  <text x="154" y="331" text-anchor="middle" font-size="10" fill="#999999">cron: "0 8 * * *"</text>
+
+  <!-- Arrows from triggers to AgentService -->
+  <line x1="244" y1="193" x2="300" y2="330" stroke="#d4d4d4" stroke-width="1"/>
+  <line x1="244" y1="255" x2="300" y2="340" stroke="#d4d4d4" stroke-width="1"/>
+  <line x1="244" y1="317" x2="300" y2="350" stroke="#d4d4d4" stroke-width="1"/>
+
+  <!-- AgentService box -->
+  <rect x="300" y="310" width="160" height="80" rx="10" fill="#0f172a" stroke="#0f172a" stroke-width="1.5"/>
+  <text x="380" y="342" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">AgentService</text>
+  <text x="380" y="360" text-anchor="middle" font-size="10" fill="#94a3b8">统一入口 · process()</text>
+  <text x="380" y="376" text-anchor="middle" font-size="10" fill="#94a3b8">三种触发源共用一个引擎</text>
+
+  <!-- ReActLoop (center) -->
+  <rect x="520" y="168" width="280" height="180" rx="12" fill="#ffffff" stroke="#2dd4bf" stroke-width="2"/>
+  <text x="660" y="194" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">🔄 ReActLoop</text>
+  <text x="660" y="214" text-anchor="middle" font-size="10" fill="#999999">自实现 · 不依赖 Spring AI Agent 抽象</text>
+
+  <!-- ReActLoop internal flow -->
+  <rect x="540" y="228" width="110" height="28" rx="5" fill="#f5f5f5" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="595" y="246" text-anchor="middle" font-size="10" fill="#333333">PromptBuilder 组装</text>
+
+  <rect x="660" y="228" width="120" height="28" rx="5" fill="#f5f5f5" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="720" y="246" text-anchor="middle" font-size="10" fill="#333333">ProviderService 调 LLM</text>
+
+  <rect x="540" y="264" width="110" height="28" rx="5" fill="#f5f5f5" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="595" y="282" text-anchor="middle" font-size="10" fill="#333333">ToolExecutor 执行</text>
+
+  <rect x="660" y="264" width="120" height="28" rx="5" fill="#f5f5f5" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="720" y="282" text-anchor="middle" font-size="10" fill="#333333">Sandbox.enforce()</text>
+
+  <text x="660" y="320" text-anchor="middle" font-size="9" fill="#bbbbbb">← 循环最多 max_iterations 次（默认 10）→</text>
+
+  <!-- Arrows from AgentService to ReActLoop -->
+  <line x1="460" y1="350" x2="520" y2="310" stroke="#d4d4d4" stroke-width="1.5" marker-end="url(#arrow-gray)"/>
+
+  <!-- Subsystems below ReActLoop -->
+  <!-- Provider -->
+  <rect x="520" y="370" width="130" height="70" rx="8" fill="#ffffff" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="585" y="394" text-anchor="middle" font-size="11" font-weight="600" fill="#0f172a">🔌 oryxos-provider</text>
+  <text x="585" y="412" text-anchor="middle" font-size="9" fill="#999999">Map&lt;name, ChatModel&gt;</text>
+  <text x="585" y="428" text-anchor="middle" font-size="9" fill="#999999">DeepSeek · Qwen · Kimi</text>
+
+  <!-- Memory -->
+  <rect x="662" y="370" width="130" height="70" rx="8" fill="#ffffff" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="727" y="394" text-anchor="middle" font-size="11" font-weight="600" fill="#0f172a">📝 oryxos-memory</text>
+  <text x="727" y="412" text-anchor="middle" font-size="9" fill="#999999">MemoryService 门面</text>
+  <text x="727" y="428" text-anchor="middle" font-size="9" fill="#999999">Markdown · SQLite · Mem0</text>
+
+  <!-- Tool -->
+  <rect x="520" y="452" width="130" height="70" rx="8" fill="#ffffff" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="585" y="476" text-anchor="middle" font-size="11" font-weight="600" fill="#0f172a">🔧 oryxos-tool</text>
+  <text x="585" y="494" text-anchor="middle" font-size="9" fill="#999999">9 内置 Tool · MCP Client</text>
+  <text x="585" y="510" text-anchor="middle" font-size="9" fill="#999999">Sandbox · NotifyTools</text>
+
+  <!-- Storage -->
+  <rect x="662" y="452" width="130" height="70" rx="8" fill="#ffffff" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="727" y="476" text-anchor="middle" font-size="11" font-weight="600" fill="#0f172a">💾 oryxos-storage</text>
+  <text x="727" y="494" text-anchor="middle" font-size="9" fill="#999999">SQLite · JPA</text>
+  <text x="727" y="510" text-anchor="middle" font-size="9" fill="#999999">tool_invocations · llm_calls</text>
+
+  <!-- Modules list (right side) -->
+  <rect x="64" y="400" width="200" height="28" rx="5" fill="#ffffff" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="164" y="418" text-anchor="middle" font-size="11" font-weight="600" fill="#0f172a">📦 oryxos-core</text>
+
+  <rect x="64" y="436" width="200" height="28" rx="5" fill="#ffffff" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="164" y="454" text-anchor="middle" font-size="11" font-weight="600" fill="#0f172a">🌐 oryxos-web</text>
+
+  <rect x="64" y="472" width="200" height="28" rx="5" fill="#ffffff" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="164" y="490" text-anchor="middle" font-size="11" font-weight="600" fill="#0f172a">💬 oryxos-channel-cli</text>
+
+  <rect x="64" y="508" width="200" height="28" rx="5" fill="#ffffff" stroke="#e5e5e5" stroke-width="1"/>
+  <text x="164" y="526" text-anchor="middle" font-size="11" font-weight="600" fill="#0f172a">⚡ oryxos-cli（Picocli）</text>
+
+  <rect x="64" y="544" width="200" height="28" rx="5" fill="#0f172a" stroke="#0f172a" stroke-width="1"/>
+  <text x="164" y="562" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">🚀 oryxos-boot（启动）</text>
+
+  <!-- ── Bottom: Framework Layer ── -->
+  <rect x="40" y="600" width="880" height="70" rx="10" fill="#fafafa" stroke="#e5e5e5" stroke-width="1.5"/>
+  <text x="480" y="628" text-anchor="middle" font-size="13" font-weight="700" fill="#999999" letter-spacing="0.1em">框架层 · FRAMEWORK（OryxOS 复用 · leverage）</text>
+  <text x="480" y="650" text-anchor="middle" font-size="11" fill="#bbbbbb">Spring AI Alibaba（LLM 协议转换 + @Tool schema 生成）· Spring Boot 3.x · Spring Data JPA · Picocli</text>
+
+  <!-- Arrow: OryxOS → Framework -->
+  <line x1="480" y1="570" x2="480" y2="600" stroke="#d4d4d4" stroke-width="1.5" marker-end="url(#arrow-gray)"/>
+
+  <!-- Legend -->
+  <rect x="680" y="640" width="12" height="12" rx="3" fill="#2dd4bf"/>
+  <text x="698" y="651" font-size="10" fill="#999999">OryxOS 自实现</text>
+  <rect x="790" y="640" width="12" height="12" rx="3" fill="#f5f5f5" stroke="#e5e5e5"/>
+  <text x="808" y="651" font-size="10" fill="#999999">复用/外部</text>
+</svg>

@@ -1,0 +1,23 @@
+# Maven
+target/
+*.jar
+*.war
+
+# npm / VitePress
+node_modules/
+website/.vitepress/dist/
+website/.vitepress/cache/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# OryxOS runtime
+.oryxos/

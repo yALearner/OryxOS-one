@@ -1,0 +1,17 @@
+/**
+ * OryxOS Core — 核心抽象和接口.
+ *
+ * <p>包含 OryxOS 运行时引擎的核心组件：
+ * <ul>
+ *   <li>{@code OryxTool} 接口 — 所有 Tool 的统一抽象</li>
+ *   <li>{@code ReActLoop} — 自实现 ReAct 循环引擎</li>
+ *   <li>{@code PromptBuilder} — Prompt 组装器</li>
+ *   <li>{@code ToolExecutor} — Tool 调度执行器</li>
+ *   <li>{@code AgentService} — 三种触发源共用的统一入口</li>
+ *   <li>{@code AgentScheduler} — 定时任务（钟推）</li>
+ *   <li>{@code AgentLoader} — 扫 .oryxos/agents/ 派生 Profile</li>
+ *   <li>{@code ContextLoader} — Bootstrap + AGENT.md 正文加载</li>
+ *   <li>{@code Profile} / {@code Session} — 核心数据模型</li>
+ * </ul>
+ */
+package com.oryxos.core;

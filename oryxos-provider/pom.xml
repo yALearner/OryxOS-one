@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.oryxos</groupId>
+        <artifactId>oryxos</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>oryxos-provider</artifactId>
+    <name>OryxOS :: Provider</name>
+    <description>核心能力一：ProviderService、Function Calling 适配、多 Provider 显式映射</description>
+
+    <dependencies>
+        <!-- Internal -->
+        <dependency>
+            <groupId>com.oryxos</groupId>
+            <artifactId>oryxos-core</artifactId>
+        </dependency>
+
+        <!-- Spring AI (LLM provider abstraction + protocol conversion) -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+</project>

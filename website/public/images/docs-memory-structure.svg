@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 280" font-family="Arial, sans-serif">
+  <defs>
+    <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.08"/></filter>
+  </defs>
+  <rect width="820" height="280" fill="#f8fafc" rx="6"/>
+  <rect x="0" y="0" width="820" height="32" fill="#1e293b" rx="6"/>
+  <rect x="0" y="16" width="820" height="16" fill="#1e293b"/>
+  <text x="410" y="21" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="bold">MEMORY.md 内部结构 — Markdown 分区设计</text>
+
+  <!-- File card -->
+  <rect x="40" y="50" width="740" height="220" rx="6" fill="#fff" stroke="#3b82f6" stroke-width="1.8" filter="url(#sh)"/>
+
+  <!-- Header -->
+  <rect x="40" y="50" width="740" height="28" rx="6" fill="#1d4ed8"/>
+  <rect x="40" y="64" width="740" height="14" fill="#1d4ed8"/>
+  <text x="60" y="69" font-size="10" font-weight="bold" fill="#fff">.oryxos/memory/MEMORY.md</text>
+
+  <!-- Core -->
+  <rect x="60" y="90" width="700" height="65" rx="5" fill="#dcfce7" stroke="#10b981" stroke-width="1.2"/>
+  <text x="80" y="112" font-size="11" font-weight="bold" fill="#15803d">## 核心记忆 (scope=CORE)</text>
+  <text x="80" y="130" font-size="9" fill="#166534">用户偏好 · 关键事实 · 项目背景 — 永远完整不截断</text>
+  <text x="80" y="148" font-size="8" fill="#047857">save_memory(content, scope="CORE") 写入此区  ·  启动时全量注入 system prompt</text>
+
+  <!-- Archival -->
+  <rect x="60" y="165" width="700" height="65" rx="5" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="80" y="187" font-size="11" font-weight="bold" fill="#b45309">## 归档记忆 (scope=ARCHIVAL)</text>
+  <text x="80" y="205" font-size="9" fill="#92400e">对话记录 · 历史决策 — 超长时截断，recallByKeyword 在此检索</text>
+  <text x="80" y="223" font-size="8" fill="#b45309">save_memory(content) 默认写入此区  ·  recall_memory 只在此区做关键词匹配</text>
+
+  <!-- Truncation -->
+  <rect x="60" y="240" width="700" height="24" rx="4" fill="#fecdd3" stroke="#e11d48" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="410" y="256" text-anchor="middle" font-size="9" font-weight="bold" fill="#be123c">⚠ 超 4000 字截断（仅作用在归档记忆区） — 核心记忆区永远完整</text>
+</svg>

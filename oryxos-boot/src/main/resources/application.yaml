@@ -1,0 +1,35 @@
+# ============================================================
+# OryxOS — Agent OS 统一底座
+# ============================================================
+# 核心阶段最小配置。Provider API key 等敏感配置通过环境变量注入。
+
+spring:
+  application:
+    name: oryxos
+  threads:
+    virtual:
+      enabled: true
+
+  # SQLite 数据源
+  datasource:
+    url: jdbc:sqlite:.oryxos/oryxos.db
+    driver-class-name: org.sqlite.JDBC
+
+  # JPA（SQLite 下禁用自动 DDL，手动维护建表脚本）
+  jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+  # Spring AI — 核心阶段通过环境变量注入真实 API key
+  ai:
+    openai:
+      api-key: unused
+      chat:
+        enabled: false
+
+# 日志
+logging:
+  level:
+    com.oryxos: INFO

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 310" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#64748b"/></marker>
+    <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.08"/></filter>
+  </defs>
+  <rect width="820" height="310" fill="#f8fafc" rx="6"/>
+  <rect x="0" y="0" width="820" height="32" fill="#1e293b" rx="6"/>
+  <rect x="0" y="16" width="820" height="16" fill="#1e293b"/>
+  <text x="410" y="21" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="bold">Provider 架构 — LLM 调用链路 (仅用协议转换 + @Tool schema 生成)</text>
+
+  <!-- ReActLoop -->
+  <rect x="20" y="105" width="110" height="42" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="75" y="123" text-anchor="middle" font-size="11" font-weight="bold" fill="#b45309">ReActLoop</text>
+  <text x="75" y="138" text-anchor="middle" font-size="8" fill="#92400e">引擎调用方</text>
+  <line x1="130" y1="126" x2="160" y2="126" stroke="#f59e0b" stroke-width="1.8" marker-end="url(#a)"/>
+
+  <!-- ProviderService -->
+  <rect x="165" y="60" width="300" height="90" rx="8" fill="#dcfce7" stroke="#10b981" stroke-width="2" filter="url(#sh)"/>
+  <text x="315" y="82" text-anchor="middle" font-size="13" font-weight="bold" fill="#15803d">ProviderService</text>
+  <line x1="180" y1="90" x2="450" y2="90" stroke="#bbf7d0" stroke-width="0.5"/>
+  <text x="180" y="108" font-size="9" fill="#166534">1. 按 Profile 选 Provider</text>
+  <text x="180" y="124" font-size="9" fill="#166534">2. Function Calling 格式适配</text>
+  <text x="180" y="140" font-size="9" fill="#166534">3. 调用 → 结果返回 → 写 llm_calls 审计表</text>
+
+  <line x1="465" y1="105" x2="500" y2="105" stroke="#10b981" stroke-width="1.8" marker-end="url(#a)"/>
+
+  <!-- Explicit Map -->
+  <rect x="330" y="165" width="190" height="55" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="425" y="186" text-anchor="middle" font-size="10" font-weight="bold" fill="#1d4ed8">Provider Name → ChatModel</text>
+  <text x="425" y="202" text-anchor="middle" font-size="9" fill="#1e40af">显式映射（非类型扫描）</text>
+  <text x="425" y="215" text-anchor="middle" font-size="8" fill="#3b82f6">deepseek / qwen / kimi / zhipu / hunyuan</text>
+  <line x1="425" y1="165" x2="425" y2="152" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#a)"/>
+
+  <!-- ChatModels -->
+  <rect x="510" y="55" width="115" height="30" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" filter="url(#sh)"/>
+  <text x="567" y="74" text-anchor="middle" font-size="9" font-weight="bold" fill="#475569">DeepSeek</text>
+  <rect x="510" y="91" width="115" height="30" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="567" y="110" text-anchor="middle" font-size="9" font-weight="bold" fill="#475569">Kimi</text>
+  <rect x="510" y="127" width="115" height="30" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="567" y="146" text-anchor="middle" font-size="9" font-weight="bold" fill="#475569">Qwen</text>
+  <rect x="510" y="163" width="115" height="30" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="567" y="182" text-anchor="middle" font-size="9" font-weight="bold" fill="#475569">Zhipu</text>
+
+  <!-- Anti-pattern -->
+  <rect x="20" y="165" width="290" height="55" rx="6" fill="#fecdd3" stroke="#e11d48" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="165" y="186" text-anchor="middle" font-size="10" font-weight="bold" fill="#be123c">🚫 禁止：扫描容器里所有 ChatModel</text>
+  <text x="165" y="202" text-anchor="middle" font-size="9" fill="#be123c">Bean 类型相同无法区分 Provider</text>
+  <text x="165" y="216" text-anchor="middle" font-size="9" fill="#be123c">→ 必须显式映射 Map&lt;String, ChatModel&gt;</text>
+
+  <!-- Spring AI Alibaba -->
+  <rect x="20" y="240" width="780" height="36" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="5,3"/>
+  <text x="410" y="262" text-anchor="middle" font-size="11" font-weight="bold" fill="#475569">Spring AI Alibaba — 协议转换层 (仅用此层)</text>
+  <text x="410" y="272" text-anchor="middle" font-size="8" fill="#94a3b8">OpenAI 协议 ↔ Anthropic 协议 ↔ Gemini 协议 ↔ 各家私有协议</text>
+
+  <line x1="410" y1="220" x2="410" y2="238" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#a)"/>
+
+  <!-- External APIs -->
+  <rect x="100" y="282" width="620" height="22" rx="5" fill="#e2e8f0"/>
+  <text x="410" y="297" text-anchor="middle" font-size="10" fill="#475569">各家 LLM API（DeepSeek API · Kimi API · 通义 API · 文心 API · …）</text>
+</svg>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.oryxos</groupId>
+        <artifactId>oryxos</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>oryxos-web</artifactId>
+    <name>OryxOS :: Web</name>
+    <description>核心能力五：WebServer、6 个 ApiController、GlobalExceptionHandler、OpenAPI 文档</description>
+
+    <dependencies>
+        <!-- Internal -->
+        <dependency>
+            <groupId>com.oryxos</groupId>
+            <artifactId>oryxos-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oryxos</groupId>
+            <artifactId>oryxos-provider</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oryxos</groupId>
+            <artifactId>oryxos-memory</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oryxos</groupId>
+            <artifactId>oryxos-tool</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oryxos</groupId>
+            <artifactId>oryxos-storage</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Web (Spring MVC + Virtual Thread) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- SpringDoc OpenAPI -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+    </dependencies>
+</project>

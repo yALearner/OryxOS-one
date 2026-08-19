@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#64748b"/></marker>
+    <marker id="aRed" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#e11d48"/></marker>
+    <marker id="aGray" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#94a3b8"/></marker>
+    <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.08"/></filter>
+  </defs>
+  <rect width="820" height="300" fill="#f8fafc" rx="6"/>
+  <rect x="0" y="0" width="820" height="32" fill="#1e293b" rx="6"/>
+  <rect x="0" y="16" width="820" height="16" fill="#1e293b"/>
+  <text x="410" y="21" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="bold">Sandbox 校验 — 接口先行 · 三层白名单</text>
+
+  <!-- Input -->
+  <rect x="30" y="55" width="120" height="40" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="90" y="73" text-anchor="middle" font-size="10" font-weight="bold" fill="#1d4ed8">Tool 调用请求</text>
+  <text x="90" y="88" text-anchor="middle" font-size="8" fill="#1e40af">read_file / shell / http_get</text>
+  <line x1="150" y1="75" x2="180" y2="75" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- Sandbox interface -->
+  <rect x="185" y="50" width="240" height="140" rx="8" fill="#dcfce7" stroke="#10b981" stroke-width="2" filter="url(#sh)"/>
+  <text x="305" y="74" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">Sandbox.enforce(action)</text>
+  <line x1="200" y1="82" x2="410" y2="82" stroke="#bbf7d0" stroke-width="0.5"/>
+  <text x="200" y="100" font-size="9" fill="#166534">接口：表达「在受控环境里执行一个动作」</text>
+  <text x="200" y="118" font-size="9" fill="#166534">不携带实现细节（不出现白名单/容器/VM）</text>
+  <text x="200" y="140" font-size="8" fill="#047857">ActionType: FILE_READ / FILE_WRITE / SHELL / HTTP</text>
+  <text x="200" y="158" font-size="8" fill="#047857">参数：path / command / url / headers / body</text>
+  <text x="200" y="176" font-size="8" fill="#047857">返回：void（校验通过）或 throw SandboxViolationException</text>
+
+  <!-- Three checks on right -->
+  <line x1="425" y1="150" x2="460" y2="150" stroke="#64748b" stroke-width="1.2" marker-end="url(#a)"/>
+
+  <rect x="465" y="55" width="180" height="42" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="555" y="73" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">文件路径白名单</text>
+  <text x="555" y="90" text-anchor="middle" font-size="8" fill="#92400e">normalize() + 防路径穿越</text>
+
+  <rect x="465" y="108" width="180" height="42" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="555" y="126" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">Shell 命令白名单</text>
+  <text x="555" y="143" text-anchor="middle" font-size="8" fill="#92400e">首个 token 比对</text>
+
+  <rect x="465" y="161" width="180" height="42" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="555" y="179" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">HTTP 域名白名单</text>
+  <text x="555" y="196" text-anchor="middle" font-size="8" fill="#92400e">host 通配符匹配</text>
+
+  <!-- Result: denied -->
+  <line x1="555" y1="203" x2="555" y2="218" stroke="#e11d48" stroke-width="1.2" marker-end="url(#aRed)"/>
+  <rect x="465" y="222" width="180" height="28" rx="6" fill="#fecdd3" stroke="#e11d48" stroke-width="1"/>
+  <text x="555" y="241" text-anchor="middle" font-size="9" font-weight="bold" fill="#be123c">拒绝 → SandboxViolationException</text>
+
+  <!-- WhitelistSandbox below -->
+  <rect x="185" y="200" width="240" height="40" rx="6" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="305" y="218" text-anchor="middle" font-size="10" font-weight="bold" fill="#6d28d9">WhitelistSandbox</text>
+  <text x="305" y="234" text-anchor="middle" font-size="8" fill="#7c3aed">核心阶段唯一实现</text>
+  <line x1="305" y1="190" x2="305" y2="198" stroke="#8b5cf6" stroke-width="1.2"/>
+
+  <!-- Future expansion -->
+  <rect x="30" y="130" width="120" height="55" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="5,3"/>
+  <text x="90" y="152" text-anchor="middle" font-size="9" font-weight="bold" fill="#94a3b8">扩展阶段</text>
+  <text x="90" y="168" text-anchor="middle" font-size="8" fill="#94a3b8">容器隔离</text>
+  <text x="90" y="182" text-anchor="middle" font-size="8" fill="#94a3b8">microVM</text>
+  <line x1="150" y1="157" x2="183" y2="157" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#aGray)"/>
+
+  <!-- Future adapters -->
+  <rect x="460" y="260" width="330" height="26" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8" stroke-dasharray="3,2"/>
+  <text x="625" y="278" text-anchor="middle" font-size="8" fill="#94a3b8">扩展阶段：容器隔离 / microVM / 自定义 Sandbox 实现</text>
+</svg>

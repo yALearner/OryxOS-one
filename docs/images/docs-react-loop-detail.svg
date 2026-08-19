@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 430" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#64748b"/></marker>
+    <marker id="aGreen" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#10b981"/></marker>
+    <marker id="aRed" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#e11d48"/></marker>
+    <marker id="aAmber" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#f59e0b"/></marker>
+    <marker id="aBlue" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#3b82f6"/></marker>
+    <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.08"/></filter>
+  </defs>
+  <rect width="880" height="430" fill="#f8fafc" rx="6"/>
+
+  <!-- Title -->
+  <rect x="0" y="0" width="880" height="32" fill="#1e293b" rx="6"/>
+  <rect x="0" y="16" width="880" height="16" fill="#1e293b"/>
+  <text x="440" y="21" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="bold">ReAct Loop — Reason → Act → Observe（自实现，~数十行 Java）</text>
+
+  <!-- ============= LEFT: PROMPT 5-PART COMPOSITION ============= -->
+  <rect x="12" y="42" width="250" height="215" rx="6" fill="#fff" stroke="#e2e8f0" stroke-width="1" filter="url(#sh)"/>
+  <rect x="12" y="42" width="250" height="26" rx="6" fill="#1d4ed8"/>
+  <rect x="12" y="55" width="250" height="13" fill="#1d4ed8"/>
+  <text x="137" y="60" text-anchor="middle" font-size="10" font-weight="bold" fill="#fff">PromptBuilder 组装的 5 部分</text>
+
+  <!-- Part 1 -->
+  <rect x="20" y="76" width="234" height="36" rx="4" fill="#eff6ff"/>
+  <text x="28" y="92" font-size="9" font-weight="bold" fill="#1d4ed8">① System Prompt</text>
+  <text x="140" y="92" font-size="8" fill="#3b82f6">← ContextLoader</text>
+  <text x="28" y="106" font-size="7" fill="#64748b">AGENT.md 正文 + Skill 元数据(L1) + Bootstrap</text>
+
+  <!-- Part 2 -->
+  <rect x="20" y="116" width="234" height="30" rx="4" fill="#f0fdf4"/>
+  <text x="28" y="132" font-size="9" font-weight="bold" fill="#15803d">② 长期记忆</text>
+  <text x="120" y="132" font-size="8" fill="#10b981">← MemoryService</text>
+  <text x="28" y="144" font-size="7" fill="#64748b">MEMORY.md 全文 · 每次重新读取不缓存</text>
+
+  <!-- Part 3 -->
+  <rect x="20" y="150" width="234" height="30" rx="4" fill="#fffbeb"/>
+  <text x="28" y="166" font-size="9" font-weight="bold" fill="#b45309">③ 对话历史</text>
+  <text x="115" y="166" font-size="8" fill="#f59e0b">← SessionManager</text>
+  <text x="28" y="178" font-size="7" fill="#64748b">最近 max_history_turns 轮（默认 20）</text>
+
+  <!-- Part 4 -->
+  <rect x="20" y="184" width="234" height="30" rx="4" fill="#f5f3ff"/>
+  <text x="28" y="200" font-size="9" font-weight="bold" fill="#6d28d9">④ 当前日期时间</text>
+  <text x="130" y="200" font-size="8" fill="#8b5cf6">← PromptBuilder</text>
+  <text x="28" y="212" font-size="7" fill="#64748b">LLM 自己不知道今天几号，必须注入</text>
+
+  <!-- Part 5 -->
+  <rect x="20" y="218" width="234" height="30" rx="4" fill="#fdf2f8"/>
+  <text x="28" y="234" font-size="9" font-weight="bold" fill="#be123c">⑤ 可用 Tool 列表</text>
+  <text x="130" y="234" font-size="8" fill="#f43f5e">← ToolRegistry</text>
+  <text x="28" y="246" font-size="7" fill="#64748b">Function Calling 格式 · OryxTool → JSON Schema</text>
+
+  <!-- Arrow to center flow -->
+  <line x1="262" y1="150" x2="295" y2="150" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#aBlue)"/>
+
+  <!-- ============= CENTER: MAIN LOOP FLOW ============= -->
+
+  <!-- Step 0: Entry -->
+  <rect x="315" y="48" width="190" height="28" rx="14" fill="#334155" filter="url(#sh)"/>
+  <text x="410" y="67" text-anchor="middle" font-size="10" font-weight="bold" fill="#fff">用户消息进入</text>
+  <line x1="410" y1="76" x2="410" y2="90" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- Step 1: Append to History -->
+  <rect x="300" y="94" width="220" height="28" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1" filter="url(#sh)"/>
+  <text x="410" y="113" text-anchor="middle" font-size="9" fill="#1d4ed8">1. 追加消息到 Session 对话历史</text>
+  <line x1="410" y1="122" x2="410" y2="136" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- Step 2: PromptBuilder -->
+  <rect x="300" y="140" width="220" height="28" rx="5" fill="#fef3c7" stroke="#f59e0b" stroke-width="1" filter="url(#sh)"/>
+  <text x="410" y="159" text-anchor="middle" font-size="9" fill="#b45309">2. PromptBuilder 组装 Prompt（5 部分）</text>
+  <line x1="410" y1="168" x2="410" y2="182" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- Reason (LLM) -->
+  <rect x="300" y="186" width="220" height="38" rx="6" fill="#dcfce7" stroke="#10b981" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="410" y="204" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">🧠 Reason · ProviderService 调 LLM</text>
+  <text x="410" y="219" text-anchor="middle" font-size="7" fill="#166534">写 llm_calls 审计表</text>
+
+  <!-- Decision diamond -->
+  <line x1="410" y1="224" x2="410" y2="242" stroke="#e11d48" stroke-width="1.5" marker-end="url(#aRed)"/>
+  <polygon points="410,245 455,270 410,295 365,270" fill="#fecdd3" stroke="#e11d48" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="410" y="273" text-anchor="middle" font-size="9" font-weight="bold" fill="#be123c">有 Tool</text>
+  <text x="410" y="284" text-anchor="middle" font-size="9" font-weight="bold" fill="#be123c">Call?</text>
+
+  <!-- No → Return -->
+  <line x1="410" y1="295" x2="410" y2="312" stroke="#10b981" stroke-width="1.5" marker-end="url(#aGreen)"/>
+  <text x="358" y="308" font-size="8" fill="#10b981">否</text>
+  <rect x="315" y="316" width="190" height="26" rx="13" fill="#10b981" filter="url(#sh)"/>
+  <text x="410" y="334" text-anchor="middle" font-size="10" font-weight="bold" fill="#fff">返回最终响应</text>
+
+  <!-- Yes → Act + Observe -->
+  <line x1="455" y1="270" x2="515" y2="270" stroke="#e11d48" stroke-width="1.5" marker-end="url(#aRed)"/>
+  <text x="475" y="263" font-size="8" fill="#e11d48">是</text>
+
+  <!-- Act -->
+  <rect x="520" y="186" width="115" height="38" rx="6" fill="#dcfce7" stroke="#10b981" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="577" y="204" text-anchor="middle" font-size="9" font-weight="bold" fill="#15803d">🔨 Act · ToolExecutor</text>
+  <text x="577" y="219" text-anchor="middle" font-size="7" fill="#166534">Sandbox → 执行 → 审计</text>
+
+  <!-- Observe -->
+  <line x1="577" y1="224" x2="577" y2="242" stroke="#64748b" stroke-width="1.2" marker-end="url(#a)"/>
+  <rect x="520" y="246" width="115" height="32" rx="6" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="577" y="260" text-anchor="middle" font-size="9" font-weight="bold" fill="#6d28d9">👁 Observe</text>
+  <text x="577" y="274" text-anchor="middle" font-size="7" fill="#7c3aed">结果追加到历史</text>
+
+  <!-- Loop back arrow -->
+  <path d="M577,278 L577,345 Q577,370 550,370 L170,370 Q120,370 120,340 L120,145 Q120,125 140,125 L298,125" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-dasharray="7,4" marker-end="url(#aAmber)"/>
+  <text x="123" y="360" font-size="9" font-weight="bold" fill="#f59e0b">⟲ 回到第 2 步继续循环（最多 max_iterations=10 次）</text>
+
+  <!-- ============= RIGHT: KEY CONSTRAINTS ============= -->
+  <rect x="655" y="42" width="213" height="340" rx="6" fill="#fff" stroke="#e2e8f0" stroke-width="1" filter="url(#sh)"/>
+  <rect x="655" y="42" width="213" height="26" rx="6" fill="#be123c"/>
+  <rect x="655" y="55" width="213" height="13" fill="#be123c"/>
+  <text x="761" y="60" text-anchor="middle" font-size="10" font-weight="bold" fill="#fff">⚠ 不可违背的约束（Constitution）</text>
+
+  <text x="665" y="84" font-size="8" font-weight="bold" fill="#be123c">原则一：自实现 ReAct Loop</text>
+  <text x="675" y="98" font-size="7" fill="#64748b">不得使用 Spring AI 的 Agent 抽象</text>
+  <text x="675" y="110" font-size="7" fill="#64748b">ChatClient.prompt().call() 自动工具执行</text>
+
+  <line x1="665" y1="117" x2="858" y2="117" stroke="#f1f5f9" stroke-width="0.5"/>
+
+  <text x="665" y="130" font-size="8" font-weight="bold" fill="#be123c">原则二：Spring AI 只用两件事</text>
+  <text x="675" y="144" font-size="7" fill="#64748b">1. LLM Provider 协议转换</text>
+  <text x="675" y="156" font-size="7" fill="#64748b">2. @Tool 注解的 JSON Schema 生成</text>
+  <text x="675" y="170" font-size="7" fill="#e11d48">必须禁用自动 tool 执行（否则调两次）</text>
+
+  <line x1="665" y1="177" x2="858" y2="177" stroke="#f1f5f9" stroke-width="0.5"/>
+
+  <text x="665" y="190" font-size="8" font-weight="bold" fill="#be123c">原则三：Provider 显式映射</text>
+  <text x="675" y="204" font-size="7" fill="#64748b">Map&lt;String, ChatModel&gt; 显式映射</text>
+  <text x="675" y="216" font-size="7" fill="#64748b">不得靠扫描 Bean 类型区分 Provider</text>
+
+  <line x1="665" y1="223" x2="858" y2="223" stroke="#f1f5f9" stroke-width="0.5"/>
+
+  <text x="665" y="236" font-size="8" font-weight="bold" fill="#be123c">原则五：审计 Day One 写入</text>
+  <text x="675" y="250" font-size="7" fill="#64748b">llm_calls 表 + tool_invocations 表</text>
+  <text x="675" y="262" font-size="7" fill="#64748b">从第一天就落库，不以日志代替</text>
+
+  <line x1="665" y1="269" x2="858" y2="269" stroke="#f1f5f9" stroke-width="0.5"/>
+
+  <text x="665" y="282" font-size="8" font-weight="bold" fill="#be123c">原则七：同步执行模型</text>
+  <text x="675" y="296" font-size="7" fill="#64748b">全程同步阻塞 + Virtual Thread 并发</text>
+  <text x="675" y="308" font-size="7" fill="#64748b">不引入 Reactor / WebFlux / CompletableFuture</text>
+
+  <line x1="665" y1="315" x2="858" y2="315" stroke="#f1f5f9" stroke-width="0.5"/>
+
+  <text x="665" y="328" font-size="8" font-weight="bold" fill="#be123c">原则六：不使用 SecurityManager</text>
+  <text x="675" y="342" font-size="7" fill="#64748b">Sandbox 接口先行 — enforce(action)</text>
+  <text x="675" y="354" font-size="7" fill="#64748b">WhitelistSandbox 三层白名单校验</text>
+
+  <line x1="665" y1="361" x2="858" y2="361" stroke="#f1f5f9" stroke-width="0.5"/>
+
+  <text x="665" y="374" font-size="8" fill="#94a3b8">原则八：三触发源共用一个引擎</text>
+  <text x="675" y="386" font-size="7" fill="#94a3b8">CLI/Web/Scheduler → AgentService.process()</text>
+
+  <!-- Bottom bar: Tool flow annotation -->
+  <rect x="300" y="350" width="220" height="36" rx="5" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="410" y="365" text-anchor="middle" font-size="8" fill="#64748b">ToolExecutor 执行细节：</text>
+  <text x="410" y="380" text-anchor="middle" font-size="7" fill="#94a3b8">Sandbox.enforce() → 内置进程内/MCP JSON-RPC/@Tool直调 → 写 tool_invocations</text>
+
+  <!-- Bottom attribution -->
+  <text x="440" y="422" text-anchor="middle" font-size="7" fill="#94a3b8">依据：CLAUDE.md · ReAct Loop 工作机制 · 9 条 Constitution 原则</text>
+</svg>

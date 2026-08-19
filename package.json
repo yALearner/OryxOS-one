@@ -1,0 +1,19 @@
+{
+  "name": "oryxos-website",
+  "version": "1.0.0",
+  "description": "OryxOS — Java 原生的、企业私有可审计的 Agent 统一底座",
+  "scripts": {
+    "docs:dev": "vitepress dev website",
+    "docs:build": "vitepress build website",
+    "docs:preview": "vitepress preview website"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ your-org/oryxos.git"
+  },
+  "license": "Apache-2.0",
+  "type": "module",
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}
