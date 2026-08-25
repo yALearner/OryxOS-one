@@ -257,6 +257,8 @@ schedules:                # 可选定时触发（AgentScheduler 钟推）
 | `created_at` | TIMESTAMP | 调用时间 |
 
 > **SQLite 迁移注意**：`hibernate.ddl-auto=update` 在 SQLite 上 `ALTER TABLE` 支持很弱。表结构变更时**不要**依赖 Hibernate 自动迁移，手动维护建表脚本或引入 Flyway。
+>
+> **SQLite 类型落地**：SQLite 无原生 TIMESTAMP，两表 `created_at` 以 **ISO-8601 TEXT** 存储（JPA `Instant` + AttributeConverter 映射），语义仍是"调用时间"。
 
 ---
 
