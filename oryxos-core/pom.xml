@@ -26,6 +26,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <!-- snakeyaml 由本模块直接声明（YAML 解析是核心功能），避免同版本双路径触发
+                     requireUpperBoundDeps 平局误报（MENFORCER-336） -->
+                <exclusion>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- SnakeYAML (Profile YAML parsing) -->

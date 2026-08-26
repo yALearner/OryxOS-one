@@ -1,0 +1,16 @@
+root = true
+
+# Google Java Style（2 空格缩进，与 google-java-format / google_checks.xml 一致）
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.java]
+indent_style = space
+indent_size = 2
+
+[*.{xml,yaml,yml,md}]
+indent_style = space
+indent_size = 2
