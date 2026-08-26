@@ -78,9 +78,19 @@ jobs:
           cache: maven
 
       # failBuildOnCVSS=7 + config/dependency-check/suppression.xml
-      # NVD_API_KEY 建议配置为仓库 secret（无 key 时 NVD 接口限流，任务可能失败重试）
+      # NVD_API_KEY 必需：NVD 自 2025 年起要求所有用户带 key，无 key 直接失败（不只是限流）。
+      # 免费申请：https://nvd.nist.gov/developers/request-an-api-key，配置为仓库 secret NVD_API_KEY。
+      # 注意：dependency-check 13 原生读取 NVD_API_KEY 环境变量，空字符串会被当非法 key，
+      # 因此 secret 未配置时必须 unset（不能只省略 -D 参数）
       - name: OWASP Dependency-Check (SCA)
-        run: mvn -B -ntp dependency-check:check -DskipTests
+        shell: bash
+        run: |
+          if [ -n "$NVD_API_KEY" ]; then
+            mvn -B -ntp dependency-check:check -DskipTests -DnvdApiKey="$NVD_API_KEY"
+          else
+            unset NVD_API_KEY
+            mvn -B -ntp dependency-check:check -DskipTests
+          fi
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
 

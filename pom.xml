@@ -335,8 +335,9 @@
                             <format>XML</format>
                             <format>JSON</format>
                         </formats>
-                        <!-- NVD API key 建议通过环境变量 NVD_API_KEY 注入（无 key 时 NVD 接口限流 ~6 次/30 秒） -->
-                        <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
+                        <!-- 注意：NVD API key 不能在此以 ${env.NVD_API_KEY} 注入——环境变量缺失时
+                             会变成空字符串，dependency-check 13 会把空 key 当非法 key 直接失败。
+                             CI 中用 shell 条件判断决定是否传 -DnvdApiKey（无 key 时 NVD 接口限流）。 -->
                     </configuration>
                 </plugin>
             </plugins>
