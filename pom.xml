@@ -51,6 +51,9 @@
         <p3c-pmd.version>2.1.1</p3c-pmd.version>
         <error-prone.version>2.50.0</error-prone.version>
         <nullaway.version>0.14.0</nullaway.version>
+        <spotbugs-maven-plugin.version>4.10.4.0</spotbugs-maven-plugin.version>
+        <findsecbugs-plugin.version>1.14.0</findsecbugs-plugin.version>
+        <dependency-check-maven.version>13.0.0</dependency-check-maven.version>
     </properties>
 
     <dependencyManagement>
@@ -296,6 +299,46 @@
                         </dependency>
                     </dependencies>
                 </plugin>
+
+                <!-- 字节码安全扫描：SpotBugs（effort=Max, threshold=Low）+ Find Security Bugs -->
+                <plugin>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>${spotbugs-maven-plugin.version}</version>
+                    <configuration>
+                        <effort>Max</effort>
+                        <threshold>Low</threshold>
+                        <failOnError>true</failOnError>
+                        <includeTests>false</includeTests>
+                        <plugins>
+                            <plugin>
+                                <groupId>com.h3xstream.findsecbugs</groupId>
+                                <artifactId>findsecbugs-plugin</artifactId>
+                                <version>${findsecbugs-plugin.version}</version>
+                            </plugin>
+                        </plugins>
+                    </configuration>
+                </plugin>
+
+                <!-- SCA：OWASP Dependency-Check（failBuildOnCVSS=7 + suppression 文件） -->
+                <plugin>
+                    <groupId>org.owasp</groupId>
+                    <artifactId>dependency-check-maven</artifactId>
+                    <version>${dependency-check-maven.version}</version>
+                    <configuration>
+                        <failBuildOnCVSS>7</failBuildOnCVSS>
+                        <suppressionFiles>
+                            <suppressionFile>${maven.multiModuleProjectDirectory}/config/dependency-check/suppression.xml</suppressionFile>
+                        </suppressionFiles>
+                        <formats>
+                            <format>HTML</format>
+                            <format>XML</format>
+                            <format>JSON</format>
+                        </formats>
+                        <!-- NVD API key 建议通过环境变量 NVD_API_KEY 注入（无 key 时 NVD 接口限流 ~6 次/30 秒） -->
+                        <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -363,6 +406,24 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- 安全门禁：verify 阶段，spotbugs:check（SpotBugs Max/Low + Find Security Bugs） -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>spotbugs-check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- OWASP Dependency-Check 不绑定默认生命周期（首跑需下载 NVD 数据，耗时长），
+                 本地显式执行：mvn dependency-check:check -DskipTests；
+                 CI 由 security job 独立执行。 -->
         </plugins>
     </build>
 
