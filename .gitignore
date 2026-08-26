@@ -21,3 +21,6 @@ Thumbs.db
 
 # OryxOS runtime
 .oryxos/
+
+# App logs (JSON structured)
+logs/
