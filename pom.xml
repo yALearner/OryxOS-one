@@ -38,6 +38,7 @@
         <snakeyaml.version>2.2</snakeyaml.version>
         <sqlite-jdbc.version>3.45.3.0</sqlite-jdbc.version>
         <springdoc-openapi.version>2.8.17</springdoc-openapi.version>
+        <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
     </properties>
 
     <dependencyManagement>
@@ -126,6 +127,13 @@
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
                 <version>${springdoc-openapi.version}</version>
+            </dependency>
+
+            <!-- Logstash Logback Encoder（结构化 JSON 日志；8.x 对应 Logback 1.5.x，9.x 需 Jackson 3 不可用） -->
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash-logback-encoder.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

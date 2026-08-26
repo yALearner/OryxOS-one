@@ -56,6 +56,23 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
+        <!-- 监控：Actuator + Prometheus -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- 结构化 JSON 日志（Logback LogstashEncoder） -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+        </dependency>
+
         <!-- Spring Boot Test (for testing support) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
