@@ -33,3 +33,17 @@ spring:
 logging:
   level:
     com.oryxos: INFO
+
+# 监控（Actuator + Prometheus）
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: oryxos

@@ -1,0 +1,103 @@
+name: CI
+
+# 工程地基门禁（java-spring-init skill 步骤 9）：三个 job 均须通过，任一失败禁止合并。
+# build = 编译 + 单测 + verify 全量门禁；style = 快速格式门禁；security = SAST + SCA。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build（编译 + 单测 + 全量门禁）
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      # verify 包含：enforcer（构建约束）、Error Prone 编译（-Werror）、单测、
+      # spotless:check、checkstyle:check、pmd:check（阿里 P3C + 标准 rulesets）、spotbugs:check（Max/Low + FSB）
+      - name: Build with full quality gates
+        run: mvn -B -ntp verify
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: '**/target/surefire-reports/**'
+          retention-days: 7
+
+  style:
+    name: style（格式门禁，快速失败）
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Spotless + Checkstyle gates
+        run: mvn -B -ntp spotless:check checkstyle:check
+
+  security:
+    name: security（semgrep SAST + OWASP Dependency-Check SCA）
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Semgrep SAST (p/java)
+        uses: semgrep/semgrep@v1
+        with:
+          config: p/java
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      # failBuildOnCVSS=7 + config/dependency-check/suppression.xml
+      # NVD_API_KEY 必需：NVD 自 2025 年起要求所有用户带 key，无 key 直接失败（不只是限流）。
+      # 免费申请：https://nvd.nist.gov/developers/request-an-api-key，配置为仓库 secret NVD_API_KEY。
+      # 注意：dependency-check 13 原生读取 NVD_API_KEY 环境变量，空字符串会被当非法 key，
+      # 因此 secret 未配置时必须 unset（不能只省略 -D 参数）
+      - name: OWASP Dependency-Check (SCA)
+        shell: bash
+        run: |
+          if [ -n "$NVD_API_KEY" ]; then
+            mvn -B -ntp dependency-check:check -DskipTests -DnvdApiKey="$NVD_API_KEY"
+          else
+            unset NVD_API_KEY
+            mvn -B -ntp dependency-check:check -DskipTests
+          fi
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+
+      - name: Upload dependency-check report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: '**/target/dependency-check-report.*'
+          retention-days: 30

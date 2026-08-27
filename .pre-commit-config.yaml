@@ -1,0 +1,12 @@
+# pre-commit 本地门禁（工程地基 step 9）
+# 安装：pip install pre-commit && pre-commit install
+# 提交前自动跑 Spotless 格式检查（CI 同款门禁，机器把关，不靠人自觉）
+repos:
+  - repo: local
+    hooks:
+      - id: spotless-check
+        name: Spotless format check (google-java-format)
+        entry: mvn -q -B -ntp spotless:check
+        language: system
+        pass_filenames: false
+        always_run: true
