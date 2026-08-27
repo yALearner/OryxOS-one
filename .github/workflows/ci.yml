@@ -78,11 +78,20 @@ jobs:
           java-version: '21'
           cache: maven
 
+      # 预检：secret 未配置/为空时给出可操作指引，而不是让 dependency-check 抛晦涩错误
+      - name: Check NVD_API_KEY secret
+        shell: bash
+        run: |
+          if [ -z "$NVD_API_KEY" ]; then
+            echo "::error::仓库未配置 NVD_API_KEY secret。NVD 自 2025 年起强制要求 API key（免费申请：https://nvd.nist.gov/developers/request-an-api-key），请到仓库 Settings → Secrets and variables → Actions → New repository secret 添加，名称必须精确为 NVD_API_KEY。"
+            exit 1
+          fi
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+
       # failBuildOnCVSS=7 + config/dependency-check/suppression.xml
-      # NVD_API_KEY 必需：NVD 自 2025 年起要求所有用户带 key，无 key 直接失败（不只是限流）。
-      # 免费申请：https://nvd.nist.gov/developers/request-an-api-key，配置为仓库 secret NVD_API_KEY。
       # 注意：dependency-check 13 原生读取 NVD_API_KEY 环境变量，空字符串会被当非法 key，
-      # 因此 secret 未配置时必须 unset（不能只省略 -D 参数）
+      # 因此空 secret 时必须 unset（不能只省略 -D 参数）
       - name: OWASP Dependency-Check (SCA)
         shell: bash
         run: |

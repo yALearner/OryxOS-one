@@ -63,6 +63,17 @@ jobs:
           distribution: temurin
           java-version: '{{JAVA_VERSION}}'
           cache: maven
+      # 预检：secret 未配置/为空时给出可操作指引（而不是 dependency-check 的晦涩报错）
+      - name: Check NVD_API_KEY secret
+        shell: bash
+        run: |
+          if [ -z "$NVD_API_KEY" ]; then
+            echo "::error::仓库未配置 NVD_API_KEY secret。NVD 自 2025 年起强制要求 API key（免费申请：https://nvd.nist.gov/developers/request-an-api-key），请在仓库 Settings → Secrets and variables → Actions 添加，名称精确为 NVD_API_KEY。"
+            exit 1
+          fi
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+
       # NVD_API_KEY 必需（NVD 2025 年政策）：免费申请 https://nvd.nist.gov/developers/request-an-api-key
       # 空 secret 时必须 unset（空字符串被 dependency-check 13 视为非法 key）
       - name: OWASP Dependency-Check (SCA)
