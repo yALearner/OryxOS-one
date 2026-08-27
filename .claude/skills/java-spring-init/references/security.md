@@ -27,7 +27,14 @@
 3. **数据目录缓存**：`~/.m2/repository/org/owasp/dependency-check-data/*/`（H2 odc.mv.db +
    NVD 数据）；修好配置后仍报错时删掉该目录重跑（数据可再生）
 4. **首次全量下载可能 10-30 分钟**（带 key 限流放宽但仍慢）：本地首跑放后台执行
-5. **semgrep 需要 Python**：本机无 Python 时只能 CI-only；本地验证缺项要在交付报告里写明
+5. **semgrep 本地安装通道**（Windows，实测 2026-08-28）：
+   - 有 Python：`pip install semgrep`
+   - 有 uv（无需 Python）：`UV_DEFAULT_INDEX=<pypi镜像> uv tool install semgrep`（秒级完成，
+     semgrep 1.175.0 实测可用；uv 自带托管 Python，不用装系统 Python）
+   - Docker：`docker run semgrep/semgrep`
+   - 全都没有：CI-only，本地验证缺项要在交付报告里写明
+6. **semgrep registry 可达性**：`--config=p/java` 需从 semgrep.dev 拉规则集；
+   网络受限时用本地 ruleset yaml 兜底验证引擎（报告注明规则集差异）
 3. **suppression 纪律**：`config/dependency-check/suppression.xml` 每新增一条必须注释理由
    （CVE 编号 + 为何不适用），禁止无理由全局抑制——宁可升版本
 4. **semgrep 需要 Python**：本机无 Python 时只能 CI-only；本地验证缺项要在交付报告里写明

@@ -92,13 +92,39 @@
 
 ## 六、遗留事项
 
-1. **合并分支**:9 个 commit 在 `feat/engineering-foundation`,可整体 squash 或逐条 cherry-pick 到 main。
-2. **NVD API key**:到 nvd.nist.gov 免费申请后,本地 `mvn dependency-check:check` 首跑 +
-   CI security job 才能绿(CI 里配置 secret `NVD_API_KEY`)。
-3. **CI 未实测**:本机无 `act`,未推送分支;三 job + CodeQL 配置已就位,推送后需观察首轮运行。
-4. **未验证项**(环境限制):semgrep 本地验证(本机无 Python)、prod profile 的 console JSON 输出、
-   NullAway 激活(需 patched javac)。
+> 状态更新于 2026-08-28,收尾执行记录见第七节。
+
+1. **合并分支**:✅ 已完成——`merge --no-ff` 合入 main(merge commit `5fce01c`)并推送。
+2. **NVD API key**:⚠️ 部分完成——用户已申请 key 并配置 GitHub secret;本地环境变量未配置
+   (本地首跑仍待 key);CI DepCheck 步骤在 secret 生效后应转绿。
+3. **CI 实测**:✅ 已实测——build/style 通过;CodeQL 通过;security 的 semgrep 步骤通过,
+   DepCheck 步骤因 secret 配置时序失败(重触发验证中);另发现并修复 semgrep action 引用错误。
+4. **未验证项**:
+   - ✅ semgrep 本地验证——通过 uv(本机无 Python 的解法:`uv tool install semgrep`),
+     60 条 p/java 规则扫 15 个 Java 文件,0 findings
+   - ✅ prod profile 的 console JSON 输出——LogstashEncoder JSON 格式实测正常
+   - ❌ NullAway 激活——最终结论:原生 javac 21u 拒绝 -Xep 参数;error-prone-javac 仅 javac 9 线
+     (无法编译 Java 21);error-prone-maven-plugin 不存在于 Central/阿里云镜像。
+     当前 EP(-Werror)+ SpotBugs 兜底即为最优可达配置(详见 tool-versions.md 坑位 2)
 5. `docs/prompt/01.md` 是工作区原有改动,执行全程未触碰。
+6. **Deploy to GitHub Pages 持续失败**:既有问题(2026-08-19 的旧运行同样失败,早于本次改动),
+   失败步骤为 `actions/deploy-pages@v4`——常见原因是仓库 Settings 未启用 Pages 或发布源配置不符。
+
+---
+
+## 七、遗留事项收尾执行记录(2026-08-28)
+
+| 动作 | 结果 |
+|------|------|
+| prod profile 冒烟 | ✅ console 为 Logstash JSON,health/swagger 正常 |
+| semgrep 本地验证 | ✅ uv tool install semgrep 1.175.0,p/java 60 规则 0 findings |
+| NullAway 再尝试 | ❌ 三通道逐一排除:原生 javac 拒 -Xep / error-prone-javac 仅 javac 9 / maven 插件不在任何可达仓库 |
+| 分支合并推送 | ✅ `merge --no-ff` → main,SSH 推送 upstream(https 凭证属他人账号被拒) |
+| CI 首轮实测 | ✅ build/style/CodeQL 绿;security 首轮因 semgrep action 引用错误失败 |
+| semgrep action 修复 | ✅ `semgrep/semgrep@v1` → `returntocorp/semgrep-action@v1`(commit `5746ca0`) |
+| CI 次轮实测 | ✅ semgrep 步骤通过;仅剩 DepCheck 步骤(等待 NVD_API_KEY secret) |
+| NVD key | ⚠️ 用户已配 GitHub secret,待重触发验证;本地 env 未配,本地首跑仍待 |
+
 
 ---
 
