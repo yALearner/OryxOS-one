@@ -53,8 +53,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # 注意：官方 action 是 returntocorp/semgrep-action（semgrep/semgrep 仓库根目录没有 action.yml）
       - name: Semgrep SAST (p/java)
-        uses: semgrep/semgrep@v1
+        uses: returntocorp/semgrep-action@v1
         with:
           config: p/java
       - uses: actions/setup-java@v6
