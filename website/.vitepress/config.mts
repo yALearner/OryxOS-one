@@ -4,12 +4,12 @@ export default defineConfig({
   title: 'OryxOS',
   titleTemplate: ':title — OryxOS',
   description: 'Java 原生的、企业私有可审计的 Agent 统一底座 — 私有部署 · 完全可审计 · 数据不出企业',
-  base: '/',
+  base: '/OryxOS-one/',
   cleanUrls: true,
   appearance: 'force-light',
 
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/OryxOS-one/favicon.svg' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap' }],

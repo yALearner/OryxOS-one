@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { useData } from 'vitepress'
+import { useData, withBase } from 'vitepress'
 
 const { lang } = useData()
 const isZh = computed(() => lang.value === 'zh-CN')
@@ -271,7 +271,7 @@ const integrations = computed(() => [
     <!-- ══════════ ARCHITECTURE DIAGRAM ══════════ -->
     <section class="oryxos-section oryxos-flow-section">
       <div class="oryxos-section-inner">
-        <img src="/diagram-architecture.svg" alt="OryxOS Architecture" class="oryxos-flow-img" />
+        <img :src="withBase('/diagram-architecture.svg')" alt="OryxOS Architecture" class="oryxos-flow-img" />
       </div>
     </section>
 
