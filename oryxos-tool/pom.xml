@@ -22,10 +22,10 @@
             <artifactId>oryxos-core</artifactId>
         </dependency>
 
-        <!-- Spring AI Core (for @Tool annotation schema generation) -->
+        <!-- Spring AI Model（@Tool 注解 schema 生成；1.1.x 起 spring-ai-core 拆分为 model/commons/client-chat） -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-core</artifactId>
+            <artifactId>spring-ai-model</artifactId>
         </dependency>
     </dependencies>
 </project>
