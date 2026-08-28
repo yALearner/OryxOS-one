@@ -6,7 +6,7 @@ export default defineConfig({
   description: 'Java 原生的、企业私有可审计的 Agent 统一底座 — 私有部署 · 完全可审计 · 数据不出企业',
   base: '/OryxOS-one/',
   cleanUrls: true,
-  appearance: 'force-light',
+  appearance: 'force-dark',
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/OryxOS-one/favicon.svg' }],
@@ -109,7 +109,7 @@ export default defineConfig({
 
   themeConfig: {
     siteTitle: false,
-    logo: '/logo-light.svg',
+    logo: '/logo-dark.svg',
     socialLinks: [
       { icon: 'github', link: 'https://github.com/your-org/oryxos' },
     ],

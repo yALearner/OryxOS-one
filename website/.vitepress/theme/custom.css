@@ -1,26 +1,33 @@
-/* ─── Brand tokens ────────────────────────────────────────────── */
+/* ─── Brand tokens（深色系）───────────────────────────────────── */
 :root {
-  --vp-nav-bg-color: rgba(255, 255, 255, 0.92);
-  --vp-local-nav-bg-color: rgba(255, 255, 255, 0.92);
-  --vp-sidebar-bg-color: #ffffff;
-  --vp-c-brand-1: #0f172a;
-  --vp-c-brand-2: #1e293b;
-  --vp-c-brand-3: #334155;
-  --vp-c-brand-soft: rgba(15, 23, 42, 0.06);
+  --vp-nav-bg-color: rgba(11, 15, 25, 0.85);
+  --vp-local-nav-bg-color: rgba(11, 15, 25, 0.85);
+  --vp-sidebar-bg-color: #0b0f19;
+  --vp-c-brand-1: #2dd4bf;
+  --vp-c-brand-2: #22d3ee;
+  --vp-c-brand-3: #818cf8;
+  --vp-c-brand-soft: rgba(45, 212, 191, 0.14);
 
   --vp-font-family-base: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
 
-  --vp-c-bg: #ffffff;
-  --vp-c-bg-soft: #f8fafc;
-  --vp-c-bg-mute: #f1f5f9;
+  --vp-c-bg: #0b0f19;
+  --vp-c-bg-soft: #101623;
+  --vp-c-bg-mute: #141b2c;
+  --vp-c-bg-alt: #0e1420;
 
-  --vp-c-text-1: #0f172a;
-  --vp-c-text-2: #334155;
-  --vp-c-text-3: #64748b;
+  --vp-c-text-1: #e8edf6;
+  --vp-c-text-2: #a8b3c7;
+  --vp-c-text-3: #6b7a93;
 
-  --vp-c-divider: #e2e8f0;
-  --vp-c-border: #e2e8f0;
+  --vp-c-divider: #1c2537;
+  --vp-c-border: #1c2537;
+
+  --vp-code-block-bg: #0e1420;
+  --vp-code-copy-code-bg: #101623;
+  --vp-code-copy-code-hover-bg: #141b2c;
+  --vp-code-tab-bg: #0e1420;
+  --vp-code-tab-active-bar-color: #2dd4bf;
 
   /* OryxOS brand accent */
   --oryx-teal: #2dd4bf;
@@ -28,7 +35,7 @@
   --oryx-cyan: #22d3ee;
 }
 
-/* ─── Hide dark mode toggle ──────────────────────────────────── */
+/* ─── Hide dark mode toggle（恒深色）──────────────────────────── */
 .VPNavBarAppearance,
 .VPSwitchAppearance {
   display: none !important;
@@ -37,7 +44,7 @@
 /* ─── Nav ─────────────────────────────────────────────────────── */
 .VPNav {
   border-bottom: 1px solid var(--vp-c-divider) !important;
-  background: rgba(255, 255, 255, 0.92) !important;
+  background: rgba(11, 15, 25, 0.85) !important;
   backdrop-filter: blur(12px) !important;
 }
 
@@ -100,31 +107,29 @@
   color: var(--vp-c-text-2);
 }
 
-/* Code blocks */
+/* Code blocks（交给 shiki 深色主题着色，这里只定容器） */
 .vp-code-group,
 div[class*='language-'] {
   border-radius: 8px !important;
   border: 1px solid var(--vp-c-divider) !important;
-  background: #f8fafc !important;
+  background: #0e1420 !important;
 }
 
 div[class*='language-'] pre,
 div[class*='language-'] pre code {
-  background: #f8fafc !important;
+  background: #0e1420 !important;
 }
 
-div[class*='language-'] code,
-div[class*='language-'] code span {
+div[class*='language-'] code {
   font-size: 0.82rem;
-  color: #1e293b !important;
 }
 
 div[class*='language-'] > span.lang {
-  color: #64748b !important;
+  color: #6b7a93 !important;
 }
 
 div[class*='language-'] > button.copy {
-  color: #64748b !important;
+  color: #6b7a93 !important;
 }
 
 /* Inline code */
@@ -134,7 +139,7 @@ div[class*='language-'] > button.copy {
   border-radius: 4px !important;
   padding: 0.1em 0.35em !important;
   font-size: 0.85em !important;
-  color: var(--vp-c-text-1) !important;
+  color: #5eead4 !important;
 }
 
 /* Tables */
@@ -171,9 +176,9 @@ div[class*='language-'] > button.copy {
 .VPMenu,
 .VPFlyout > .menu,
 .VPNavBarMenuGroup > .menu {
-  background: #ffffff !important;
+  background: #101623 !important;
   border: 1px solid var(--vp-c-divider) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
 }
 
 .VPMenu .item .VPMenuLink,
@@ -187,7 +192,7 @@ div[class*='language-'] > button.copy {
 .VPMenu .item .link:hover,
 .VPFlyout .VPMenuLink:hover,
 .VPFlyout .link:hover {
-  background: var(--vp-c-bg-soft) !important;
+  background: var(--vp-c-bg-mute) !important;
   color: var(--vp-c-text-1) !important;
 }
 
@@ -197,31 +202,31 @@ div[class*='language-'] > button.copy {
 }
 
 .VPSidebar {
-  background: #ffffff !important;
+  background: #0b0f19 !important;
   border-right: 1px solid var(--vp-c-divider) !important;
 }
 
 .VPSidebarItem .item .link.is-active,
 .VPSidebarItem .item .link.is-active:hover {
-  color: #000000 !important;
+  color: #2dd4bf !important;
   font-weight: 600 !important;
 }
 
 .VPSidebarItem .item .link.is-active .text {
-  color: #000000 !important;
+  color: #2dd4bf !important;
   font-weight: 600 !important;
 }
 
 .VPSidebarItem.is-active > .item > .link,
 .VPSidebarItem.is-active > .item > .link:hover {
-  background: #f0f0f0 !important;
+  background: rgba(45, 212, 191, 0.08) !important;
   border-radius: 6px !important;
-  color: #000000 !important;
+  color: #2dd4bf !important;
   font-weight: 600 !important;
 }
 
 .VPSidebarItem.level-1.is-active > .item > .indicator {
-  background: #000000 !important;
+  background: #2dd4bf !important;
 }
 
 /* ─── Footer ──────────────────────────────────────────────────── */
@@ -253,4 +258,13 @@ div[class*='language-'] > button.copy {
 
 .VPFooter {
   display: none !important;
+}
+
+/* ─── 深色模式下 VitePress 默认组件的细节校准 ───────────────────── */
+html.dark .VPNavBar .curtain {
+  background: rgba(11, 15, 25, 0.85) !important;
+}
+
+.vp-doc img {
+  border-radius: 12px;
 }

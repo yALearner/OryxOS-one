@@ -1,67 +1,67 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 310" font-family="Arial, sans-serif">
   <defs>
-    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#64748b"/></marker>
-    <marker id="aGray" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#94a3b8"/></marker>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#7d8ca5"/></marker>
+    <marker id="aGray" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#9db0c9"/></marker>
     <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.08"/></filter>
   </defs>
-  <rect width="820" height="310" fill="#f8fafc" rx="6"/>
-  <rect x="0" y="0" width="820" height="32" fill="#1e293b" rx="6"/>
-  <rect x="0" y="16" width="820" height="16" fill="#1e293b"/>
-  <text x="410" y="21" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="bold">Tool 调用流程 — LLM → OryxOS → 外部世界</text>
+  <rect width="820" height="310" fill="#0e1420" rx="6"/>
+  <rect x="0" y="0" width="820" height="32" fill="#d7e2f2" rx="6"/>
+  <rect x="0" y="16" width="820" height="16" fill="#d7e2f2"/>
+  <text x="410" y="21" text-anchor="middle" fill="#141b2c" font-size="12" font-weight="bold">Tool 调用流程 — LLM → OryxOS → 外部世界</text>
 
   <!-- ToolRegistry -->
-  <rect x="40" y="50" width="280" height="28" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="0.8"/>
-  <text x="180" y="69" text-anchor="middle" font-size="9" fill="#475569">ToolRegistry — 统一注册所有 OryxTool</text>
-  <line x1="180" y1="78" x2="180" y2="88" stroke="#94a3b8" stroke-width="1" marker-end="url(#aGray)"/>
+  <rect x="40" y="50" width="280" height="28" rx="5" fill="#141b2c" stroke="#33435e" stroke-width="0.8"/>
+  <text x="180" y="69" text-anchor="middle" font-size="9" fill="#7d8ca5">ToolRegistry — 统一注册所有 OryxTool</text>
+  <line x1="180" y1="78" x2="180" y2="88" stroke="#9db0c9" stroke-width="1" marker-end="url(#aGray)"/>
 
   <!-- LLM -->
-  <rect x="40" y="92" width="110" height="40" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
-  <text x="95" y="110" text-anchor="middle" font-size="10" font-weight="bold" fill="#1d4ed8">LLM 返回</text>
-  <text x="95" y="124" text-anchor="middle" font-size="8" fill="#1e40af">Tool Call</text>
+  <rect x="40" y="92" width="110" height="40" rx="6" fill="#10203f" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="95" y="110" text-anchor="middle" font-size="10" font-weight="bold" fill="#93c5fd">LLM 返回</text>
+  <text x="95" y="124" text-anchor="middle" font-size="8" fill="#93c5fd">Tool Call</text>
   <line x1="150" y1="112" x2="180" y2="112" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#a)"/>
 
   <!-- ToolExecutor -->
-  <rect x="185" y="75" width="260" height="115" rx="8" fill="#dcfce7" stroke="#10b981" stroke-width="2" filter="url(#sh)"/>
-  <text x="315" y="98" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">ToolExecutor</text>
-  <line x1="200" y1="106" x2="430" y2="106" stroke="#bbf7d0" stroke-width="0.5"/>
-  <text x="200" y="122" font-size="9" fill="#166534">1. 从 ToolRegistry 查找 Tool</text>
-  <text x="200" y="138" font-size="9" fill="#166534">2. Sandbox.enforce() 白名单校验</text>
-  <text x="200" y="154" font-size="9" fill="#166534">3. 执行 Tool</text>
-  <text x="200" y="170" font-size="9" fill="#166534">4. ToolResult 包装 → 回填 ReActLoop</text>
-  <text x="200" y="186" font-size="9" fill="#166534">5. 写 tool_invocations 审计表</text>
+  <rect x="185" y="75" width="260" height="115" rx="8" fill="#0d2b21" stroke="#10b981" stroke-width="2" filter="url(#sh)"/>
+  <text x="315" y="98" text-anchor="middle" font-size="12" font-weight="bold" fill="#86efac">ToolExecutor</text>
+  <line x1="200" y1="106" x2="430" y2="106" stroke="#14532d" stroke-width="0.5"/>
+  <text x="200" y="122" font-size="9" fill="#6ee7b7">1. 从 ToolRegistry 查找 Tool</text>
+  <text x="200" y="138" font-size="9" fill="#6ee7b7">2. Sandbox.enforce() 白名单校验</text>
+  <text x="200" y="154" font-size="9" fill="#6ee7b7">3. 执行 Tool</text>
+  <text x="200" y="170" font-size="9" fill="#6ee7b7">4. ToolResult 包装 → 回填 ReActLoop</text>
+  <text x="200" y="186" font-size="9" fill="#6ee7b7">5. 写 tool_invocations 审计表</text>
 
   <line x1="445" y1="112" x2="480" y2="112" stroke="#10b981" stroke-width="1.5" marker-end="url(#a)"/>
 
   <!-- Three tool types -->
-  <rect x="485" y="60" width="100" height="32" rx="5" fill="#fef3c7" stroke="#f59e0b" stroke-width="1" filter="url(#sh)"/>
-  <text x="535" y="80" text-anchor="middle" font-size="9" font-weight="bold" fill="#b45309">内置 Tool</text>
-  <rect x="485" y="100" width="100" height="32" rx="5" fill="#fef3c7" stroke="#f59e0b" stroke-width="1"/>
-  <text x="535" y="120" text-anchor="middle" font-size="9" font-weight="bold" fill="#b45309">MCP Tool</text>
-  <rect x="485" y="140" width="100" height="32" rx="5" fill="#fef3c7" stroke="#f59e0b" stroke-width="1"/>
-  <text x="535" y="160" text-anchor="middle" font-size="9" font-weight="bold" fill="#b45309">@Tool Bean</text>
+  <rect x="485" y="60" width="100" height="32" rx="5" fill="#2a2110" stroke="#f59e0b" stroke-width="1" filter="url(#sh)"/>
+  <text x="535" y="80" text-anchor="middle" font-size="9" font-weight="bold" fill="#fbbf24">内置 Tool</text>
+  <rect x="485" y="100" width="100" height="32" rx="5" fill="#2a2110" stroke="#f59e0b" stroke-width="1"/>
+  <text x="535" y="120" text-anchor="middle" font-size="9" font-weight="bold" fill="#fbbf24">MCP Tool</text>
+  <rect x="485" y="140" width="100" height="32" rx="5" fill="#2a2110" stroke="#f59e0b" stroke-width="1"/>
+  <text x="535" y="160" text-anchor="middle" font-size="9" font-weight="bold" fill="#fbbf24">@Tool Bean</text>
 
   <!-- Sandbox -->
-  <rect x="185" y="200" width="260" height="32" rx="6" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5" filter="url(#sh)"/>
-  <text x="315" y="221" text-anchor="middle" font-size="10" fill="#6d28d9">Sandbox.enforce(action) → 白名单校验</text>
+  <rect x="185" y="200" width="260" height="32" rx="6" fill="#191233" stroke="#8b5cf6" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="315" y="221" text-anchor="middle" font-size="10" fill="#a78bfa">Sandbox.enforce(action) → 白名单校验</text>
   <line x1="315" y1="190" x2="315" y2="198" stroke="#8b5cf6" stroke-width="1.2"/>
 
   <!-- External -->
-  <rect x="485" y="200" width="100" height="28" rx="5" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>
-  <text x="535" y="219" text-anchor="middle" font-size="8" fill="#64748b">MCP Server</text>
-  <line x1="535" y1="172" x2="535" y2="198" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2"/>
+  <rect x="485" y="200" width="100" height="28" rx="5" fill="#263248" stroke="#9db0c9" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="535" y="219" text-anchor="middle" font-size="8" fill="#7d8ca5">MCP Server</text>
+  <line x1="535" y1="172" x2="535" y2="198" stroke="#9db0c9" stroke-width="1" stroke-dasharray="3,2"/>
 
   <!-- Audit -->
-  <rect x="40" y="216" width="120" height="50" rx="6" fill="#fecdd3" stroke="#e11d48" stroke-width="1"/>
-  <text x="100" y="236" text-anchor="middle" font-size="9" font-weight="bold" fill="#be123c">审计记录</text>
-  <text x="100" y="252" text-anchor="middle" font-size="8" fill="#be123c">tool_invocations 表</text>
-  <text x="100" y="264" text-anchor="middle" font-size="7" fill="#9f1239">success / error / duration</text>
-  <line x1="160" y1="241" x2="183" y2="241" stroke="#e11d48" stroke-width="1" stroke-dasharray="3,2"/>
+  <rect x="40" y="216" width="120" height="50" rx="6" fill="#33151f" stroke="#fb7185" stroke-width="1"/>
+  <text x="100" y="236" text-anchor="middle" font-size="9" font-weight="bold" fill="#fb7185">审计记录</text>
+  <text x="100" y="252" text-anchor="middle" font-size="8" fill="#fb7185">tool_invocations 表</text>
+  <text x="100" y="264" text-anchor="middle" font-size="7" fill="#fda4af">success / error / duration</text>
+  <line x1="160" y1="241" x2="183" y2="241" stroke="#fb7185" stroke-width="1" stroke-dasharray="3,2"/>
 
   <!-- Bottom legend -->
-  <rect x="40" y="276" width="740" height="26" rx="5" fill="#f1f5f9"/>
-  <text x="60" y="294" font-size="8" font-weight="bold" fill="#64748b">ToolResult:</text>
-  <text x="140" y="294" font-size="8" fill="#475569">success: boolean</text>
-  <text x="270" y="294" font-size="8" fill="#475569">content: String</text>
-  <text x="380" y="294" font-size="8" fill="#475569">errorMessage: String?</text>
-  <text x="510" y="294" font-size="8" fill="#475569">retryable: boolean</text>
+  <rect x="40" y="276" width="740" height="26" rx="5" fill="#141b2c"/>
+  <text x="60" y="294" font-size="8" font-weight="bold" fill="#7d8ca5">ToolResult:</text>
+  <text x="140" y="294" font-size="8" fill="#7d8ca5">success: boolean</text>
+  <text x="270" y="294" font-size="8" fill="#7d8ca5">content: String</text>
+  <text x="380" y="294" font-size="8" fill="#7d8ca5">errorMessage: String?</text>
+  <text x="510" y="294" font-size="8" fill="#7d8ca5">retryable: boolean</text>
 </svg>

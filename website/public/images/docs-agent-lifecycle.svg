@@ -1,59 +1,59 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" font-family="Arial, sans-serif">
   <defs>
-    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#64748b"/></marker>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#7d8ca5"/></marker>
     <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.08"/></filter>
   </defs>
-  <rect width="820" height="360" fill="#f8fafc" rx="6"/>
-  <rect x="0" y="0" width="820" height="32" fill="#1e293b" rx="6"/>
-  <rect x="0" y="16" width="820" height="16" fill="#1e293b"/>
-  <text x="410" y="21" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="bold">Agent 生命周期 — 两条录入路径 · 一段注册代码</text>
+  <rect width="820" height="360" fill="#0e1420" rx="6"/>
+  <rect x="0" y="0" width="820" height="32" fill="#d7e2f2" rx="6"/>
+  <rect x="0" y="16" width="820" height="16" fill="#d7e2f2"/>
+  <text x="410" y="21" text-anchor="middle" fill="#141b2c" font-size="12" font-weight="bold">Agent 生命周期 — 两条录入路径 · 一段注册代码</text>
 
   <!-- Path 1: API Upload -->
-  <rect x="30" y="50" width="360" height="80" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
-  <text x="210" y="72" text-anchor="middle" font-size="11" font-weight="bold" fill="#1d4ed8">路径一：API 上传 (扩展阶段)</text>
-  <line x1="45" y1="80" x2="375" y2="80" stroke="#bfdbfe" stroke-width="0.5"/>
-  <text x="45" y="98" font-size="9" fill="#1e40af">POST /agents/generate → 一句话生成 AGENT.md 草稿</text>
-  <text x="45" y="114" font-size="9" fill="#1e40af">POST /agents → 写 Agent 目录到 .oryxos/agents/</text>
-  <text x="45" y="130" font-size="9" fill="#1e40af">PUT /agents/{name} · DELETE /agents/{name} → 归档</text>
+  <rect x="30" y="50" width="360" height="80" rx="7" fill="#10203f" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="210" y="72" text-anchor="middle" font-size="11" font-weight="bold" fill="#93c5fd">路径一：API 上传 (扩展阶段)</text>
+  <line x1="45" y1="80" x2="375" y2="80" stroke="#1d3a6e" stroke-width="0.5"/>
+  <text x="45" y="98" font-size="9" fill="#93c5fd">POST /agents/generate → 一句话生成 AGENT.md 草稿</text>
+  <text x="45" y="114" font-size="9" fill="#93c5fd">POST /agents → 写 Agent 目录到 .oryxos/agents/</text>
+  <text x="45" y="130" font-size="9" fill="#93c5fd">PUT /agents/{name} · DELETE /agents/{name} → 归档</text>
 
   <!-- Path 2: Manual -->
-  <rect x="430" y="50" width="360" height="80" rx="7" fill="#dcfce7" stroke="#10b981" stroke-width="1.5" filter="url(#sh)"/>
-  <text x="610" y="72" text-anchor="middle" font-size="11" font-weight="bold" fill="#15803d">路径二：手工丢目录 (核心阶段)</text>
-  <line x1="445" y1="80" x2="775" y2="80" stroke="#bbf7d0" stroke-width="0.5"/>
-  <text x="445" y="98" font-size="9" fill="#166534">mkdir .oryxos/agents/my-agent/</text>
-  <text x="445" y="114" font-size="9" fill="#166534">vim AGENT.md + 可选 skills/scripts/REFERENCE.md</text>
-  <text x="445" y="130" font-size="9" fill="#166534">WorkspaceWatcher 实时监听变更</text>
+  <rect x="430" y="50" width="360" height="80" rx="7" fill="#0d2b21" stroke="#10b981" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="610" y="72" text-anchor="middle" font-size="11" font-weight="bold" fill="#86efac">路径二：手工丢目录 (核心阶段)</text>
+  <line x1="445" y1="80" x2="775" y2="80" stroke="#14532d" stroke-width="0.5"/>
+  <text x="445" y="98" font-size="9" fill="#6ee7b7">mkdir .oryxos/agents/my-agent/</text>
+  <text x="445" y="114" font-size="9" fill="#6ee7b7">vim AGENT.md + 可选 skills/scripts/REFERENCE.md</text>
+  <text x="445" y="130" font-size="9" fill="#6ee7b7">WorkspaceWatcher 实时监听变更</text>
 
   <!-- Arrows -->
-  <line x1="210" y1="130" x2="210" y2="160" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>
-  <line x1="610" y1="130" x2="610" y2="160" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="210" y1="130" x2="210" y2="160" stroke="#7d8ca5" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="610" y1="130" x2="610" y2="160" stroke="#7d8ca5" stroke-width="1.5" marker-end="url(#a)"/>
 
   <!-- Unified register -->
-  <rect x="230" y="164" width="360" height="38" rx="8" fill="#334155" filter="url(#sh)"/>
+  <rect x="230" y="164" width="360" height="38" rx="8" fill="#9db0c9" filter="url(#sh)"/>
   <text x="410" y="188" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">AgentLifecycleService.register(agentDir)</text>
-  <line x1="410" y1="202" x2="410" y2="225" stroke="#64748b" stroke-width="1.8" marker-end="url(#a)"/>
+  <line x1="410" y1="202" x2="410" y2="225" stroke="#7d8ca5" stroke-width="1.8" marker-end="url(#a)"/>
 
   <!-- Three steps -->
-  <rect x="40" y="230" width="220" height="50" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
-  <text x="150" y="252" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">1. AgentLoader.deriveProfile()</text>
-  <text x="150" y="268" text-anchor="middle" font-size="8" fill="#92400e">AGENT.md frontmatter → Profile</text>
-  <text x="150" y="280" text-anchor="middle" font-size="7" fill="#b45309">校验 Provider/Tool/Channel/Bootstrap</text>
+  <rect x="40" y="230" width="220" height="50" rx="6" fill="#2a2110" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="150" y="252" text-anchor="middle" font-size="10" font-weight="bold" fill="#fbbf24">1. AgentLoader.deriveProfile()</text>
+  <text x="150" y="268" text-anchor="middle" font-size="8" fill="#fcd34d">AGENT.md frontmatter → Profile</text>
+  <text x="150" y="280" text-anchor="middle" font-size="7" fill="#fbbf24">校验 Provider/Tool/Channel/Bootstrap</text>
 
-  <rect x="300" y="230" width="220" height="50" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
-  <text x="410" y="252" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">2. ProfileRegistry.register()</text>
-  <text x="410" y="268" text-anchor="middle" font-size="8" fill="#92400e">name → Profile 内存索引</text>
-  <text x="410" y="280" text-anchor="middle" font-size="7" fill="#b45309">多 Agent 并存</text>
+  <rect x="300" y="230" width="220" height="50" rx="6" fill="#2a2110" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="410" y="252" text-anchor="middle" font-size="10" font-weight="bold" fill="#fbbf24">2. ProfileRegistry.register()</text>
+  <text x="410" y="268" text-anchor="middle" font-size="8" fill="#fcd34d">name → Profile 内存索引</text>
+  <text x="410" y="280" text-anchor="middle" font-size="7" fill="#fbbf24">多 Agent 并存</text>
 
-  <rect x="560" y="230" width="220" height="50" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
-  <text x="670" y="252" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">3. AgentScheduler.registerProfile()</text>
-  <text x="670" y="268" text-anchor="middle" font-size="8" fill="#92400e">schedules 字段 → CronTrigger</text>
-  <text x="670" y="280" text-anchor="middle" font-size="7" fill="#b45309">动态注册定时任务</text>
+  <rect x="560" y="230" width="220" height="50" rx="6" fill="#2a2110" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="670" y="252" text-anchor="middle" font-size="10" font-weight="bold" fill="#fbbf24">3. AgentScheduler.registerProfile()</text>
+  <text x="670" y="268" text-anchor="middle" font-size="8" fill="#fcd34d">schedules 字段 → CronTrigger</text>
+  <text x="670" y="280" text-anchor="middle" font-size="7" fill="#fbbf24">动态注册定时任务</text>
 
   <!-- Result -->
-  <line x1="410" y1="280" x2="410" y2="308" stroke="#64748b" stroke-width="1.8" marker-end="url(#a)"/>
+  <line x1="410" y1="280" x2="410" y2="308" stroke="#7d8ca5" stroke-width="1.8" marker-end="url(#a)"/>
   <rect x="210" y="312" width="400" height="36" rx="18" fill="#10b981" filter="url(#sh)"/>
   <text x="410" y="335" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">Agent 就绪 · 免重启 · 即时生效</text>
 
   <!-- Key note -->
-  <text x="410" y="358" text-anchor="middle" font-size="8" fill="#94a3b8">「API 上传即上线 = 丢目录即上线」 — 殊途同归，deriveProfile + register + registerProfile 是同一段代码</text>
+  <text x="410" y="358" text-anchor="middle" font-size="8" fill="#9db0c9">「API 上传即上线 = 丢目录即上线」 — 殊途同归，deriveProfile + register + registerProfile 是同一段代码</text>
 </svg>
