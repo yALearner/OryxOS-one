@@ -13,7 +13,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/your-org/oryxos.git
+git clone https://github.com/yALearner/OryxOS-one.git
 cd oryxos
 
 # 编译打包

@@ -54,4 +54,4 @@ OryxOS 欢迎一切形式的贡献：代码、文档、Issue、讨论。
 4. 推送 (`git push origin feat/amazing-feature`)
 5. 创建 Pull Request
 
-提交前请阅读 [CLAUDE.md](https://github.com/your-org/oryxos/blob/main/CLAUDE.md) 了解项目宪章和编码原则。
+提交前请阅读 [CLAUDE.md](https://github.com/yALearner/OryxOS-one/blob/main/CLAUDE.md) 了解项目宪章和编码原则。

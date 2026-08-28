@@ -54,4 +54,4 @@ OryxOS welcomes all forms of contribution: code, docs, issues, discussions.
 4. Push (`git push origin feat/amazing-feature`)
 5. Create a Pull Request
 
-Read [CLAUDE.md](https://github.com/your-org/oryxos/blob/main/CLAUDE.md) for the project constitution and coding principles.
+Read [CLAUDE.md](https://github.com/yALearner/OryxOS-one/blob/main/CLAUDE.md) for the project constitution and coding principles.

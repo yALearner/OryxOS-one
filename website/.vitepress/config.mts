@@ -35,7 +35,7 @@ export default defineConfig({
         nav: [
           { text: 'Home', link: '/' },
           { text: 'Docs', link: '/docs/what' },
-          { text: 'GitHub', link: 'https://github.com/your-org/oryxos' },
+          { text: 'GitHub', link: 'https://github.com/yALearner/OryxOS-one' },
         ],
         sidebar: {
           '/docs/': [
@@ -74,7 +74,7 @@ export default defineConfig({
         nav: [
           { text: '首页', link: '/zh/' },
           { text: '文档', link: '/zh/docs/what' },
-          { text: 'GitHub', link: 'https://github.com/your-org/oryxos' },
+          { text: 'GitHub', link: 'https://github.com/yALearner/OryxOS-one' },
         ],
         sidebar: {
           '/zh/docs/': [
@@ -111,7 +111,7 @@ export default defineConfig({
     siteTitle: false,
     logo: '/logo-dark.svg',
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/your-org/oryxos' },
+      { icon: 'github', link: 'https://github.com/yALearner/OryxOS-one' },
     ],
   },
 

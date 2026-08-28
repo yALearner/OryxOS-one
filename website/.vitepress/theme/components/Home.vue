@@ -182,13 +182,13 @@ const integrations = computed(() => [
         </p>
 
         <div class="oryxos-hero-actions">
-          <a class="oryxos-btn-primary" :href="t('/zh/docs/quick-start', '/docs/quick-start')">
+          <a class="oryxos-btn-primary" :href="withBase(t('/zh/docs/quick-start', '/docs/quick-start'))">
             {{ t('快速开始', 'Get Started') }} →
           </a>
-          <a class="oryxos-btn-ghost" :href="t('/zh/docs/architecture', '/docs/architecture')">
+          <a class="oryxos-btn-ghost" :href="withBase(t('/zh/docs/architecture', '/docs/architecture'))">
             {{ t('系统架构', 'Architecture') }}
           </a>
-          <a class="oryxos-btn-ghost" href="https://github.com/your-org/oryxos" target="_blank" rel="noopener">
+          <a class="oryxos-btn-ghost" href="https://github.com/yALearner/OryxOS-one" target="_blank" rel="noopener">
             GitHub
           </a>
         </div>
@@ -403,7 +403,7 @@ const integrations = computed(() => [
           <h2 class="oryxos-cta-title">{{ t('开始构建', 'Start Building') }}</h2>
           <p class="oryxos-cta-desc">{{ t('一个 fat JAR，一个目录，一个 Agent 就起来了。不需要 PostgreSQL，不需要 Redis。', 'One fat JAR, one directory, one Agent running. No PostgreSQL, no Redis required.') }}</p>
           <pre class="oryxos-code oryxos-cta-code"><code># 克隆仓库
-git clone https://github.com/your-org/oryxos.git
+git clone https://github.com/yALearner/OryxOS-one.git
 cd oryxos
 
 # 编译打包
@@ -421,8 +421,8 @@ java -jar oryxos-boot/target/oryxos-boot-*.jar chat
 # 启动 HTTP API 服务
 java -jar oryxos-boot/target/oryxos-boot-*.jar serve --port 8080</code></pre>
           <div class="oryxos-cta-links">
-            <a class="oryxos-btn-primary" :href="t('/zh/docs/', '/docs/')">{{ t('查看文档', 'Read the Docs') }}</a>
-            <a class="oryxos-btn-ghost" href="https://github.com/your-org/oryxos" target="_blank" rel="noopener">GitHub</a>
+            <a class="oryxos-btn-primary" :href="withBase(t('/zh/docs/', '/docs/'))">{{ t('查看文档', 'Read the Docs') }}</a>
+            <a class="oryxos-btn-ghost" href="https://github.com/yALearner/OryxOS-one" target="_blank" rel="noopener">GitHub</a>
           </div>
         </div>
       </div>

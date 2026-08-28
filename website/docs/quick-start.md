@@ -13,7 +13,7 @@ That's it. No PostgreSQL, Redis, or other external dependencies — data is stor
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/oryxos.git
+git clone https://github.com/yALearner/OryxOS-one.git
 cd oryxos
 
 # Build
