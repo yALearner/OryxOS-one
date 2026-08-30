@@ -29,6 +29,18 @@ spring:
       chat:
         enabled: false
 
+# 全局层 Provider 声明（核心能力一）：这个实例接了哪些模型服务——"连不连得上"。
+# Agent 层在 AGENT.md frontmatter 的 provider.name 里引用这里的 name（"怎么用"）。
+# 凭证只允许 ${ENV_VAR} 占位；缺失或非法时启动校验报错，不静默失败。
+oryxos:
+  providers:
+    - name: deepseek
+      api-key: ${DEEPSEEK_API_KEY}
+      base-url: https://api.deepseek.com
+    - name: kimi
+      api-key: ${KIMI_API_KEY}
+      base-url: https://api.moonshot.cn/v1
+
 # 日志
 logging:
   level:
