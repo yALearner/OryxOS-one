@@ -421,7 +421,7 @@ java -jar oryxos-boot/target/oryxos-boot-*.jar chat
 # 启动 HTTP API 服务
 java -jar oryxos-boot/target/oryxos-boot-*.jar serve --port 8080</code></pre>
           <div class="oryxos-cta-links">
-            <a class="oryxos-btn-primary" :href="withBase(t('/zh/docs/', '/docs/'))">{{ t('查看文档', 'Read the Docs') }}</a>
+            <a class="oryxos-btn-primary" :href="withBase(t('/zh/docs/what', '/docs/what'))">{{ t('查看文档', 'Read the Docs') }}</a>
             <a class="oryxos-btn-ghost" href="https://github.com/yALearner/OryxOS-one" target="_blank" rel="noopener">GitHub</a>
           </div>
         </div>
