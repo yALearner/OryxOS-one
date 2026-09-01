@@ -1,5 +1,6 @@
 package com.oryxos.provider;
 
+import com.oryxos.core.LlmGateway;
 import com.oryxos.core.Profile;
 import com.oryxos.storage.LlmCall;
 import com.oryxos.storage.LlmCallRepository;
@@ -31,7 +32,7 @@ import org.springframework.ai.model.tool.ToolCallingChatOptions;
  *
  * <p>审计（day one）：成功与失败都落 {@code llm_calls}；失败路径先落账再把异常原样上抛。
  */
-public final class ProviderService {
+public final class ProviderService implements LlmGateway {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProviderService.class);
 
@@ -52,6 +53,7 @@ public final class ProviderService {
    * @param profile Agent 运行时配置（路由与默认调用参数的来源）
    * @param prompt 要发送的内容（消息列表 + 可用工具）
    */
+  @Override
   @SuppressFBWarnings(
       value = "THROWS_METHOD_THROWS_RUNTIMEEXCEPTION",
       justification = "契约要求：失败路径先落审计、异常原样上抛（需求文档 FR-5/FR-7、contracts/provider-service.md 行为不变量）")

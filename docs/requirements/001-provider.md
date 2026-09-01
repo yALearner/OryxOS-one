@@ -2,6 +2,8 @@
 
 > 需求编号：001-provider | 对应主体阶段 US-1（对接 LLM，核心能力一）
 > 文档依据（唯一来源）：`docs/AiProgrammingGuide.md` §4.1、`docs/TechnicalSolution.md` §1.1/§3/§8.2/§9.2、`docs/DemandAnalysis.md` §5.3/§6.1/§10/§13、`docs/IndustryResearch.md` §4.3~4.4
+>
+> 修订说明（2026-09-01，002-react G2 拍板）：① `ToolSchemaAdapter` 迁至 oryxos-core（类+测试随迁，逻辑零改动；002 的 PromptBuilder 在 core 消费它，依赖方向 core ← provider 下无法反向引用）；② `ProviderService` 增加 `implements LlmGateway`（core 定义的依赖倒置端口，签名逐字一致，既有调用方不受影响）。
 
 ## 背景与价值
 

@@ -46,8 +46,10 @@ Agent 配置 | Channel | Memory | Tool | 审计
 ```
 oryxos/
 ├── oryxos-core          # 核心抽象：OryxTool 接口、Session、Profile、ContextLoader、
-│                        #   AgentLoader、ReActLoop、PromptBuilder、ToolExecutor、AgentService、AgentScheduler
-├── oryxos-provider      # 能力一：ProviderService、Function Calling 适配、
+│                        #   AgentLoader、ReActLoop、PromptBuilder、ToolExecutor、AgentService、
+│                        #   ProfileContext、SessionManager、AgentScheduler、ToolSchemaAdapter、
+│                        #   LlmGateway（依赖倒置端口）
+├── oryxos-provider      # 能力一：ProviderService、
 │                        #   多 Provider 显式映射（provider name → ChatModel）
 ├── oryxos-memory        # 能力三：MemoryService 统一门面、LongTermMemory 可插拔后端、
 │                        #   MemoryTools（save_memory / recall_memory）

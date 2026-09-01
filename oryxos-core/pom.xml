@@ -48,6 +48,13 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
+        <!-- Spring AI 数据模型（拍板③：仅纯数据模型 Prompt/ChatResponse/ToolCall/ToolDefinition，
+             禁用 Agent 抽象与自动 tool 执行——不引入 starter/自动配置；T001 已实测 spring-ai-model 承载全部所需类型） -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-model</artifactId>
+        </dependency>
+
         <!-- 测试 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
