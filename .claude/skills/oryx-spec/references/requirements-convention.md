@@ -31,11 +31,15 @@ docs/requirements/
   /oryx-spec US-3                  # 主体阶段 user story
   /oryx-spec 001-react-runtime --from tasks   # 断点续跑
 
-若无需求文档：按本文件「需求文档最小模板」先创建 docs/requirements/NNN-slug.md。
-需求文档的编写是人工判断事项，本 skill 不代写。
+若无需求文档：调用 `/oryx-design <目标模块>` 生成六段式设计文档（优先），
+或按本文件「需求文档最小模板」手写（兜底）。设计文档的编写须经人工复核。
 ```
 
 ## 需求文档最小模板
+
+> **优先用完整模板**：`/oryx-design` skill 的 `references/template.md` 提供六段式完整模板
+> （背景与价值 / 用户场景 / 功能需求 / 明确不做 / 验收标准 / 依赖与假设），
+> `docs/requirements/001-provider.md` / `002-react.md` 是事实模板。本最小模板仅作兜底。
 
 ```markdown
 # <特性名>
