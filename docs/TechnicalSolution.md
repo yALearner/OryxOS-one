@@ -648,8 +648,8 @@ OryxOS 是 Maven 多模块项目，由 9 个模块组成：
 
 | 模块名 | 职责 |
 |--------|------|
-| `oryxos-core` | 核心抽象和接口：`OryxTool` 接口、`Session`、`Profile`、`ContextLoader`、`AgentLoader`（扫 `.oryxos/agents/`、`deriveProfile`）、`ReActLoop`、`PromptBuilder`、`ToolExecutor`、`AgentService`、`AgentScheduler`（定时触发）、`AgentLifecycleService`（扩展阶段，编排"定义一个 Agent（Agent 目录落盘 + 派生 Profile + 注册 + Scheduler）"） |
-| `oryxos-provider` | 核心能力一：`ProviderService`、Function Calling 适配、Provider 配置（provider name 到 `ChatModel` 显式映射） |
+| `oryxos-core` | 核心抽象和接口：`OryxTool` 接口、`Session`、`Profile`、`ContextLoader`、`AgentLoader`（扫 `.oryxos/agents/`、`deriveProfile`）、`ReActLoop`、`PromptBuilder`、`ToolExecutor`、`AgentService`、`ProfileContext`、`SessionManager`、`ToolSchemaAdapter`（Function Calling 翻译）、`LlmGateway`（依赖倒置端口）、`AgentScheduler`（定时触发）、`AgentLifecycleService`（扩展阶段，编排"定义一个 Agent（Agent 目录落盘 + 派生 Profile + 注册 + Scheduler）"） |
+| `oryxos-provider` | 核心能力一：`ProviderService`、Provider 配置（provider name 到 `ChatModel` 显式映射） |
 | `oryxos-memory` | 核心能力三：`MemoryService` 统一门面、`LongTermMemory`、`MemoryTools`（`save_memory` / `recall_memory`） |
 | `oryxos-tool` | 核心能力四：内置 Tool（`FileTools`、`ShellTools`、`HttpTools`、`NotifyTools`）、`McpClientService`、`McpToolAdapter`、`ToolRegistry`、`Sandbox` 接口 + `WhitelistSandbox` 实现、`NotifyChannelAdapter` 接口 + `WebhookNotifyAdapter` 实现（三合一模块） |
 | `oryxos-channel-cli` | CLI Channel：`CliChannel`、`oryxos chat` 命令实现 |

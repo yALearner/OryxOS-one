@@ -109,7 +109,7 @@
    ③ grep 无明文 key ④ `session_id` 只在 `SessionManager` 内拼接
    ⑤ 无 Reactor / `CompletableFuture` / 自建线程池 ⑥ 无 Spring AI 自动工具执行路径
 6. 验收报告：以上证据 + 需求文档验收标准中**剩余人工项清单**，明确告知用户
-   「机器已判卷的部分与等你人工过的部分」
+   「机器已判卷的部分与等你人工过的部分」（人工项执行方法见 `references/manual-acceptance.md`）
 7. **变更总结三段结构**（直接输出在对话里，不另开文件，以 `git status --short` /
    `git diff --stat` 实测为准）：
    - **改动点**：按模块分组列新增/移动/修改/删除的文件，每处一句话说明动机；

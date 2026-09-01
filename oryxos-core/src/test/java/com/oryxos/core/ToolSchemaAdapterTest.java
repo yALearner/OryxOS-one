@@ -1,12 +1,10 @@
-package com.oryxos.provider;
+package com.oryxos.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oryxos.core.JsonSchema;
-import com.oryxos.core.OryxTool;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.ai.tool.definition.DefaultToolDefinition;
 import org.springframework.ai.tool.definition.ToolDefinition;
 
-/** ToolSchemaAdapter 验收 harness——schema 字段一一对齐、产物不含执行逻辑。 */
+/** ToolSchemaAdapter 验收 harness——schema 字段一一对齐、产物不含执行逻辑（002 自 oryxos-provider 随迁，逻辑零改动）。 */
 class ToolSchemaAdapterTest {
 
   private final ToolSchemaAdapter adapter = new ToolSchemaAdapter(new ObjectMapper());
