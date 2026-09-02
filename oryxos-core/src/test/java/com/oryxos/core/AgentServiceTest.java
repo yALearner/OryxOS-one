@@ -8,6 +8,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oryxos.storage.SessionRepository;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +40,14 @@ class AgentServiceTest {
   }
 
   private Session session() {
-    return new SessionManager().getOrCreate("cli", "alice", "ops-agent");
+    return newSessionManager().getOrCreate("cli", "alice", "ops-agent");
+  }
+
+  /** 003 起 SessionManager 为 JPA 版（构造注入仓储）；测试用 mock 仓储 + 真 ObjectMapper。 */
+  private SessionManager newSessionManager() {
+    SessionRepository repository = mock(SessionRepository.class);
+    when(repository.findById(anyString())).thenReturn(java.util.Optional.empty());
+    return new SessionManager(repository, new ObjectMapper());
   }
 
   @AfterEach
@@ -56,9 +65,10 @@ class AgentServiceTest {
               assertThat(ProfileContext.current()).isSameAs(profile);
               return "ok";
             });
-    when(sessionManager.getOrCreate(anyString(), anyString(), anyString())).thenReturn(session());
+    Session session = session();
+    when(sessionManager.getOrCreate(anyString(), anyString(), anyString())).thenReturn(session);
 
-    service().process(session(), "hi");
+    service().process(session, "hi");
 
     assertThat(ProfileContext.current()).isNull(); // 结束后已清理
   }
@@ -68,9 +78,10 @@ class AgentServiceTest {
   void profileContextClearedEvenWhenProcessingThrows() {
     profileRegistry.register(profile);
     when(reActLoop.run(any(), anyString(), any())).thenThrow(new RuntimeException("boom"));
-    when(sessionManager.getOrCreate(anyString(), anyString(), anyString())).thenReturn(session());
+    Session session = session();
+    when(sessionManager.getOrCreate(anyString(), anyString(), anyString())).thenReturn(session);
 
-    assertThatThrownBy(() -> service().process(session(), "hi"))
+    assertThatThrownBy(() -> service().process(session, "hi"))
         .isInstanceOf(RuntimeException.class)
         .hasMessageContaining("boom");
 
@@ -82,8 +93,8 @@ class AgentServiceTest {
   void sessionSavedAfterProcessing() {
     profileRegistry.register(profile);
     when(reActLoop.run(any(), anyString(), any())).thenReturn("reply");
-    when(sessionManager.getOrCreate(anyString(), anyString(), anyString())).thenReturn(session());
     Session session = session();
+    when(sessionManager.getOrCreate(anyString(), anyString(), anyString())).thenReturn(session);
 
     service().process(session, "hi");
 
@@ -93,9 +104,10 @@ class AgentServiceTest {
   @Test
   @DisplayName("Profile 从注册表按 session.profileName() 获取；未注册则清晰报错")
   void profileResolvedFromRegistryOrClearError() {
-    when(sessionManager.getOrCreate(anyString(), anyString(), anyString())).thenReturn(session());
+    Session session = session();
+    when(sessionManager.getOrCreate(anyString(), anyString(), anyString())).thenReturn(session);
 
-    assertThatThrownBy(() -> service().process(session(), "hi"))
+    assertThatThrownBy(() -> service().process(session, "hi"))
         .isInstanceOf(IllegalStateException.class)
         .hasMessageContaining("ops-agent");
   }

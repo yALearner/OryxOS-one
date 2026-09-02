@@ -65,6 +65,10 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <!-- 003-cli：boot 是唯一打包入口（单二进制，mainClass 已迁至 boot pom）。
+                         cli 作为库必须出 plain jar——本模块 repackage 会产出嵌套 fat jar，
+                         嵌进 boot 后类加载失败（BOOT-INF 套 BOOT-INF）。mainClass 保留供将来独立打包时启用。 -->
+                    <skip>true</skip>
                     <mainClass>com.oryxos.cli.OryxOsCli</mainClass>
                 </configuration>
             </plugin>

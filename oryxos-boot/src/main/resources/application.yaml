@@ -22,6 +22,14 @@ spring:
       ddl-auto: none
     show-sql: false
 
+  # 手工建表脚本接线（003-cli：001 review 留白的"建表脚本无人自动执行"在本课到期）——
+  # SQLite 不被 Spring Boot 视为 embedded 数据库，mode 必须显式 always；
+  # schema.sql 全部 CREATE TABLE IF NOT EXISTS（幂等，每次启动执行安全）
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+
   # Spring AI — 核心阶段通过环境变量注入真实 API key
   ai:
     openai:

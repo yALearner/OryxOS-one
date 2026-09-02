@@ -1,8 +1,11 @@
 package com.oryxos.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oryxos.storage.SessionRepository;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -61,6 +64,14 @@ class PromptBuilderTest {
         new Profile.Settings(10, 20));
   }
 
+  /** 003 起 SessionManager 为 JPA 版（构造注入仓储）；测试用 mock 仓储 + 真 ObjectMapper。 */
+  private SessionManager newSessionManager() {
+    SessionRepository repository = mock(SessionRepository.class);
+    when(repository.findById(org.mockito.ArgumentMatchers.anyString()))
+        .thenReturn(java.util.Optional.empty());
+    return new SessionManager(repository, new ObjectMapper());
+  }
+
   private PromptBuilder builder(Path workspace, List<OryxTool> tools) {
     Map<String, OryxTool> toolSet = new java.util.HashMap<>();
     for (OryxTool t : tools) {
@@ -74,7 +85,7 @@ class PromptBuilderTest {
   void fourSectionsInOrderWithDateAtSystemEnd(@TempDir Path workspace) throws Exception {
     Files.writeString(workspace.resolve("AGENTS.md"), "# 引导内容A");
     Files.writeString(workspace.resolve("SOUL.md"), "# 引导内容B");
-    Session session = new SessionManager().getOrCreate("cli", "alice", "ops-agent");
+    Session session = newSessionManager().getOrCreate("cli", "alice", "ops-agent");
     session.append(Message.user("hi"));
     session.append(Message.assistant("你好"));
 
@@ -104,7 +115,7 @@ class PromptBuilderTest {
   @Test
   @DisplayName("坑二回归：历史超 N 轮被截断，且不切断一轮内的 tool 调用链")
   void historyTruncatedWithoutSplittingToolChains(@TempDir Path workspace) throws Exception {
-    Session session = new SessionManager().getOrCreate("cli", "alice", "ops-agent");
+    Session session = newSessionManager().getOrCreate("cli", "alice", "ops-agent");
     // 第 1 轮：带 tool 调用链（截断后应整体丢弃）
     session.append(Message.user("第1轮"));
     session.append(assistantWithToolCall("call-1"));
@@ -146,7 +157,7 @@ class PromptBuilderTest {
   @Test
   @DisplayName("工具列表为 Function Calling 格式，且按 Profile.tools 过滤")
   void toolsAttachedInFunctionCallingFormatAndFiltered(@TempDir Path workspace) {
-    Session session = new SessionManager().getOrCreate("cli", "alice", "ops-agent");
+    Session session = newSessionManager().getOrCreate("cli", "alice", "ops-agent");
     session.append(Message.user("hi"));
 
     Prompt prompt =
@@ -166,7 +177,7 @@ class PromptBuilderTest {
   @Test
   @DisplayName("工具列表为空：prompt 正常组装，无工具段不报错")
   void emptyToolSetBuildsPromptWithoutToolSection(@TempDir Path workspace) {
-    Session session = new SessionManager().getOrCreate("cli", "alice", "ops-agent");
+    Session session = newSessionManager().getOrCreate("cli", "alice", "ops-agent");
     session.append(Message.user("hi"));
 
     Prompt prompt =
@@ -181,7 +192,7 @@ class PromptBuilderTest {
   @DisplayName("长期记忆段未启用时跳过（system 只含角色+引导+日期时间）")
   void memorySectionSkippedWhenMemoryUnavailable(@TempDir Path workspace) throws Exception {
     Files.writeString(workspace.resolve("AGENTS.md"), "引导");
-    Session session = new SessionManager().getOrCreate("cli", "alice", "ops-agent");
+    Session session = newSessionManager().getOrCreate("cli", "alice", "ops-agent");
     session.append(Message.user("hi"));
 
     Prompt prompt =
