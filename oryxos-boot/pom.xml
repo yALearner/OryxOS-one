@@ -86,6 +86,12 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- 单二进制：整个程序的 main 是 CLI 入口（技术方案 §8.7「OryxOsCli 是整个程序的 main」）；
+                         重命令经 Class.forName 加载本模块的 OryxOsApplication（坑九防线所在），
+                         application.yaml（oryxos.providers 全局层）随 boot 打进 fat jar 供轻命令读取 -->
+                    <mainClass>com.oryxos.cli.OryxOsCli</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>

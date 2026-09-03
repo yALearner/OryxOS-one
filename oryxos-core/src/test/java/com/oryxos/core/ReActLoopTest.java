@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oryxos.storage.SessionRepository;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,13 @@ class ReActLoopTest {
 
   private final LlmGateway gateway = mock(LlmGateway.class);
   private final ToolExecutor toolExecutor = mock(ToolExecutor.class);
+
+  /** 003 起 SessionManager 为 JPA 版（构造注入仓储）；测试用 mock 仓储 + 真 ObjectMapper。 */
+  private SessionManager newSessionManager() {
+    SessionRepository repository = mock(SessionRepository.class);
+    when(repository.findById(anyString())).thenReturn(java.util.Optional.empty());
+    return new SessionManager(repository, new ObjectMapper());
+  }
 
   private ReActLoop loop() {
     // 真实 PromptBuilder（骨架期无历史注入也无妨——ReActLoop 只关心拿到 Prompt）；
@@ -66,7 +74,7 @@ class ReActLoopTest {
   void singleRoundWhenNoToolCalls() {
     when(gateway.chat(anyString(), any(), any())).thenReturn(textResponse("今天适合穿薄外套"));
 
-    Session session = new SessionManager().getOrCreate("cli", "alice", "test-agent");
+    Session session = newSessionManager().getOrCreate("cli", "alice", "test-agent");
     String reply = loop().run(session, "查天气", profileWith(10));
 
     assertThat(reply).isEqualTo("今天适合穿薄外套");
@@ -81,7 +89,7 @@ class ReActLoopTest {
         .thenReturn(textResponse("建议穿外套"));
     when(toolExecutor.execute(anyString(), any())).thenReturn(ToolResult.success("北京 22°C"));
 
-    Session session = new SessionManager().getOrCreate("cli", "alice", "test-agent");
+    Session session = newSessionManager().getOrCreate("cli", "alice", "test-agent");
     String reply = loop().run(session, "查天气", profileWith(10));
 
     assertThat(reply).isEqualTo("建议穿外套");
@@ -97,7 +105,7 @@ class ReActLoopTest {
         .thenReturn(textResponse("最终答复"));
     when(toolExecutor.execute(anyString(), any())).thenReturn(ToolResult.success("北京 22°C"));
 
-    Session session = new SessionManager().getOrCreate("cli", "alice", "test-agent");
+    Session session = newSessionManager().getOrCreate("cli", "alice", "test-agent");
     loop().run(session, "查天气", profileWith(10));
 
     List<Message> messages = session.messages();
@@ -120,7 +128,7 @@ class ReActLoopTest {
     when(gateway.chat(anyString(), any(), any())).thenReturn(toolCallResponse());
     when(toolExecutor.execute(anyString(), any())).thenReturn(ToolResult.success("ok"));
 
-    Session session = new SessionManager().getOrCreate("cli", "alice", "test-agent");
+    Session session = newSessionManager().getOrCreate("cli", "alice", "test-agent");
     String reply = loop().run(session, "查天气", profileWith(10));
 
     verify(gateway, times(10)).chat(anyString(), any(), any());
@@ -134,7 +142,7 @@ class ReActLoopTest {
     when(gateway.chat(anyString(), any(), any())).thenReturn(textResponse("直接答复"));
 
     loop()
-        .run(new SessionManager().getOrCreate("cli", "alice", "test-agent"), "hi", profileWith(10));
+        .run(newSessionManager().getOrCreate("cli", "alice", "test-agent"), "hi", profileWith(10));
 
     verify(toolExecutor, times(0)).execute(anyString(), any());
   }
@@ -144,7 +152,7 @@ class ReActLoopTest {
   void eachLlmCallCarriesSessionId() {
     when(gateway.chat(anyString(), any(), any())).thenReturn(textResponse("ok"));
 
-    Session session = new SessionManager().getOrCreate("cli", "alice", "test-agent");
+    Session session = newSessionManager().getOrCreate("cli", "alice", "test-agent");
     loop().run(session, "hi", profileWith(10));
 
     verify(gateway).chat(eq("cli|alice|test-agent"), any(), any(Prompt.class));
@@ -159,7 +167,7 @@ class ReActLoopTest {
     when(toolExecutor.execute(anyString(), any()))
         .thenReturn(ToolResult.failure("网络错误", true)); // 失败结果带 retryable 回传
 
-    Session session = new SessionManager().getOrCreate("cli", "alice", "test-agent");
+    Session session = newSessionManager().getOrCreate("cli", "alice", "test-agent");
     String reply = loop().run(session, "查天气", profileWith(10));
 
     assertThat(reply).isEqualTo("网络不可用，已改从本地缓存查询，建议穿外套");

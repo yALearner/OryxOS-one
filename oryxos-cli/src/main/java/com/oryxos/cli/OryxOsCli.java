@@ -18,7 +18,17 @@ import picocli.CommandLine.Command;
     description = "OryxOS — Java 原生的、企业私有可审计的 Agent 统一底座",
     mixinStandardHelpOptions = true,
     versionProvider = OryxOsCli.VersionProvider.class,
-    subcommands = {})
+    subcommands = {
+      InitCommand.class,
+      StatusCommand.class,
+      ChatCommand.class,
+      ServeCommand.class,
+      GatewayCommand.class,
+      ProfileCommand.class,
+      ProviderCommand.class,
+      ToolCommand.class,
+      SessionCommand.class
+    })
 public class OryxOsCli implements Callable<Integer> {
 
   @Override

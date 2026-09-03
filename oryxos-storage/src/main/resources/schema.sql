@@ -31,3 +31,20 @@ CREATE TABLE IF NOT EXISTS tool_invocations (
     duration_ms   INTEGER,
     created_at    TEXT    NOT NULL
 );
+
+-- sessions 会话表（003-cli 新增，手工维护，不依赖 hibernate.ddl-auto 自动迁移）。
+-- 字段照技术方案 §9.2：session_id 由 SessionManager 按 channel|user|profile 唯一拼接；
+-- messages_json 对话历史整体 JSON 序列化一列存（核心阶段不按条拆表）；
+-- 时间戳 ISO-8601 TEXT（SQLite 无原生 TIMESTAMP，复用 InstantTextConverter）；归档流转归第 26 节。
+
+CREATE TABLE IF NOT EXISTS sessions (
+    session_id     TEXT PRIMARY KEY,
+    profile_name   TEXT NOT NULL,
+    channel        TEXT NOT NULL,
+    user_id        TEXT NOT NULL,
+    messages_json  TEXT,
+    status         TEXT NOT NULL DEFAULT 'active',
+    created_at     TEXT NOT NULL,
+    last_active_at TEXT NOT NULL,
+    archived_at    TEXT
+);
