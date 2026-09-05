@@ -23,7 +23,7 @@ WARNING 记录: （累计 1/3）
 - [x] 临时 harness NotifyManualIT（成功落账带渠道名 + 反例二条 + JPA 映射回读断言，3/3 全绿；已按方法论删除）
 - [x] 落库核对（notify_channels 4 列；tool_invocations success/result_json/duration_ms 核对通过；harness 期间发现并修复两坑：① surefire 工作目录实测 = 模块目录 → .oryxos 父目录先建 ② 数据源必须 @DynamicPropertySource 隔离 target/manual-it，避免 deleteAll 碰共享库）
 - [ ] 接口中立性自查（步骤四思维练习：换企业微信官方 SDK 实现，send(NotifyTarget, String) 签名需要改吗？答案应是不需要——留给用户 1 分钟自查）
-- [ ] 已知待办：LLM 对话内自动调 notify 端到端 → 第 20 节工具注册后补验（需求文档既定契约）
+- [x] 已知待办：LLM 对话内自动调 notify 端到端 → 第 20 节（005-tool）已补验（2026-09-05：chat 里自动调 notify 推送成功，企业微信群收到，完整 ReAct 日志铁证）
 
 停止清单触发记录:
 - （2026-09-05 S0）分支检查：hook 未配置、当前在已合并的 003-cli → 按项目既有 {NNN}-{slug} 约定自 main 新建 004-notify（用户确认）；未提交的 docs 改动随工作区带入新分支
