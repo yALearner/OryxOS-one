@@ -62,5 +62,18 @@
             <version>4.10.4</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- MCP Client（005-tool 方式二：连接外部 MCP server；版本随 spring-ai-bom 管理） -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-client</artifactId>
+        </dependency>
+
+        <!-- @Tool 扫描自动配置（005-tool 方式三：MethodToolCallbackProvider bean 来源；版本随 spring-ai-bom 管理，
+             2026-09-05 用户拍板补列——原降级状态仅手动注册可走） -->
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-autoconfigure-model-tool</artifactId>
+        </dependency>
     </dependencies>
 </project>
