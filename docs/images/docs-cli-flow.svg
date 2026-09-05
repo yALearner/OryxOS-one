@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 470" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#64748b"/></marker>
+    <marker id="aGray" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#94a3b8"/></marker>
+    <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.08"/></filter>
+  </defs>
+  <rect width="860" height="470" fill="#f8fafc" rx="6"/>
+  <rect x="0" y="0" width="860" height="32" fill="#1e293b" rx="6"/>
+  <rect x="0" y="16" width="860" height="16" fill="#1e293b"/>
+  <text x="430" y="21" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="bold">CLI 12 子命令 — 轻重分流 · chat 三元组幂等 · Session JPA 持久化（跨重启恢复）</text>
+
+  <!-- Entry -->
+  <rect x="30" y="52" width="250" height="36" rx="6" fill="#1e293b" filter="url(#sh)"/>
+  <text x="155" y="74" text-anchor="middle" fill="#f1f5f9" font-size="9" font-weight="bold">oryxos init | status | chat | profile …（12 子命令，Picocli）</text>
+  <line x1="95" y1="88" x2="95" y2="102" stroke="#64748b" stroke-width="1.2" marker-end="url(#a)"/>
+  <line x1="215" y1="88" x2="215" y2="102" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#a)"/>
+
+  <!-- Light commands -->
+  <rect x="30" y="104" width="120" height="170" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="90" y="122" text-anchor="middle" font-size="9" font-weight="bold" fill="#334155">轻命令（不启 Spring）</text>
+  <text x="90" y="142" text-anchor="middle" font-size="8" fill="#475569">init 幂等建 .oryxos/</text>
+  <text x="90" y="160" text-anchor="middle" font-size="8" fill="#475569">profile ×4</text>
+  <text x="90" y="178" text-anchor="middle" font-size="8" fill="#475569">status · provider list</text>
+  <text x="90" y="196" text-anchor="middle" font-size="8" fill="#475569">tool list · session list</text>
+  <text x="90" y="218" text-anchor="middle" font-size="8" fill="#475569">标准 API 读文件 /</text>
+  <text x="90" y="232" text-anchor="middle" font-size="8" fill="#475569">JDBC 直读 SQLite</text>
+  <text x="90" y="256" text-anchor="middle" font-size="8" fill="#64748b">→ 秒回</text>
+
+  <!-- Heavy commands -->
+  <rect x="160" y="104" width="120" height="116" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="220" y="122" text-anchor="middle" font-size="9" font-weight="bold" fill="#1d4ed8">重命令（启 Spring）</text>
+  <text x="220" y="142" text-anchor="middle" font-size="8" fill="#1e40af">chat</text>
+  <text x="220" y="158" text-anchor="middle" font-size="8" fill="#1e40af">serve / gateway</text>
+  <text x="220" y="178" text-anchor="middle" font-size="8" fill="#1e40af">坑九：JPA 扫描根</text>
+  <text x="220" y="192" text-anchor="middle" font-size="8" fill="#1e40af">@EnableJpaRepositories</text>
+  <text x="220" y="206" text-anchor="middle" font-size="8" fill="#1e40af">@EntityScan 显式声明</text>
+
+  <!-- Criterion -->
+  <rect x="30" y="290" width="250" height="40" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="155" y="308" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#b45309">分流判据唯一（课件 §二）：</text>
+  <text x="155" y="324" text-anchor="middle" font-size="8" fill="#92400e">要不要调模型 / 跑引擎</text>
+
+  <!-- Terminal -->
+  <rect x="340" y="52" width="200" height="40" rx="5" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="440" y="68" text-anchor="middle" font-size="8.5" fill="#475569">终端（人推入口）</text>
+  <text x="440" y="84" text-anchor="middle" font-size="8" fill="#64748b">--profile · --message · /quit</text>
+  <line x1="440" y1="92" x2="440" y2="110" stroke="#94a3b8" stroke-width="1.2" marker-end="url(#aGray)"/>
+
+  <!-- CliChannel -->
+  <rect x="340" y="112" width="200" height="64" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="440" y="132" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">CliChannel（薄壳）</text>
+  <text x="440" y="150" text-anchor="middle" font-size="8" fill="#92400e">读一行 → 转交引擎 → 打印</text>
+  <text x="440" y="166" text-anchor="middle" font-size="8" fill="#92400e">user=本机用户名 · channel="cli"（三元组只交给 SessionManager 拼）</text>
+  <line x1="440" y1="176" x2="440" y2="194" stroke="#f59e0b" stroke-width="1.2" marker-end="url(#a)"/>
+
+  <!-- SessionManager -->
+  <rect x="340" y="196" width="200" height="64" rx="6" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="440" y="216" text-anchor="middle" font-size="10" font-weight="bold" fill="#6d28d9">SessionManager.getOrCreate</text>
+  <text x="440" y="234" text-anchor="middle" font-size="8" fill="#7c3aed">(channel, user, profileName)</text>
+  <text x="440" y="250" text-anchor="middle" font-size="8" fill="#7c3aed">同三元组幂等（H4 不变量四）· id 拼接只此一处</text>
+  <line x1="440" y1="260" x2="440" y2="278" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#a)"/>
+
+  <!-- AgentService -->
+  <rect x="340" y="280" width="200" height="54" rx="6" fill="#dcfce7" stroke="#10b981" stroke-width="2" filter="url(#sh)"/>
+  <text x="440" y="300" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">AgentService.process(session, line)</text>
+  <text x="440" y="318" text-anchor="middle" font-size="8" fill="#166534">引擎（002 交付，本课不动）</text>
+
+  <!-- Return -->
+  <line x1="540" y1="307" x2="605" y2="307" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="605" y1="307" x2="605" y2="144" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="605" y1="144" x2="542" y2="144" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#aGray)"/>
+  <text x="610" y="220" font-size="7.5" fill="#64748b">响应打印</text>
+  <text x="610" y="232" font-size="7" fill="#94a3b8">（--message 单条后退出）</text>
+
+  <!-- Session -->
+  <rect x="620" y="52" width="210" height="48" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="725" y="70" text-anchor="middle" font-size="9" font-weight="bold" fill="#334155">Session（core 内存容器，002 契约）</text>
+  <text x="725" y="88" text-anchor="middle" font-size="8" fill="#475569">messages 累积 — 语义不动</text>
+  <line x1="725" y1="100" x2="725" y2="128" stroke="#64748b" stroke-width="1.2" marker-end="url(#a)"/>
+  <text x="732" y="118" font-size="7.5" fill="#475569">转换（本类内）</text>
+
+  <!-- SessionEntity -->
+  <rect x="620" y="130" width="210" height="48" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="725" y="148" text-anchor="middle" font-size="9" font-weight="bold" fill="#1d4ed8">SessionEntity（JPA 实体）</text>
+  <text x="725" y="166" text-anchor="middle" font-size="8" fill="#1e40af">messages_json 整体序列化一列存</text>
+  <line x1="725" y1="178" x2="725" y2="206" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#a)"/>
+
+  <!-- sessions table -->
+  <rect x="620" y="208" width="210" height="70" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="725" y="226" text-anchor="middle" font-size="9" font-weight="bold" fill="#1d4ed8">sessions 表（schema.sql 手工建表 · 坑八）</text>
+  <text x="725" y="242" text-anchor="middle" font-size="8" fill="#1e40af">session_id PK · profile_name · channel · user_id</text>
+  <text x="725" y="258" text-anchor="middle" font-size="8" fill="#1e40af">messages_json · status · 时间戳 ×3</text>
+  <text x="725" y="274" text-anchor="middle" font-size="7.5" fill="#1e40af">（ISO-8601 TEXT，InstantTextConverter）</text>
+  <line x1="725" y1="278" x2="725" y2="306" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#a)"/>
+
+  <!-- Restart recovery -->
+  <rect x="620" y="308" width="210" height="48" rx="5" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="725" y="326" text-anchor="middle" font-size="9" font-weight="bold" fill="#475569">跨重启恢复</text>
+  <text x="725" y="344" text-anchor="middle" font-size="8" fill="#64748b">同三元组 → 历史还在（模拟重启测试钉死）</text>
+
+  <!-- SessionManager to entity -->
+  <line x1="540" y1="228" x2="618" y2="228" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#a)"/>
+  <text x="548" y="222" font-size="7.5" fill="#6d28d9">save / get</text>
+
+  <!-- Bottom summary -->
+  <rect x="30" y="420" width="800" height="26" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="430" y="437" text-anchor="middle" font-size="8.5" fill="#475569">三种模式（chat / serve / gateway）共享同一份 Profile 配置与同一套 Session 存储；CLI 是入口不是干活的人——不碰 Agent 逻辑</text>
+</svg>

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 470" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#7d8ca5"/></marker>
+    <marker id="aGray" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#9db0c9"/></marker>
+    <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.08"/></filter>
+  </defs>
+  <rect width="860" height="470" fill="#0e1420" rx="6"/>
+  <rect x="0" y="0" width="860" height="32" fill="#d7e2f2" rx="6"/>
+  <rect x="0" y="16" width="860" height="16" fill="#d7e2f2"/>
+  <text x="430" y="21" text-anchor="middle" fill="#141b2c" font-size="12" font-weight="bold">notify 工具执行链路 — 四步顺序钉死 · 显式映射选 adapter · enforce 先于 send</text>
+
+  <!-- Agent -->
+  <rect x="30" y="55" width="170" height="48" rx="6" fill="#2a2110" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="115" y="76" text-anchor="middle" font-size="10" font-weight="bold" fill="#fbbf24">Agent 调 notify 工具</text>
+  <text x="115" y="94" text-anchor="middle" font-size="8" fill="#fcd34d">notify(content, channel=?)</text>
+  <line x1="200" y1="79" x2="238" y2="79" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- ToolExecutor -->
+  <rect x="240" y="52" width="380" height="54" rx="6" fill="#10203f" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="430" y="72" text-anchor="middle" font-size="11" font-weight="bold" fill="#93c5fd">ToolExecutor — 按名调度 + 审计 day one</text>
+  <text x="430" y="90" text-anchor="middle" font-size="8.5" fill="#93c5fd">成功与失败都写 tool_invocations（NotifyTools 不新增审计逻辑）</text>
+  <line x1="430" y1="106" x2="430" y2="124" stroke="#10b981" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- NotifyTools -->
+  <rect x="240" y="126" width="380" height="184" rx="8" fill="#0d2b21" stroke="#10b981" stroke-width="2" filter="url(#sh)"/>
+  <text x="430" y="146" text-anchor="middle" font-size="12" font-weight="bold" fill="#86efac">NotifyTools.execute — 四步顺序钉死</text>
+  <text x="260" y="176" font-size="9" fill="#6ee7b7">① registry.resolve(channel) → NotifyTarget</text>
+  <text x="260" y="212" font-size="9" fill="#6ee7b7">② adapters.get(channelType) — 显式映射选 adapter</text>
+  <text x="260" y="248" font-size="9" fill="#6ee7b7">③ sandbox.enforce(HTTP_REQUEST, url) — 先于 send（坑十）</text>
+  <text x="260" y="284" font-size="9" fill="#6ee7b7">④ adapter.send(target, content) → 已推送到 &lt;渠道名&gt;</text>
+
+  <!-- Right column: table -->
+  <rect x="650" y="52" width="180" height="78" rx="6" fill="#10203f" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="740" y="70" text-anchor="middle" font-size="9" font-weight="bold" fill="#93c5fd">notify_channels 表</text>
+  <line x1="662" y1="78" x2="818" y2="78" stroke="#1d3a6e" stroke-width="0.5"/>
+  <text x="662" y="94" font-size="8" fill="#93c5fd">name: "team-lark"</text>
+  <text x="662" y="108" font-size="8" fill="#93c5fd">type: "webhook"</text>
+  <text x="662" y="122" font-size="8" fill="#93c5fd">url: "https://open.feishu.cn/..."</text>
+  <line x1="740" y1="130" x2="740" y2="148" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#a)"/>
+
+  <!-- Right column: registry -->
+  <rect x="650" y="150" width="180" height="40" rx="6" fill="#191233" stroke="#8b5cf6" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="740" y="166" text-anchor="middle" font-size="9" font-weight="bold" fill="#a78bfa">NotifyChannelRegistry（纯数据）</text>
+  <text x="740" y="180" text-anchor="middle" font-size="8" fill="#a78bfa">name → NotifyTarget(type, url, name)</text>
+  <line x1="650" y1="170" x2="622" y2="170" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#a)"/>
+
+  <!-- Right column: explicit map -->
+  <rect x="650" y="190" width="180" height="78" rx="6" fill="#141b2c" stroke="#64748b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="740" y="208" text-anchor="middle" font-size="9" font-weight="bold" fill="#9db0c9">装配处显式映射（宪法 III 哲学）</text>
+  <text x="740" y="224" text-anchor="middle" font-size="8" fill="#9db0c9">Map.of("webhook", webhookAdapter)</text>
+  <text x="740" y="240" text-anchor="middle" font-size="8" fill="#9db0c9">加新渠道 = 新增实现类 + 映射一行</text>
+  <text x="740" y="256" text-anchor="middle" font-size="8" fill="#9db0c9">已验收代码零改动</text>
+  <line x1="650" y1="212" x2="622" y2="212" stroke="#7d8ca5" stroke-width="1.2" marker-end="url(#a)"/>
+
+  <!-- Right column: future -->
+  <line x1="740" y1="268" x2="740" y2="286" stroke="#9db0c9" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="650" y="288" width="180" height="44" rx="6" fill="#141b2c" stroke="#33435e" stroke-width="1.2" stroke-dasharray="5,3"/>
+  <text x="740" y="306" text-anchor="middle" font-size="8.5" fill="#9db0c9">扩展阶段（只加不改）</text>
+  <text x="740" y="322" text-anchor="middle" font-size="8" fill="#9db0c9">LarkNotifyAdapter / WeComNotifyAdapter</text>
+
+  <!-- Failure path -->
+  <rect x="30" y="126" width="170" height="120" rx="6" fill="#33151f" stroke="#fb7185" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="115" y="146" text-anchor="middle" font-size="9" font-weight="bold" fill="#fb7185">失败路径（不静默）</text>
+  <text x="42" y="166" font-size="8" fill="#fb7185">· 渠道不存在 / 多条缺省</text>
+  <text x="42" y="184" font-size="8" fill="#fb7185">· channelType 无 adapter</text>
+  <text x="42" y="202" font-size="8" fill="#fb7185">· 白名单拒绝（enforce 抛异常）</text>
+  <text x="42" y="226" font-size="8" fill="#fb7185">→ 明确报错，Agent 不会以为</text>
+  <text x="42" y="240" font-size="8" fill="#fb7185">  发出去了；审计落 success=false</text>
+  <line x1="240" y1="190" x2="202" y2="190" stroke="#fb7185" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#a)"/>
+
+  <!-- Interface self-check -->
+  <rect x="30" y="300" width="170" height="84" rx="6" fill="#191233" stroke="#8b5cf6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="115" y="320" text-anchor="middle" font-size="9" font-weight="bold" fill="#a78bfa">接口先行自查（课件 §五）</text>
+  <text x="42" y="340" font-size="8" fill="#a78bfa">换企业微信 SDK 实现：</text>
+  <text x="42" y="356" font-size="8" fill="#a78bfa">send(target, content) 签名</text>
+  <text x="42" y="372" font-size="8" fill="#a78bfa">需要改吗？→ 不需要</text>
+
+  <!-- Adapter -->
+  <line x1="430" y1="310" x2="430" y2="314" stroke="#10b981" stroke-width="1.5" marker-end="url(#a)"/>
+  <rect x="240" y="316" width="380" height="42" rx="6" fill="#0d2b21" stroke="#16a34a" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="430" y="334" text-anchor="middle" font-size="10" font-weight="bold" fill="#86efac">WebhookNotifyAdapter — 核心阶段唯一实现</text>
+  <text x="430" y="350" text-anchor="middle" font-size="8" fill="#6ee7b7">RestClient POST JSON {content} → target.config 的 url；5xx 异常上抛（坑十一）</text>
+
+  <!-- External targets -->
+  <line x1="430" y1="358" x2="430" y2="386" stroke="#9db0c9" stroke-width="1.2" marker-end="url(#aGray)"/>
+  <rect x="240" y="388" width="380" height="36" rx="5" fill="#263248" stroke="#9db0c9" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="430" y="410" text-anchor="middle" font-size="9" fill="#7d8ca5">企业微信 · 飞书 · 钉钉 群机器人 webhook</text>
+
+  <!-- Audit -->
+  <rect x="30" y="434" width="800" height="26" rx="5" fill="#33151f"/>
+  <text x="430" y="451" text-anchor="middle" font-size="8.5" fill="#fb7185">审计 day one：notify 复用 ToolExecutor 既有审计路径 — 成功记 "已推送到 &lt;渠道名&gt;"，失败记 success=false + 原因；不新增审计逻辑</text>
+</svg>

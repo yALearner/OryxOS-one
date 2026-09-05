@@ -48,3 +48,14 @@ CREATE TABLE IF NOT EXISTS sessions (
     last_active_at TEXT NOT NULL,
     archived_at    TEXT
 );
+
+-- notify_channels 通知渠道全局注册表（004-notify 新增，手工维护，不依赖 hibernate.ddl-auto 自动迁移）。
+-- 技术方案 §6.8：Agent 正文按 name 引用渠道，webhook 地址不进对话、不进 frontmatter；
+-- type 核心阶段均为 webhook（扩展阶段其他类型自行解释 url 语义）；CRUD 归 Web Service 节。
+
+CREATE TABLE IF NOT EXISTS notify_channels (
+    name        TEXT PRIMARY KEY,
+    type        TEXT NOT NULL,
+    url         TEXT NOT NULL,
+    description TEXT
+);
