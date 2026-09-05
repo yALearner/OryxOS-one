@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 540" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#7d8ca5"/></marker>
+    <marker id="aGray" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#9db0c9"/></marker>
+    <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.08"/></filter>
+  </defs>
+  <rect width="860" height="540" fill="#0e1420" rx="6"/>
+  <rect x="0" y="0" width="860" height="32" fill="#d7e2f2" rx="6"/>
+  <rect x="0" y="16" width="860" height="16" fill="#d7e2f2"/>
+  <text x="430" y="21" text-anchor="middle" fill="#141b2c" font-size="12" font-weight="bold">ReAct 循环 — 想一步 · 做一步 · 看结果 · 直到收敛（执行权唯一：ToolExecutor）</text>
+
+  <!-- Trigger -->
+  <rect x="30" y="52" width="220" height="40" rx="5" fill="#263248" stroke="#9db0c9" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="140" y="68" text-anchor="middle" font-size="8.5" fill="#7d8ca5">触发源（宪法 VIII：一个引擎三个入口）</text>
+  <text x="140" y="84" text-anchor="middle" font-size="8" fill="#9db0c9">CLI · Web · AgentScheduler — 接入从 18/25 节起</text>
+  <line x1="140" y1="92" x2="140" y2="110" stroke="#9db0c9" stroke-width="1.2" marker-end="url(#aGray)"/>
+
+  <!-- AgentService -->
+  <rect x="30" y="112" width="220" height="88" rx="6" fill="#191233" stroke="#8b5cf6" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="140" y="132" text-anchor="middle" font-size="10" font-weight="bold" fill="#a78bfa">AgentService.process — 统一编排</text>
+  <text x="140" y="150" text-anchor="middle" font-size="8" fill="#a78bfa">① ProfileContext.set(profile)</text>
+  <text x="140" y="168" text-anchor="middle" font-size="8" fill="#a78bfa">② reActLoop.run → sessionManager.save(session)</text>
+  <text x="140" y="186" text-anchor="middle" font-size="8" fill="#a78bfa">③ finally ProfileContext.clear() — 坑四：异常也必须清</text>
+
+  <!-- ContextLoader -->
+  <rect x="30" y="230" width="220" height="84" rx="6" fill="#141b2c" stroke="#64748b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="140" y="250" text-anchor="middle" font-size="9" font-weight="bold" fill="#9db0c9">ContextLoader（FR-3 · 坑五）</text>
+  <text x="140" y="268" text-anchor="middle" font-size="8" fill="#9db0c9">每次组装重新读文件，不缓存</text>
+  <text x="140" y="286" text-anchor="middle" font-size="8" fill="#9db0c9">Bootstrap 三件套 + Skill 元数据</text>
+  <text x="140" y="304" text-anchor="middle" font-size="8" fill="#9db0c9">显式引用缺失报错 / Bootstrap 缺失 WARN</text>
+  <line x1="250" y1="272" x2="285" y2="272" stroke="#7d8ca5" stroke-width="1.2"/>
+  <line x1="285" y1="272" x2="285" y2="78" stroke="#7d8ca5" stroke-width="1.2"/>
+  <line x1="285" y1="78" x2="318" y2="78" stroke="#7d8ca5" stroke-width="1.2" marker-end="url(#a)"/>
+
+  <!-- PromptBuilder -->
+  <rect x="320" y="52" width="400" height="56" rx="6" fill="#141b2c" stroke="#64748b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="520" y="70" text-anchor="middle" font-size="9" font-weight="bold" fill="#9db0c9">② PromptBuilder — 每轮组装四部分</text>
+  <text x="520" y="88" text-anchor="middle" font-size="8" fill="#9db0c9">system prompt（角色 + Skill 元数据 + 当前日期）· 长期记忆（没开跳过）· 会话历史（截断 20 轮，坑二）</text>
+  <text x="520" y="100" text-anchor="middle" font-size="8" fill="#9db0c9">工具列表（001 ToolSchemaAdapter 翻译）</text>
+  <line x1="520" y1="108" x2="520" y2="126" stroke="#7d8ca5" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- AgentService to ReActLoop -->
+  <line x1="250" y1="156" x2="300" y2="156" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="300" y1="156" x2="300" y2="174" stroke="#8b5cf6" stroke-width="1.2"/>
+  <line x1="300" y1="174" x2="318" y2="174" stroke="#8b5cf6" stroke-width="1.2" marker-end="url(#a)"/>
+
+  <!-- ReActLoop -->
+  <rect x="320" y="128" width="400" height="92" rx="8" fill="#0d2b21" stroke="#10b981" stroke-width="2" filter="url(#sh)"/>
+  <text x="520" y="148" text-anchor="middle" font-size="11" font-weight="bold" fill="#86efac">③ ReActLoop.run — 调度循环（自实现，禁框架循环 · 宪法 I）</text>
+  <text x="520" y="168" text-anchor="middle" font-size="8.5" fill="#6ee7b7">调 providerService.chat(session.id()) → 写 llm_calls（成功失败都落）</text>
+  <text x="520" y="188" text-anchor="middle" font-size="8.5" fill="#6ee7b7">有 tool call？→ ToolExecutor；无 → 返回最终响应；maxIterations=10 强制停（坑一）</text>
+
+  <!-- Final response -->
+  <line x1="390" y1="220" x2="390" y2="248" stroke="#9db0c9" stroke-width="1.2" marker-end="url(#aGray)"/>
+  <text x="398" y="238" font-size="7.5" fill="#9db0c9">无 tool call</text>
+  <rect x="320" y="250" width="180" height="44" rx="6" fill="#263248" stroke="#9db0c9" stroke-width="1" filter="url(#sh)"/>
+  <text x="410" y="268" text-anchor="middle" font-size="9" font-weight="bold" fill="#7d8ca5">返回最终响应</text>
+  <text x="410" y="284" text-anchor="middle" font-size="8" fill="#9db0c9">（经 AgentService 给用户）</text>
+
+  <!-- ToolExecutor -->
+  <line x1="620" y1="220" x2="620" y2="248" stroke="#3b82f6" stroke-width="1.2" marker-end="url(#a)"/>
+  <text x="628" y="238" font-size="7.5" fill="#93c5fd">有 tool call（逐个执行）</text>
+  <rect x="530" y="250" width="190" height="84" rx="6" fill="#10203f" stroke="#3b82f6" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="625" y="270" text-anchor="middle" font-size="10" font-weight="bold" fill="#93c5fd">④ ToolExecutor — 执行权唯一（宪法 II）</text>
+  <text x="625" y="288" text-anchor="middle" font-size="8" fill="#93c5fd">按名查 OryxTool → 执行</text>
+  <text x="625" y="306" text-anchor="middle" font-size="8" fill="#93c5fd">写 tool_invocations（坑七：失败也落账）</text>
+  <text x="625" y="322" text-anchor="middle" font-size="8" fill="#93c5fd">ToolResult 回填 Session（坑三：下一轮接得上）</text>
+
+  <!-- Loop back -->
+  <line x1="720" y1="292" x2="780" y2="292" stroke="#10b981" stroke-width="1.2"/>
+  <line x1="780" y1="292" x2="780" y2="174" stroke="#10b981" stroke-width="1.2"/>
+  <line x1="780" y1="174" x2="722" y2="174" stroke="#10b981" stroke-width="1.2" marker-end="url(#a)"/>
+  <text x="786" y="240" font-size="7.5" fill="#86efac">回填 → 继续循环</text>
+
+  <!-- Sandbox wall -->
+  <rect x="30" y="430" width="250" height="44" rx="5" fill="#141b2c" stroke="#33435e" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="155" y="448" text-anchor="middle" font-size="8.5" fill="#9db0c9">Sandbox 接口墙（FR-7 · oryxos-tool）</text>
+  <text x="155" y="464" text-anchor="middle" font-size="8" fill="#9db0c9">纯接口零实现；20 节起各工具 execute 首行接入；白名单 23/24 节</text>
+
+  <!-- Audit -->
+  <rect x="30" y="494" width="800" height="26" rx="5" fill="#33151f"/>
+  <text x="430" y="511" text-anchor="middle" font-size="8.5" fill="#fb7185">审计 day one：llm_calls + tool_invocations 成功失败都落账；执行权唯一——工具只在 ToolExecutor 一处执行（宪法 II）</text>
+</svg>

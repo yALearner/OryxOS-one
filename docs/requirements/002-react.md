@@ -51,6 +51,8 @@ Session 的对话历史包含完整的 LLM 调用链和 Tool 调用链（技术�
 | NFR-2 | 结构化 JSON 日志（Logback）：每次 LLM 调用和 Tool 调用都记录结构化日志，日志与审计落库并存（日志不等价于审计） | — | 需求文档 §5.4、技术方案 §1.2 |
 | NFR-3 | **职责边界划窄（正向定义）**：循环本身只做调度——转圈、判断停不停、攒结果；拼 prompt、调模型、执行工具全都交出去。循环里塞的东西越少，越好读、越不容易出 bug | — | 课件 §二、技术方案 §2 |
 
+![ReAct 循环全链路：三种触发源汇入 AgentService 统一编排（ProfileContext set/finally clear）→ PromptBuilder 每轮组装（ContextLoader 不缓存供给）→ ReActLoop 调度循环 → 无 tool call 返回最终响应 / 有 tool call 交 ToolExecutor 执行并回填继续循环；审计 day one 双表落账](../../website/public/images/docs-react-flow.svg)
+
 ### 核心代码骨架（与课件第17节一致）
 
 ```java

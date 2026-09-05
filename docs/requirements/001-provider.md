@@ -42,6 +42,8 @@ Agent 作者只写业务指令（`AGENT.md` 正文），不关心 DeepSeek 和 K
 | NFR-2 | 结构化 JSON 日志（Logback），LLM 调用日志与审计落库并存（日志不等价于审计） | — | 技术方案 §1.2 技术栈、§9.2 |
 | NFR-3 | **职责边界划窄（正向定义）**：Provider 只做三件事——挑对模型、发起一次调用、把结果拿回来；循环怎么转、工具怎么执行、上下文怎么拼装都不归它管，否则 Provider 会越写越胖、最后和 ReActLoop 缠在一起分不开。本节代码不触碰 `ReActLoop`/`ToolExecutor` 等 US-2 内容；Provider 层不感知消息从哪个入口来 | — | 编程指南 §4.1/§4.2 边界、技术方案 §8.6 三种运行模式 |
 
+![Agent Provider 调用链路：两层配置（全局层声明 + Profile 层引用校验）→ ProviderService 统一门面 → 显式映射选模型 → Spring AI 协议转换 → 各家 LLM；工具 schema 只翻译不执行；审计 day one 写 llm_calls](../../website/public/images/docs-provider-flow.svg)
+
 **配置形态示例**（全局层 + Profile 层各管一段，key 一律 `${ENV}` 占位）：
 
 ```yaml
