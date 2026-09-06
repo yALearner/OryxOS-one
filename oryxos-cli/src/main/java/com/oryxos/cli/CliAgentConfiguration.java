@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oryxos.channel.cli.CliChannel;
 import com.oryxos.core.AgentService;
 import com.oryxos.core.ContextLoader;
+import com.oryxos.core.LongTermMemoryStore;
+import com.oryxos.core.MemoryService;
 import com.oryxos.core.Profile;
 import com.oryxos.core.ProfileLoader;
 import com.oryxos.core.ProfileRegistry;
@@ -12,6 +14,12 @@ import com.oryxos.core.ReActLoop;
 import com.oryxos.core.SessionManager;
 import com.oryxos.core.ToolExecutor;
 import com.oryxos.core.ToolSchemaAdapter;
+import com.oryxos.memory.MarkdownMemoryStore;
+import com.oryxos.memory.Mem0MemoryStore;
+import com.oryxos.memory.MemoryServiceImpl;
+import com.oryxos.memory.RecallMemoryTool;
+import com.oryxos.memory.SaveMemoryTool;
+import com.oryxos.memory.SqliteMemoryStore;
 import com.oryxos.provider.ProviderProperties;
 import com.oryxos.provider.ProviderService;
 import com.oryxos.storage.NotifyChannelRepository;
@@ -104,6 +112,47 @@ public class CliAgentConfiguration {
     return new PermissiveSandbox();
   }
 
+  /**
+   * 006-memory FR-6：长期记忆后端显式 @Bean（宪法 III 哲学——不扫描），按 {@code oryxos.memory.backend} 换档装配：缺省
+   * markdown；sqlite 用 Boot 自动装配的数据源（可选注入——markdown 档不要求数据源在场）；mem0 要求环境变量 MEM0_BASE_URL +
+   * MEM0_API_KEY（占位缺失 → 启动校验明确报错不静默，001 ConfigLoader 口径）。
+   */
+  @Bean
+  public LongTermMemoryStore longTermMemoryStore(
+      Environment environment,
+      RestClient restClient,
+      ObjectProvider<javax.sql.DataSource> dataSourceProvider) {
+    String backend = environment.getProperty("oryxos.memory.backend", "markdown");
+    return switch (backend) {
+      case "markdown" -> new MarkdownMemoryStore(Path.of(".oryxos", "memory", "MEMORY.md"));
+      case "sqlite" -> {
+        javax.sql.DataSource dataSource = dataSourceProvider.getIfAvailable();
+        if (dataSource == null) {
+          throw new IllegalStateException("oryxos.memory.backend=sqlite 需要数据源（Boot 自动装配缺失）");
+        }
+        yield new SqliteMemoryStore(dataSource);
+      }
+      case "mem0" -> {
+        String baseUrl = environment.getProperty("MEM0_BASE_URL");
+        String apiKey = environment.getProperty("MEM0_API_KEY");
+        if (baseUrl == null || baseUrl.isBlank() || apiKey == null || apiKey.isBlank()) {
+          throw new IllegalStateException(
+              "oryxos.memory.backend=mem0 需要环境变量 MEM0_BASE_URL 与 MEM0_API_KEY");
+        }
+        yield new Mem0MemoryStore(restClient, baseUrl, apiKey);
+      }
+      default ->
+          throw new IllegalStateException(
+              "oryxos.memory.backend 非法值: " + backend + "（取值 markdown/sqlite/mem0）");
+    };
+  }
+
+  /** 006-memory FR-1：记忆统一门面（buildContext 供 PromptBuilder、remember/recall 供两 Tool）。 */
+  @Bean
+  public MemoryService memoryService(LongTermMemoryStore longTermMemoryStore) {
+    return new MemoryServiceImpl(longTermMemoryStore);
+  }
+
   /** 004 契约不变量 9：Boot 自动配置 factory + connect/read timeout（connect 3s / read 10s）。 */
   @Bean
   public RestClient restClient() {
@@ -126,6 +175,7 @@ public class CliAgentConfiguration {
       Sandbox sandbox,
       RestClient restClient,
       NotifyTools notifyTools,
+      MemoryService memoryService,
       ObjectProvider<MethodToolCallbackProvider> methodProvider,
       ObjectMapper objectMapper) {
     ToolRegistry registry = new ToolRegistry();
@@ -136,6 +186,8 @@ public class CliAgentConfiguration {
     registry.register(new HttpGetTool(sandbox, restClient));
     registry.register(new HttpPostTool(sandbox, restClient));
     registry.register(notifyTools);
+    registry.register(new SaveMemoryTool(memoryService)); // 006-memory FR-7
+    registry.register(new RecallMemoryTool(memoryService)); // 006-memory FR-7
     registerAnnotatedMethodTools(registry, methodProvider, objectMapper);
     validateToolRefs(profileRegistry, registry);
     return registry;
@@ -193,8 +245,11 @@ public class CliAgentConfiguration {
 
   @Bean
   public PromptBuilder promptBuilder(
-      ContextLoader contextLoader, ToolSchemaAdapter adapter, ToolRegistry registry) {
-    return new PromptBuilder(contextLoader, adapter, nameMapOf(registry));
+      ContextLoader contextLoader,
+      ToolSchemaAdapter adapter,
+      ToolRegistry registry,
+      MemoryService memoryService) {
+    return new PromptBuilder(contextLoader, adapter, nameMapOf(registry), memoryService);
   }
 
   @Bean

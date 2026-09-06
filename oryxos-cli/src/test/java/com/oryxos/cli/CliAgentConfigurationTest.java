@@ -1,0 +1,170 @@
+package com.oryxos.cli;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oryxos.core.LongTermMemoryStore;
+import com.oryxos.core.MemoryService;
+import com.oryxos.core.Message;
+import com.oryxos.core.Profile;
+import com.oryxos.core.PromptBuilder;
+import com.oryxos.core.Session;
+import com.oryxos.core.SessionManager;
+import com.oryxos.memory.MarkdownMemoryStore;
+import com.oryxos.memory.MemoryServiceImpl;
+import com.oryxos.provider.ProviderService;
+import com.oryxos.storage.NotifyChannelRepository;
+import com.oryxos.storage.SessionRepository;
+import com.oryxos.storage.ToolInvocationRepository;
+import com.oryxos.tool.ToolRegistry;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.context.annotation.Bean;
+
+/**
+ * CliAgentConfiguration 记忆装配 harness（2026-09-06 用户指示补强——cli 模块此前零测试）： US1 装配断言（T010）：两记忆 Tool 注册 +
+ * MemoryService/缺省 markdown 档装配 + 注入 PromptBuilder； US3 换档断言（T025）在同文件增补。
+ */
+class CliAgentConfigurationTest {
+
+  private final ApplicationContextRunner runner =
+      new ApplicationContextRunner()
+          .withUserConfiguration(CliAgentConfiguration.class, MockBeans.class);
+
+  /** 装配依赖桩：仓储/ProviderService 全 mock（不启 JPA/真实 LLM），ObjectMapper 真实例。 */
+  @TestConfiguration
+  static class MockBeans {
+
+    @Bean
+    ObjectMapper objectMapper() {
+      return new ObjectMapper();
+    }
+
+    @Bean
+    SessionRepository sessionRepository() {
+      SessionRepository repository = mock(SessionRepository.class);
+      when(repository.findById(anyString())).thenReturn(java.util.Optional.empty());
+      return repository;
+    }
+
+    @Bean
+    ToolInvocationRepository toolInvocationRepository() {
+      return mock(ToolInvocationRepository.class);
+    }
+
+    @Bean
+    NotifyChannelRepository notifyChannelRepository() {
+      return mock(NotifyChannelRepository.class);
+    }
+
+    @Bean
+    ProviderService providerService() {
+      return mock(ProviderService.class);
+    }
+
+    @Bean
+    javax.sql.DataSource dataSource() {
+      return mock(javax.sql.DataSource.class);
+    }
+  }
+
+  private static Profile profileWithEmptyBootstrap() {
+    return new Profile(
+        "ops-agent",
+        null,
+        new Profile.Identity("运维小欧", "你是一个专业运维助手"),
+        new Profile.ProviderRef("deepseek", null, null),
+        List.of(),
+        List.of(),
+        List.of(),
+        List.of(),
+        List.of(),
+        new Profile.Settings(10, 20));
+  }
+
+  @Test
+  @DisplayName(
+      "US1 装配：save_memory/recall_memory 注册进 ToolRegistry，缺省 backend 装配 MarkdownMemoryStore")
+  void memoryToolsRegisteredAndMarkdownWired() {
+    runner.run(
+        context -> {
+          ToolRegistry registry = context.getBean(ToolRegistry.class);
+          assertThat(registry.contains("save_memory")).isTrue();
+          assertThat(registry.contains("recall_memory")).isTrue();
+
+          MemoryService memoryService = context.getBean(MemoryService.class);
+          assertThat(memoryService).isInstanceOf(MemoryServiceImpl.class);
+          assertThat(context.getBean(LongTermMemoryStore.class))
+              .isInstanceOf(MarkdownMemoryStore.class);
+        });
+  }
+
+  @Test
+  @DisplayName("MemoryService 注入 PromptBuilder：build 后 system 含长期记忆段")
+  void memoryServiceInjectedIntoPromptBuilder() {
+    runner.run(
+        context -> {
+          Session session =
+              context.getBean(SessionManager.class).getOrCreate("cli", "alice", "ops-agent");
+          session.append(Message.user("hi"));
+
+          PromptBuilder promptBuilder = context.getBean(PromptBuilder.class);
+          String system =
+              promptBuilder
+                  .build(session, profileWithEmptyBootstrap())
+                  .getInstructions()
+                  .get(0)
+                  .getText();
+
+          // 测试环境无 .oryxos/memory/MEMORY.md：load 为空，但 buildContext 结构头仍在
+          assertThat(system).contains("## 长期记忆").contains("## 会话历史").contains("[用户] hi");
+        });
+  }
+
+  @Test
+  @DisplayName("换档 sqlite：backend=sqlite → LongTermMemoryStore bean 为 SqliteMemoryStore")
+  void sqliteBackendWired() {
+    runner
+        .withPropertyValues("oryxos.memory.backend=sqlite")
+        .run(
+            context ->
+                assertThat(context.getBean(LongTermMemoryStore.class))
+                    .isInstanceOf(com.oryxos.memory.SqliteMemoryStore.class));
+  }
+
+  @Test
+  @DisplayName("换档 mem0：backend=mem0 + 凭证环境变量 → LongTermMemoryStore bean 为 Mem0MemoryStore")
+  void mem0BackendWired() {
+    runner
+        .withPropertyValues(
+            "oryxos.memory.backend=mem0",
+            "MEM0_BASE_URL=http://localhost:9999",
+            "MEM0_API_KEY=test-key")
+        .run(
+            context ->
+                assertThat(context.getBean(LongTermMemoryStore.class))
+                    .isInstanceOf(com.oryxos.memory.Mem0MemoryStore.class));
+  }
+
+  @Test
+  @DisplayName("mem0 缺凭证：backend=mem0 无 MEM0_BASE_URL → 启动失败明确报错（FR-6 配置校验不静默）")
+  void mem0WithoutCredentialsFails() {
+    runner
+        .withPropertyValues("oryxos.memory.backend=mem0")
+        .run(context -> assertThat(context).hasFailed());
+  }
+
+  @Test
+  @DisplayName("非法 backend 值 → 启动失败明确报错（FR-6，001 ConfigLoader 口径不静默）")
+  void illegalBackendFails() {
+    runner
+        .withPropertyValues("oryxos.memory.backend=bogus")
+        .run(context -> assertThat(context).hasFailed());
+  }
+}

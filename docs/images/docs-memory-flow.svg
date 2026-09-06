@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 560" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#64748b"/></marker>
+    <marker id="aGray" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#94a3b8"/></marker>
+    <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.08"/></filter>
+  </defs>
+  <rect width="860" height="560" fill="#f8fafc" rx="6"/>
+  <rect x="0" y="0" width="860" height="32" fill="#1e293b" rx="6"/>
+  <rect x="0" y="16" width="860" height="16" fill="#1e293b"/>
+  <text x="430" y="21" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="bold">Memory 全链路 — 门面统一收口 · 三档后端 memory.backend 切换 · 核心区永不截断</text>
+  <rect x="30" y="55" width="170" height="36" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="115.0" y="72" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">Agent 主动调记忆 Tool</text>
+  <rect x="230" y="105" width="190" height="36" rx="6" fill="#dcfce7" stroke="#10b981" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="325.0" y="122" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">SaveMemoryTool / RecallMemoryTool</text>
+  <text x="325.0" y="137" text-anchor="middle" font-size="8" fill="#166534">（OryxTool 纯实现，005 注册进 ToolRegistry）</text>
+  <rect x="230" y="155" width="190" height="54" rx="6" fill="#dcfce7" stroke="#10b981" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="325.0" y="172" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">MemoryService 统一门面（接口落 core）</text>
+  <text x="325.0" y="187" text-anchor="middle" font-size="8" fill="#166534">buildContext / remember / recall</text>
+  <text x="325.0" y="201" text-anchor="middle" font-size="8" fill="#166534">接口墙：上层零实现细节</text>
+  <rect x="230" y="228" width="90" height="40" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="275.0" y="245" text-anchor="middle" font-size="10" font-weight="bold" fill="#1e40af">会话记忆</text>
+  <text x="275.0" y="260" text-anchor="middle" font-size="8" fill="#1d4ed8">SessionManager</text>
+  <text x="275.0" y="274" text-anchor="middle" font-size="8" fill="#1d4ed8">→ SQLite（002 已交付）</text>
+  <rect x="330" y="228" width="90" height="40" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="375.0" y="245" text-anchor="middle" font-size="10" font-weight="bold" fill="#334155">长期记忆</text>
+  <text x="375.0" y="260" text-anchor="middle" font-size="8" fill="#475569">LongTermMemoryStore 接口</text>
+  <text x="375.0" y="274" text-anchor="middle" font-size="8" fill="#475569">四条行为契约</text>
+  <rect x="230" y="283" width="130" height="44" rx="6" fill="#dcfce7" stroke="#10b981" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="295.0" y="300" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">MarkdownMemoryStore</text>
+  <text x="295.0" y="315" text-anchor="middle" font-size="8" fill="#166534">默认档：MEMORY.md 两区块</text>
+  <text x="295.0" y="329" text-anchor="middle" font-size="8" fill="#166534">4000 字截断只裁归档</text>
+  <rect x="375" y="283" width="130" height="44" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="440.0" y="300" text-anchor="middle" font-size="10" font-weight="bold" fill="#1e40af">SqliteMemoryStore</text>
+  <text x="440.0" y="315" text-anchor="middle" font-size="8" fill="#1d4ed8">memory_entries 表</text>
+  <text x="440.0" y="329" text-anchor="middle" font-size="8" fill="#1d4ed8">LIKE 检索 · LIMIT 截断</text>
+  <rect x="520" y="283" width="108" height="44" rx="6" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="574.0" y="300" text-anchor="middle" font-size="10" font-weight="bold" fill="#6d28d9">Mem0MemoryStore</text>
+  <text x="574.0" y="315" text-anchor="middle" font-size="8" fill="#7c3aed">自托管 REST · 语义检索</text>
+  <text x="574.0" y="329" text-anchor="middle" font-size="8" fill="#7c3aed">数据不出域</text>
+  <line x1="200" y1="73" x2="228" y2="123" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="325" y1="141" x2="325" y2="153" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="280" y1="209" x2="275" y2="226" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="370" y1="209" x2="375" y2="226" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="375" y1="268" x2="375" y2="281" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <rect x="650" y="55" width="180" height="54" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="740.0" y="72" text-anchor="middle" font-size="10" font-weight="bold" fill="#1e40af">PromptBuilder 集成（002 改造点）</text>
+  <text x="740.0" y="87" text-anchor="middle" font-size="8" fill="#1d4ed8">buildContext 拼入 system prompt</text>
+  <text x="740.0" y="101" text-anchor="middle" font-size="8" fill="#1d4ed8">核心记忆 + 会话历史</text>
+  <line x1="420" y1="82" x2="648" y2="82" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <rect x="650" y="150" width="180" height="40" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="740.0" y="167" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">oryxos.memory.backend 配置</text>
+  <text x="740.0" y="182" text-anchor="middle" font-size="8" fill="#92400e">缺省 markdown · 一行换档</text>
+  <line x1="650" y1="170" x2="630" y2="305" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <rect x="650" y="210" width="180" height="66" rx="6" fill="#fecdd3" stroke="#be123c" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="740.0" y="227" text-anchor="middle" font-size="10" font-weight="bold" fill="#9f1239">四条行为契约（全实现共用）</text>
+  <text x="740.0" y="242" text-anchor="middle" font-size="8" fill="#9f1239">坑十五不缓存 · 坑十六截断只裁归档</text>
+  <text x="740.0" y="256" text-anchor="middle" font-size="8" fill="#9f1239">坑十七 scope 显式 · 坑十八只搜归档</text>
+  <rect x="650" y="292" width="180" height="48" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="740.0" y="309" text-anchor="middle" font-size="10" font-weight="bold" fill="#1e40af">MEMORY.md 两区块</text>
+  <text x="740.0" y="324" text-anchor="middle" font-size="8" fill="#1d4ed8">## 核心记忆（永不截断）</text>
+  <text x="740.0" y="338" text-anchor="middle" font-size="8" fill="#1d4ed8">## 归档记忆（可截断可检索）</text>
+  <rect x="650" y="355" width="180" height="36" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="740.0" y="372" text-anchor="middle" font-size="10" font-weight="bold" fill="#94a3b8">USER.md 只读不写</text>
+  <text x="740.0" y="387" text-anchor="middle" font-size="8" fill="#94a3b8">Bootstrap 文件（003 已交付）</text>
+  <rect x="650" y="406" width="180" height="40" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="5,3" filter="url(#sh)"/>
+  <text x="740.0" y="423" text-anchor="middle" font-size="10" font-weight="bold" fill="#94a3b8">明确不做 → 扩展阶段</text>
+  <text x="740.0" y="438" text-anchor="middle" font-size="8" fill="#94a3b8">自动提炼 / 语义检索 / 情景记忆 / 记忆压缩</text>
+  <rect x="30" y="520" width="800" height="26" rx="6" fill="#fecdd3" stroke="#be123c" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="430" y="537" text-anchor="middle" font-size="9" font-weight="bold" fill="#9f1239">审计 day one：save_memory / recall_memory 成败都落 tool_invocations（复用 ToolExecutor 既有路径，本课零新增审计逻辑）</text>
+</svg>

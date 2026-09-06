@@ -36,10 +36,16 @@ class ReActLoopTest {
 
   private ReActLoop loop() {
     // 真实 PromptBuilder（骨架期无历史注入也无妨——ReActLoop 只关心拿到 Prompt）；
-    // 工作区用当前目录（无 bootstrap/skills 时不报错）
+    // 工作区用当前目录（无 bootstrap/skills 时不报错）；MemoryService mock（002 改造点：构造器新增参数）
+    MemoryService memoryService = mock(MemoryService.class);
+    when(memoryService.buildContext(org.mockito.ArgumentMatchers.any(Session.class)))
+        .thenReturn("");
     PromptBuilder promptBuilder =
         new PromptBuilder(
-            new ContextLoader(Path.of(".")), new ToolSchemaAdapter(new ObjectMapper()), Map.of());
+            new ContextLoader(Path.of(".")),
+            new ToolSchemaAdapter(new ObjectMapper()),
+            Map.of(),
+            memoryService);
     return new ReActLoop(gateway, promptBuilder, toolExecutor);
   }
 
