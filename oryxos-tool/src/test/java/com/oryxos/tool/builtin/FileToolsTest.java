@@ -9,10 +9,15 @@ import static org.mockito.Mockito.verify;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oryxos.core.ToolResult;
 import com.oryxos.tool.ActionType;
+import com.oryxos.tool.FileSandboxProperties;
+import com.oryxos.tool.HttpSandboxProperties;
 import com.oryxos.tool.Sandbox;
 import com.oryxos.tool.SandboxViolationException;
+import com.oryxos.tool.ShellSandboxProperties;
+import com.oryxos.tool.WhitelistSandbox;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -122,6 +127,28 @@ class FileToolsTest {
                         .put("content", "x")))
         .isInstanceOf(SandboxViolationException.class);
     assertThat(Files.exists(file)).isFalse(); // 坑十：校验在前，IO 零发生
+  }
+
+  @Test
+  @DisplayName("007 T014 接线回归：真实 WhitelistSandbox 白名单外 write_file——违规被拦且文件未创建")
+  void whitelistSandboxBlocksWriteOutsideRoot(@TempDir Path tmp) {
+    WhitelistSandbox sandbox =
+        new WhitelistSandbox(
+            new FileSandboxProperties(List.of("/workspace")),
+            new ShellSandboxProperties(List.of()),
+            new HttpSandboxProperties(List.of()));
+    WriteFileTool tool = new WriteFileTool(sandbox);
+    Path file = tmp.resolve("blocked.txt"); // @TempDir 路径在白名单外
+
+    assertThatThrownBy(
+            () ->
+                tool.execute(
+                    objectMapper
+                        .createObjectNode()
+                        .put("path", file.toString())
+                        .put("content", "x")))
+        .isInstanceOf(SandboxViolationException.class);
+    assertThat(Files.exists(file)).isFalse(); // 真 IO 没发生（不是 mock 拒绝，是白名单真拦）
   }
 
   @Test

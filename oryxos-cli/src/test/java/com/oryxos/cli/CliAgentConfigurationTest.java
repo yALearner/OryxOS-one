@@ -167,4 +167,21 @@ class CliAgentConfigurationTest {
         .withPropertyValues("oryxos.memory.backend=bogus")
         .run(context -> assertThat(context).hasFailed());
   }
+
+  @Test
+  @DisplayName("007 FR-6 装配替换：sandbox bean 为 WhitelistSandbox 实例（PermissiveSandbox 全放行退出历史）")
+  void sandboxBeanIsWhitelistSandbox() {
+    runner.run(
+        context ->
+            assertThat(context.getBean(com.oryxos.tool.Sandbox.class))
+                .isInstanceOf(com.oryxos.tool.WhitelistSandbox.class));
+  }
+
+  @Test
+  @DisplayName("007 FR-6：PermissiveSandbox 类已删除（javadoc 承诺「24 节替换后本类删除」兑现）")
+  void permissiveSandboxClassIsGone() {
+    org.assertj.core.api.Assertions.assertThatThrownBy(
+            () -> Class.forName("com.oryxos.tool.PermissiveSandbox"))
+        .isInstanceOf(ClassNotFoundException.class);
+  }
 }

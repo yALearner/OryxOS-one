@@ -26,9 +26,12 @@ import com.oryxos.storage.NotifyChannelRepository;
 import com.oryxos.storage.SessionRepository;
 import com.oryxos.storage.ToolInvocationRepository;
 import com.oryxos.tool.AnnotatedMethodToolAdapter;
-import com.oryxos.tool.PermissiveSandbox;
+import com.oryxos.tool.FileSandboxProperties;
+import com.oryxos.tool.HttpSandboxProperties;
 import com.oryxos.tool.Sandbox;
+import com.oryxos.tool.ShellSandboxProperties;
 import com.oryxos.tool.ToolRegistry;
+import com.oryxos.tool.WhitelistSandbox;
 import com.oryxos.tool.builtin.HttpGetTool;
 import com.oryxos.tool.builtin.HttpPostTool;
 import com.oryxos.tool.builtin.ListDirTool;
@@ -53,6 +56,7 @@ import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.method.MethodToolCallback;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
@@ -65,8 +69,8 @@ import org.springframework.web.client.RestClient;
 
 /**
  * 重命令 Spring 装配（Spring 内部接线，非对外 API）——把 002 组件接成可运行整体（003-cli FR-10）； 005-tool FR-7：工具集空 Map 换成
- * ToolRegistry 全量、004 遗留 NotifyTools 接线（契约不变量 9）、 PermissiveSandbox 临时接线（24 节替换）、Profile tools
- * 引用启动校验（001 同款纪律）。
+ * ToolRegistry 全量、004 遗留 NotifyTools 接线（契约不变量 9）、 WhitelistSandbox 三层白名单接线（007-sandbox FR-6， 24
+ * 节替换收口）、Profile tools 引用启动校验（001 同款纪律）。
  *
  * <p>落 oryxos-cli（CLAUDE.md 依赖方向：cli 组装所有模块）；轻命令不起 Spring 即不加载本类。{@code ProviderService} 由 001 的
  * ProviderConfiguration 自动装配；仓储/实体扫描由启动类显式声明（坑九，002 fix 已落）。
@@ -75,6 +79,11 @@ import org.springframework.web.client.RestClient;
  * 002 现有路径（未知名 WARN 兜底）；本处启动校验在其之上补充 ERROR 级明确报错。
  */
 @Configuration
+@EnableConfigurationProperties({
+  FileSandboxProperties.class,
+  ShellSandboxProperties.class,
+  HttpSandboxProperties.class
+})
 public class CliAgentConfiguration {
 
   private static final Logger LOG = LoggerFactory.getLogger(CliAgentConfiguration.class);
@@ -104,12 +113,16 @@ public class CliAgentConfiguration {
   }
 
   /**
-   * 临时全放行 Sandbox（005-tool 拍板方案 A）——**第 24 节替换为 WhitelistSandbox（002 FR-7）**，只换本 Bean
-   * 实现类，调用方零改动。20~23 节白名单未生效：内网假设 + 审计留痕 + 保守 Profile 纪律兜底（需求文档 FR-7）。
+   * 沙箱核心阶段唯一实现（007-sandbox FR-6）：WhitelistSandbox 三层白名单（file/shell/http 三块配置， 空 = 什么都不允许
+   * fail-closed）。005 拍板方案 A 收口——PermissiveSandbox 全放行已删除；调用方只认 {@link Sandbox} 接口，扩展阶段换容器/microVM
+   * 只换本 Bean 实现类。
    */
   @Bean
-  public Sandbox sandbox() {
-    return new PermissiveSandbox();
+  public Sandbox sandbox(
+      FileSandboxProperties fileProps,
+      ShellSandboxProperties shellProps,
+      HttpSandboxProperties httpProps) {
+    return new WhitelistSandbox(fileProps, shellProps, httpProps);
   }
 
   /**
