@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 560" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#64748b"/></marker>
+    <marker id="aGray" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#94a3b8"/></marker>
+    <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.08"/></filter>
+  </defs>
+  <rect width="860" height="560" fill="#f8fafc" rx="6"/>
+  <rect x="0" y="0" width="860" height="32" fill="#1e293b" rx="6"/>
+  <rect x="0" y="16" width="860" height="16" fill="#1e293b"/>
+  <text x="430" y="21" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="bold">Sandbox 三层白名单 — 七工具 enforce 已接线 · 拒绝复用既有审计（零新增）· 空配置 = 全拒绝</text>
+  <rect x="30" y="55" width="180" height="52" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="120.0" y="72" text-anchor="middle" font-size="10" font-weight="bold" fill="#b45309">Agent 调七个内置 Tool</text>
+  <text x="120.0" y="87" text-anchor="middle" font-size="8" fill="#92400e">read/write/list/shell</text>
+  <text x="120.0" y="101" text-anchor="middle" font-size="8" fill="#92400e">http_get/http_post/notify</text>
+  <rect x="250" y="55" width="210" height="52" rx="6" fill="#dcfce7" stroke="#10b981" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="355.0" y="72" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">Tool.execute 首行 enforce</text>
+  <text x="355.0" y="87" text-anchor="middle" font-size="8" fill="#166534">SandboxAction(type, target)</text>
+  <text x="355.0" y="101" text-anchor="middle" font-size="8" fill="#166534">005 已接线 · 本节零改动</text>
+  <rect x="250" y="150" width="210" height="108" rx="6" fill="#dcfce7" stroke="#10b981" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="355.0" y="167" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">WhitelistSandbox — 唯一实现</text>
+  <text x="355.0" y="181" text-anchor="middle" font-size="8" fill="#166534">enforce 按 ActionType 路由</text>
+  <text x="355.0" y="195" text-anchor="middle" font-size="8" fill="#166534">FILE_READ/WRITE → checkFilePath</text>
+  <text x="355.0" y="209" text-anchor="middle" font-size="8" fill="#166534">SHELL_COMMAND → checkShellCommand</text>
+  <text x="355.0" y="223" text-anchor="middle" font-size="8" fill="#166534">HTTP_REQUEST → checkHttpUrl</text>
+  <text x="355.0" y="237" text-anchor="middle" font-size="8" fill="#166534">三个校验方法全部 private</text>
+  <text x="355.0" y="251" text-anchor="middle" font-size="8" fill="#166534">normalize 拦 ../ · 点号边界拦 evil-</text>
+  <rect x="250" y="290" width="210" height="80" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="355.0" y="307" text-anchor="middle" font-size="10" font-weight="bold" fill="#1e40af">配置源 application.yaml</text>
+  <text x="355.0" y="321" text-anchor="middle" font-size="8" fill="#1d4ed8">file.allowed_paths</text>
+  <text x="355.0" y="335" text-anchor="middle" font-size="8" fill="#1d4ed8">shell.allowed_commands</text>
+  <text x="355.0" y="349" text-anchor="middle" font-size="8" fill="#1d4ed8">http.allowed_domains</text>
+  <text x="355.0" y="363" text-anchor="middle" font-size="8" fill="#1d4ed8">空 = 全拒绝（不是不校验）</text>
+  <rect x="510" y="150" width="190" height="40" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="605.0" y="167" text-anchor="middle" font-size="10" font-weight="bold" fill="#334155">放行 → 真正 IO</text>
+  <text x="605.0" y="181" text-anchor="middle" font-size="8" fill="#475569">读写文件 / 跑命令 / 发请求</text>
+  <rect x="510" y="210" width="190" height="80" rx="6" fill="#fecdd3" stroke="#be123c" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="605.0" y="227" text-anchor="middle" font-size="10" font-weight="bold" fill="#9f1239">拒绝 → 抛异常</text>
+  <text x="605.0" y="241" text-anchor="middle" font-size="8" fill="#9f1239">SandboxViolationException</text>
+  <text x="605.0" y="255" text-anchor="middle" font-size="8" fill="#9f1239">→ ToolExecutor 既有 catch（002）</text>
+  <text x="605.0" y="269" text-anchor="middle" font-size="8" fill="#9f1239">→ 落 tool_invocations 审计</text>
+  <text x="605.0" y="283" text-anchor="middle" font-size="8" fill="#9f1239">success=false · error_message 可读</text>
+  <rect x="510" y="310" width="190" height="52" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="5,3" filter="url(#sh)"/>
+  <text x="605.0" y="327" text-anchor="middle" font-size="10" font-weight="bold" fill="#94a3b8">扩展阶段：容器 / microVM</text>
+  <text x="605.0" y="341" text-anchor="middle" font-size="8" fill="#94a3b8">接口不变 · 只新增实现类</text>
+  <text x="605.0" y="355" text-anchor="middle" font-size="8" fill="#94a3b8">（Kata / Firecracker，信号驱动）</text>
+  <line x1="210" y1="80" x2="248" y2="80" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="355" y1="107" x2="355" y2="148" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="355" y1="290" x2="355" y2="260" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="460" y1="170" x2="508" y2="170" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="460" y1="240" x2="508" y2="250" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="510" y1="336" x2="462" y2="200" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#aGray)"/>
+  <rect x="30" y="470" width="800" height="26" rx="6" fill="#fecdd3" stroke="#be123c" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="430" y="487" text-anchor="middle" font-size="9" font-weight="bold" fill="#9f1239">审计 day one：放行与拒绝走同一链路——拒绝落 success=false + error_message（复用 ToolExecutor 既有路径，本节零新增审计逻辑）</text>
+</svg>
