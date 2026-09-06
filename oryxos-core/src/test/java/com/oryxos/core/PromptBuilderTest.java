@@ -77,7 +77,10 @@ class PromptBuilderTest {
     for (OryxTool t : tools) {
       toolSet.put(t.getName(), t);
     }
-    return new PromptBuilder(new ContextLoader(workspace), adapter, toolSet);
+    MemoryService memoryService = mock(MemoryService.class);
+    when(memoryService.buildContext(org.mockito.ArgumentMatchers.any(Session.class)))
+        .thenReturn("## 长期记忆\n记忆上下文: 核心条目测试");
+    return new PromptBuilder(new ContextLoader(workspace), adapter, toolSet, memoryService);
   }
 
   @Test
@@ -189,8 +192,8 @@ class PromptBuilderTest {
   }
 
   @Test
-  @DisplayName("长期记忆段未启用时跳过（system 只含角色+引导+日期时间）")
-  void memorySectionSkippedWhenMemoryUnavailable(@TempDir Path workspace) throws Exception {
+  @DisplayName("长期记忆段已注入：buildContext 输出在 system 中、位于 Bootstrap 之后日期之前（002 改造点）")
+  void memorySectionInjectedViaBuildContext(@TempDir Path workspace) throws Exception {
     Files.writeString(workspace.resolve("AGENTS.md"), "引导");
     Session session = newSessionManager().getOrCreate("cli", "alice", "ops-agent");
     session.append(Message.user("hi"));
@@ -201,8 +204,10 @@ class PromptBuilderTest {
 
     String system = prompt.getInstructions().get(0).getText();
     assertThat(system).contains("你是一个专业运维助手").contains("引导").contains("当前日期时间:");
-    // 记忆模块（第 21/22 节）未就绪：system 中不存在长期记忆段
-    assertThat(system).doesNotContain("长期记忆");
+    // 002 改造点：MemoryService.buildContext 输出拼入 system（bootstrap 之后、日期之前）
+    assertThat(system).contains("## 长期记忆").contains("记忆上下文: 核心条目测试");
+    assertThat(system.indexOf("引导")).isLessThan(system.indexOf("## 长期记忆"));
+    assertThat(system.indexOf("## 长期记忆")).isLessThan(system.indexOf("当前日期时间:"));
   }
 
   private static Message assistantWithToolCall(String callId) {

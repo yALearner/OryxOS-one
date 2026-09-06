@@ -49,6 +49,14 @@ oryxos:
       api-key: ${KIMI_API_KEY}
       base-url: https://api.moonshot.cn/v1
 
+  # Memory 后端切换（006-memory FR-6）：markdown（缺省）/ sqlite / mem0——一行换档，上层零改动。
+  # 非法值启动校验明确报错不静默；后端故障快速失败不静默空记忆、不自动降级换档。
+  # mem0 档凭证与地址走环境变量占位（自托管实例，数据不出域；自托管应 HTTPS）：
+  #   MEM0_BASE_URL=http://自托管地址
+  #   MEM0_API_KEY=${MEM0_API_KEY}
+  memory:
+    backend: markdown
+
 # 日志
 logging:
   level:

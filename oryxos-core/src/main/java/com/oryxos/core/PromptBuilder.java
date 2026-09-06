@@ -24,9 +24,9 @@ import org.springframework.ai.tool.function.FunctionToolCallback;
  *
  * <ol>
  *   <li>system：角色设定（{@code Profile.identity.prompt}）+ Bootstrap 与 Skill 元数据（{@link ContextLoader}
- *       每轮现读）+ **末尾附当前日期时间**（LLM 自己不知道今天几号，定时场景的"今天"全靠这一行）
- *   <li>长期记忆：Memory 模块归第 21/22 节，未就绪——**没开就跳过**（拼接位留空，不引入占位内容）
- *   <li>会话历史：只留最近 {@code maxHistoryTurns} 轮（默认 20），超出截断（坑二：TOOL 消息跟随所属 ASSISTANT 响应成组保留，不切断一轮内的
+ *       每轮现读）+ <strong>记忆注入</strong>（{@link MemoryService#buildContext}：长期记忆 + 会话历史，每次重新读不缓存） +
+ *       **末尾附当前日期时间**（LLM 自己不知道今天几号，定时场景的"今天"全靠这一行）
+ *   <li>对话历史：只留最近 {@code maxHistoryTurns} 轮（默认 20），超出截断（坑二：TOOL 消息跟随所属 ASSISTANT 响应成组保留，不切断一轮内的
  *       tool 调用链）
  *   <li>可用工具列表：按 {@code Profile.tools} 过滤注入的工具集 → {@link ToolSchemaAdapter} 翻译 → Function Calling
  *       格式（ToolCallbacks 挂上 options；ProviderService 侧自动执行已关闭）
@@ -39,29 +39,34 @@ public final class PromptBuilder {
   private final ContextLoader contextLoader;
   private final ToolSchemaAdapter toolSchemaAdapter;
   private final Map<String, OryxTool> tools;
+  private final MemoryService memoryService;
 
   /**
    * @param tools 注入的完整工具集（第 20 节起由 ToolRegistry 提供，契约不变）
+   * @param memoryService 记忆统一门面（002 改造点：buildContext 输出拼入 system prompt，技术方案 §5.3 明文集成点）
    */
   public PromptBuilder(
       ContextLoader contextLoader,
       ToolSchemaAdapter toolSchemaAdapter,
-      Map<String, OryxTool> tools) {
+      Map<String, OryxTool> tools,
+      MemoryService memoryService) {
     this.contextLoader = contextLoader;
     this.toolSchemaAdapter = toolSchemaAdapter;
     this.tools = Map.copyOf(tools);
+    this.memoryService = memoryService;
   }
 
   /** 组装一轮 Prompt。 */
   public Prompt build(Session session, Profile profile) {
     List<Message> instructions = new ArrayList<>();
-    // ① system：角色设定 + ContextLoader 产物 + 当前日期时间（末尾）
+    // ① system：角色设定 + ContextLoader 产物 + MemoryService 记忆注入 + 当前日期时间（末尾）
     String system =
         String.join(System.lineSeparator(), identity(profile), contextLoader.load(profile))
+            + memoryService.buildContext(session) // ② 记忆注入：长期记忆 + 会话历史（每次重新读，坑十五联动）
+            + System.lineSeparator()
             + "当前日期时间: "
             + LocalDateTime.now(ZoneId.systemDefault());
     instructions.add(new SystemMessage(system));
-    // ② 长期记忆：Memory 模块（第 21/22 节）未就绪——没开就跳过
     // ③ 会话历史：最近 N 轮（坑二截断语义）
     for (com.oryxos.core.Message m : historyOf(session, profile.settings().maxHistoryTurns())) {
       instructions.add(toSpringMessage(m));

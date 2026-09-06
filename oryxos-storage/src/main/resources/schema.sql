@@ -59,3 +59,14 @@ CREATE TABLE IF NOT EXISTS notify_channels (
     url         TEXT NOT NULL,
     description TEXT
 );
+
+-- memory_entries 长期记忆表（006-memory 新增，手工维护，不依赖 hibernate.ddl-auto 自动迁移）。
+-- sqlite 档行存储：scope 列与 MEMORY.md 两区块一一对应（CORE / ARCHIVAL，坑十七）；
+-- created_at ISO-8601 TEXT（SQLite 无原生 TIMESTAMP，复用 InstantTextConverter）。
+
+CREATE TABLE IF NOT EXISTS memory_entries (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    content    TEXT NOT NULL,
+    scope      TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
