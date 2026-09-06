@@ -14,11 +14,16 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oryxos.core.ToolResult;
 import com.oryxos.tool.ActionType;
+import com.oryxos.tool.FileSandboxProperties;
+import com.oryxos.tool.HttpSandboxProperties;
 import com.oryxos.tool.Sandbox;
 import com.oryxos.tool.SandboxViolationException;
+import com.oryxos.tool.ShellSandboxProperties;
+import com.oryxos.tool.WhitelistSandbox;
 import com.oryxos.tool.notify.NotifyChannelAdapter;
 import com.oryxos.tool.notify.NotifyChannelRegistry;
 import com.oryxos.tool.notify.NotifyTarget;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -183,6 +188,28 @@ class NotifyToolsTest {
                         .put("channel", "team-lark")))
         .isInstanceOf(SandboxViolationException.class);
     verify(adapter, never()).send(any(), any());
+  }
+
+  @Test
+  @DisplayName("007 T014 接线回归：真实 WhitelistSandbox 白名单外域名——违规被拦且 send 不得被调用")
+  void whitelistSandboxBlocksSend() {
+    WhitelistSandbox whitelist =
+        new WhitelistSandbox(
+            new FileSandboxProperties(List.of()),
+            new ShellSandboxProperties(List.of()),
+            new HttpSandboxProperties(List.of("wttr.in")));
+    NotifyTools tool = new NotifyTools(whitelist, Map.of("webhook", adapter), registry);
+    when(registry.resolve("team-lark")).thenReturn(teamLarkTarget());
+
+    assertThatThrownBy(
+            () ->
+                tool.execute(
+                    objectMapper
+                        .createObjectNode()
+                        .put("content", "hello")
+                        .put("channel", "team-lark")))
+        .isInstanceOf(SandboxViolationException.class);
+    verify(adapter, never()).send(any(), any()); // 真推送没发生（不是 mock 拒绝，是白名单真拦）
   }
 
   @Test

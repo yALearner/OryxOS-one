@@ -10,8 +10,13 @@ import static org.mockito.Mockito.verify;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oryxos.core.ToolResult;
 import com.oryxos.tool.ActionType;
+import com.oryxos.tool.FileSandboxProperties;
+import com.oryxos.tool.HttpSandboxProperties;
 import com.oryxos.tool.Sandbox;
 import com.oryxos.tool.SandboxViolationException;
+import com.oryxos.tool.ShellSandboxProperties;
+import com.oryxos.tool.WhitelistSandbox;
+import java.util.List;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -100,6 +105,24 @@ class HttpToolsTest {
                     objectMapper.createObjectNode().put("url", server.url("/w").toString())))
         .isInstanceOf(SandboxViolationException.class);
     assertThat(server.getRequestCount()).isZero(); // 校验在前，请求零发出
+  }
+
+  @Test
+  @DisplayName("007 T014 接线回归：真实 WhitelistSandbox 白名单外域名——违规被拦且请求零发出")
+  void whitelistSandboxBlocksRequest() {
+    WhitelistSandbox sandbox =
+        new WhitelistSandbox(
+            new FileSandboxProperties(List.of()),
+            new ShellSandboxProperties(List.of()),
+            new HttpSandboxProperties(List.of("wttr.in")));
+    HttpGetTool tool = new HttpGetTool(sandbox, restClient);
+
+    assertThatThrownBy(
+            () ->
+                tool.execute(
+                    objectMapper.createObjectNode().put("url", server.url("/w").toString())))
+        .isInstanceOf(SandboxViolationException.class);
+    assertThat(server.getRequestCount()).isZero(); // 真请求没发（不是 mock 拒绝，是白名单真拦）
   }
 
   @Test

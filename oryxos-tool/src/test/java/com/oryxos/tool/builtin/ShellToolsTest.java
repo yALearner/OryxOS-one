@@ -10,10 +10,18 @@ import static org.mockito.Mockito.verify;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oryxos.core.ToolResult;
 import com.oryxos.tool.ActionType;
+import com.oryxos.tool.FileSandboxProperties;
+import com.oryxos.tool.HttpSandboxProperties;
 import com.oryxos.tool.Sandbox;
 import com.oryxos.tool.SandboxViolationException;
+import com.oryxos.tool.ShellSandboxProperties;
+import com.oryxos.tool.WhitelistSandbox;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * ShellTools 验收 harness——执行前必须先过 sandbox.enforce(SHELL_COMMAND)（坑十）；超时强制销毁 + 明确报错 （构造注入小超时，不等真实
@@ -59,6 +67,23 @@ class ShellToolsTest {
 
     assertThatThrownBy(() -> tool.execute(objectMapper.createObjectNode().put("command", "echo x")))
         .isInstanceOf(SandboxViolationException.class);
+  }
+
+  @Test
+  @DisplayName("007 T014 接线回归：真实 WhitelistSandbox 白名单外命令——违规被拦且进程未执行（副作用文件不存在）")
+  void whitelistSandboxBlocksCommand(@TempDir Path tmp) {
+    WhitelistSandbox sandbox =
+        new WhitelistSandbox(
+            new FileSandboxProperties(List.of()),
+            new ShellSandboxProperties(List.of("ls")),
+            new HttpSandboxProperties(List.of()));
+    ShellTools tool = new ShellTools(sandbox, 30_000);
+    Path marker = tmp.resolve("marker.txt");
+
+    assertThatThrownBy(
+            () -> tool.execute(objectMapper.createObjectNode().put("command", "touch " + marker)))
+        .isInstanceOf(SandboxViolationException.class);
+    assertThat(Files.exists(marker)).isFalse(); // 真进程没跑（不是 mock 拒绝，是白名单真拦）
   }
 
   @Test

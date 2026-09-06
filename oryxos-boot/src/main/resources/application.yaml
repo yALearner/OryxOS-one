@@ -57,6 +57,23 @@ oryxos:
   memory:
     backend: markdown
 
+# Sandbox 三层白名单（007-sandbox FR-2）——核心阶段唯一实现 WhitelistSandbox 的配置源。
+# 空 = 什么都不允许（fail-closed，不是"不校验"）；任一为空启动打 WARN 诊断。
+# 相对根按启动目录解析（构造期 toAbsolutePath）；配置构造期拷贝、不可热更新——改后须重启。
+# 诚实标注：应用层白名单是劝阻级防线——防模型犯傻误操作、防不住蓄意攻击（软链/DNS rebinding 等不覆盖）。
+file:
+  allowed_paths:
+    - .oryxos/workspace
+    - /data/reports
+shell:
+  allowed_commands:
+    - ls
+    - cat
+http:
+  allowed_domains:
+    - wttr.in
+    - api.example.com
+
 # 日志
 logging:
   level:
