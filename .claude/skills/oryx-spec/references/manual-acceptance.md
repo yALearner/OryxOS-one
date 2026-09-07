@@ -56,11 +56,24 @@
 | PowerShell 折行粘贴 | `>>` 续行接两个引号参数 → ParserError | mvn 参数一行写完 |
 | surefire 工作目录 = 模块目录 | 相对路径数据源/文件落 `<module>/.oryxos/` 而非根 | 预期行为；核对时指对路径即可 |
 | `scanBasePackages` 不作用于 JPA 扫描 | 真实启动时 Repository/实体 Bean 缺失 | 主类显式 `@EnableJpaRepositories/@EntityScan`（002 fix 已落） |
-| 索引式属性覆盖 | 只覆盖 `providers[0].api-key` 会把 name 顶掉 → 启动校验失败 | 覆盖整元素全部字段 |
+| 索引式属性覆盖 | 只覆盖 `providers[0].api-key` 会把 name 顶掉 → 启动校验失败 | 覆盖整元素全部字段；**@DynamicPropertySource 同样适用**（008 又踩一次：registry.add("oryxos.providers[0].api-key") 顶掉 name → 上下文启动失败「列表项缺少 name」） |
+| 会话级环境变量不可见 | 用户在某个 PowerShell 窗口 `$env:KEY=...` 配的 key，Claude/Maven 进程继承不到 → harness assumption SKIP | 让用户在自己配了 key 的终端跑 mvn；或升为用户级环境变量 `[Environment]::SetEnvironmentVariable("KEY", $env:KEY, "User")`（新开终端生效） |
 | 本机无符号链接特权 | `Files.createSymbolicLink` 抛"客户端没有所需的特权" | 测试用 `mklink /J` junction（Java 以 `isOther()` 识别）；ContextLoader.isBinding 已双形态支持 |
 | Mockito 混合 matcher 与裸值 | `InvalidUseOfMatchers` | 全用 matcher（裸值包 `eq(...)`） |
 | Error Prone `-Werror` | `LocalDateTime.now()`/`split(regex)`/`toLowerCase()` 等触发告警即失败 | 显式时区 / `split(regex, -1)` / `toLowerCase(Locale.ROOT)` / 显式 UTF_8 |
 | FindSecBugs CRLF 注入 | 用户可控值进日志参数被拦 | 日志参数不带 sessionId/名称类字段（001 先例），关联信息在审计表 |
+
+## 定时任务钟推特例（008 实录，2026-09-08）
+
+课件 25 §五说「真实到点触发只能真等一次」——harness 把它变成了可等的自动化形态：
+
+1. **等真钟**：cron 配短周期（六段含秒，如 `*/30 * * * * *`——**Spring 6 只接受六段**，五段启动报错），测试内轮询审计表计数：
+   `while (llmCallRepository.count() == before && now < deadline) Thread.sleep(2000);`——计数一动 = Spring 的钟真走了
+2. **AGENT.md fixture 在 static 块预建**（上下文创建前就位——profileRegistry bean 启动扫描注册）：
+   `Files.writeString(Path.of(".oryxos", "agents", "x", "AGENT.md"), "...", UTF_8)`；bootstrap 缺失只 WARN 不炸
+3. **真 key 的 provider 覆盖**：@DynamicPropertySource 补全整元素（坑表）+ 测试内 `Assumptions.assumeTrue(key != null)`——无 key SKIP 不 FAIL
+4. **证据口径**：`llm_calls` 新增 ≥1 是**硬断言**（钟推必然到 LLM 层，真 key 下完整 ReAct）；`tool_invocations` 数量**打印不硬断**（模型行为不确定）；核对 session 三元组（钟推 = `scheduler|scheduler|profileName`）
+5. **日志实拍判据**：触发线程名 `[taskScheduler-N]` 是「钟真的走了」的实拍证据（区别于手调 runOnce 的 main 线程）
 
 ## 与流程的关系
 

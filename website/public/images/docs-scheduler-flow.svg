@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 580" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#7d8ca5"/></marker>
+    <marker id="aGray" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#9db0c9"/></marker>
+    <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.08"/></filter>
+  </defs>
+  <rect width="860" height="580" fill="#0e1420" rx="6"/>
+  <rect x="0" y="0" width="860" height="32" fill="#d7e2f2" rx="6"/>
+  <rect x="0" y="16" width="860" height="16" fill="#d7e2f2"/>
+  <text x="430" y="21" text-anchor="middle" fill="#10203f" font-size="12" font-weight="bold">定时任务钟推 — 到点拼消息交 AgentService · 四坑全解（配置驱动/本地锁防重叠/失败不崩/时区显式）</text>
+  <rect x="30" y="55" width="250" height="66" rx="6" fill="#2a2110" stroke="#f59e0b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="155.0" y="72" text-anchor="middle" font-size="10" font-weight="bold" fill="#fbbf24">配置源 AGENT.md frontmatter</text>
+  <text x="155.0" y="87" text-anchor="middle" font-size="8" fill="#fcd34d">schedules: cron / zone / message</text>
+  <text x="155.0" y="101" text-anchor="middle" font-size="8" fill="#fcd34d">002 已交付 · 本节零改动</text>
+  <rect x="320" y="55" width="250" height="66" rx="6" fill="#0d2b21" stroke="#10b981" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="445.0" y="72" text-anchor="middle" font-size="10" font-weight="bold" fill="#6ee7b7">AgentScheduler.registerAll</text>
+  <text x="445.0" y="87" text-anchor="middle" font-size="8" fill="#86efac">启动扫描 ProfileRegistry.list()</text>
+  <text x="445.0" y="101" text-anchor="middle" font-size="8" fill="#86efac">CronTrigger(cron, zone) 动态注册</text>
+  <rect x="320" y="160" width="250" height="66" rx="6" fill="#10203f" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="445.0" y="177" text-anchor="middle" font-size="10" font-weight="bold" fill="#93c5fd">ThreadPoolTaskScheduler</text>
+  <text x="445.0" y="191" text-anchor="middle" font-size="8" fill="#93c5fd">Spring 调度线程池 · 到点触发</text>
+  <text x="445.0" y="205" text-anchor="middle" font-size="8" fill="#93c5fd">不用 @Scheduled 写死（坑一）</text>
+  <rect x="320" y="265" width="250" height="80" rx="6" fill="#0d2b21" stroke="#10b981" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="445.0" y="282" text-anchor="middle" font-size="10" font-weight="bold" fill="#6ee7b7">到点 → runOnce（拿锁）</text>
+  <text x="445.0" y="296" text-anchor="middle" font-size="8" fill="#86efac">派生锁 key tryLock（坑二）</text>
+  <text x="445.0" y="310" text-anchor="middle" font-size="8" fill="#86efac">拿到 → 会话三元组 scheduler</text>
+  <text x="445.0" y="324" text-anchor="middle" font-size="8" fill="#86efac">拿不到 → 跳过本次 · log</text>
+  <rect x="30" y="265" width="250" height="80" rx="6" fill="#10203f" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="155.0" y="282" text-anchor="middle" font-size="10" font-weight="bold" fill="#93c5fd">AgentService.process</text>
+  <text x="155.0" y="296" text-anchor="middle" font-size="8" fill="#93c5fd">与 CLI/Web 完全同一入口</text>
+  <text x="155.0" y="310" text-anchor="middle" font-size="8" fill="#93c5fd">ReAct 循环 · 审计零新增</text>
+  <text x="155.0" y="324" text-anchor="middle" font-size="8" fill="#93c5fd">llm_calls / tool_invocations</text>
+  <rect x="620" y="265" width="210" height="52" rx="6" fill="#141b2c" stroke="#7d8ca5" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="725.0" y="282" text-anchor="middle" font-size="10" font-weight="bold" fill="#9db0c9">跳过本次触发</text>
+  <text x="725.0" y="296" text-anchor="middle" font-size="8" fill="#9db0c9">上一次还没跑完 · 不排队</text>
+  <text x="725.0" y="310" text-anchor="middle" font-size="8" fill="#9db0c9">log.info 记日志</text>
+  <rect x="30" y="385" width="250" height="66" rx="6" fill="#33151f" stroke="#fb7185" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="155.0" y="402" text-anchor="middle" font-size="10" font-weight="bold" fill="#fb7185">失败处理（坑三）</text>
+  <text x="155.0" y="416" text-anchor="middle" font-size="8" fill="#fb7185">catch → log.error 不崩调度器</text>
+  <text x="155.0" y="430" text-anchor="middle" font-size="8" fill="#fb7185">finally → unlock（锁必放）</text>
+  <rect x="30" y="490" width="800" height="70" rx="6" fill="#141b2c" stroke="#7d8ca5" stroke-width="1.2" stroke-dasharray="5,3" filter="url(#sh)"/>
+  <text x="430" y="507" text-anchor="middle" font-size="10" font-weight="bold" fill="#9db0c9">归后续节（本节不做）</text>
+  <text x="430" y="521" text-anchor="middle" font-size="8" fill="#9db0c9">28 节：scheduled_tasks / task_executions 两张表 + ScheduleApiController 四端点（查看/补跑/停用）</text>
+  <text x="430" y="535" text-anchor="middle" font-size="8" fill="#9db0c9">扩展阶段：分布式协调（选主/租约）· 失败重试/告警 · 运行时增删改 cron</text>
+  <line x1="280" y1="88" x2="318" y2="88" stroke="#7d8ca5" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="445" y1="121" x2="445" y2="158" stroke="#7d8ca5" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="445" y1="226" x2="445" y2="263" stroke="#7d8ca5" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="320" y1="305" x2="282" y2="305" stroke="#7d8ca5" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="570" y1="291" x2="618" y2="291" stroke="#7d8ca5" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="155" y1="345" x2="155" y2="383" stroke="#7d8ca5" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="155" y1="490" x2="155" y2="453" stroke="#9db0c9" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#aGray)"/>
+</svg>
