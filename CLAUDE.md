@@ -207,7 +207,7 @@ settings:
   max_iterations: 10
   max_history_turns: 20
 schedules:                # 可选定时触发（AgentScheduler 钟推）
-  - cron: "0 8 * * *"
+  - cron: "0 0 8 * * *"   # Spring 6 六段含秒（008-scheduler 实测：五段启动报错）
     zone: Asia/Shanghai
     message: 生成今日天气和穿搭建议
 ---

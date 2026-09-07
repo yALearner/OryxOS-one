@@ -2,6 +2,7 @@ package com.oryxos.cli;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oryxos.channel.cli.CliChannel;
+import com.oryxos.core.AgentScheduler;
 import com.oryxos.core.AgentService;
 import com.oryxos.core.ContextLoader;
 import com.oryxos.core.LongTermMemoryStore;
@@ -65,6 +66,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.client.RestClient;
 
 /**
@@ -123,6 +125,35 @@ public class CliAgentConfiguration {
       ShellSandboxProperties shellProps,
       HttpSandboxProperties httpProps) {
     return new WhitelistSandbox(fileProps, shellProps, httpProps);
+  }
+
+  /**
+   * 定时任务调度线程池（008-scheduler FR-5）：⑦a {@code setPoolSize(4)}——默认单线程下同步阻塞的长 ReAct 会占住唯一
+   * 调度线程、跨任务互相拖累（防重叠锁只管同任务）；任务体同步阻塞（宪法 VII）无需大池。容器关闭随 DisposableBean 自动 shutdown；Boot 自动装配的
+   * taskScheduler 被本显式 Bean 顶替（@ConditionalOnMissingBean 语义）。
+   */
+  @Bean
+  public ThreadPoolTaskScheduler taskScheduler() {
+    ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+    scheduler.setPoolSize(4);
+    scheduler.initialize();
+    return scheduler;
+  }
+
+  /**
+   * 钟推入口（008-scheduler FR-5，宪法 VIII 第三种触发源）：装配时显式调 {@code registerAll()} 替代 @PostConstruct （形态机械适配
+   * ②）；31 节两个定时 Demo 的触发源——schedules 定义在 AGENT.md frontmatter，改 cron 需重启生效。
+   */
+  @Bean
+  public AgentScheduler agentScheduler(
+      ThreadPoolTaskScheduler taskScheduler,
+      ProfileRegistry registry,
+      SessionManager sessionManager,
+      AgentService agentService) {
+    AgentScheduler scheduler =
+        new AgentScheduler(taskScheduler, registry, sessionManager, agentService);
+    scheduler.registerAll();
+    return scheduler;
   }
 
   /**
