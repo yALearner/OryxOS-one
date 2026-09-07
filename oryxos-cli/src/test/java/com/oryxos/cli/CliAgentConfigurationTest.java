@@ -169,6 +169,21 @@ class CliAgentConfigurationTest {
   }
 
   @Test
+  @DisplayName("008 FR-5 装配：AgentScheduler bean 存在 + 调度线程池 corePoolSize>1（⑦a 回归钉）")
+  void agentSchedulerWiredWithPoolSize() {
+    runner.run(
+        context -> {
+          assertThat(context.getBean(com.oryxos.core.AgentScheduler.class))
+              .isInstanceOf(com.oryxos.core.AgentScheduler.class);
+          org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler taskScheduler =
+              context.getBean(
+                  org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler.class);
+          assertThat(taskScheduler.getScheduledThreadPoolExecutor().getCorePoolSize())
+              .isGreaterThan(1);
+        });
+  }
+
+  @Test
   @DisplayName("007 FR-6 装配替换：sandbox bean 为 WhitelistSandbox 实例（PermissiveSandbox 全放行退出历史）")
   void sandboxBeanIsWhitelistSandbox() {
     runner.run(
