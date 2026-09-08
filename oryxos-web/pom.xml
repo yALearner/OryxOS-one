@@ -15,6 +15,11 @@
     <name>OryxOS :: Web</name>
     <description>核心能力五：WebServer、6 个 ApiController、GlobalExceptionHandler、OpenAPI 文档</description>
 
+    <properties>
+        <!-- ⑨ P2 落地：前端构建跳过开关——后端迭代跑 mvn -Dskip.npm=true package 不背前端构建 -->
+        <skip.npm>false</skip.npm>
+    </properties>
+
     <dependencies>
         <!-- Internal -->
         <dependency>
@@ -57,5 +62,66 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- 测试栈（009-web-service：@WebMvcTest/@SpringBootTest——各模块同款 spring-boot-starter-test 先例） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- SpotBugs 抑制注解（004/006/007/008 各模块同款机械延伸） -->
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>4.10.4</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- 拍板 B：前端构建绑进 mvn package（一条命令出 fat JAR）；node 版本与 .nvmrc 同步（⑨ P2 落地） -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.15.1</version>
+                <configuration>
+                    <workingDirectory>src/main/frontend</workingDirectory>
+                    <nodeVersion>v22.11.0</nodeVersion>
+                    <installDirectory>target</installDirectory>
+                    <skip>${skip.npm}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install-node-and-npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>npm-install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>ci</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm-build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 480" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#64748b"/></marker>
+    <marker id="aGray" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5 Z" fill="#94a3b8"/></marker>
+    <filter id="sh"><feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-opacity="0.08"/></filter>
+  </defs>
+  <rect width="860" height="480" fill="#f8fafc" rx="6"/>
+  <rect x="0" y="0" width="860" height="32" fill="#1e293b" rx="6"/>
+  <rect x="0" y="16" width="860" height="16" fill="#1e293b"/>
+  <text x="430" y="21" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="bold">Web Service — 业务系统 REST 接入 · 薄 Controller 与 CLI 同引擎 · 异常单出口统一信封 · /admin 只读管理台</text>
+  <rect x="30" y="55" width="250" height="66" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="155.0" y="72" text-anchor="middle" font-size="10" font-weight="bold" fill="#1e40af">业务系统（REST 接入）</text>
+  <text x="155.0" y="87" text-anchor="middle" font-size="8" fill="#1d4ed8">建会话 / 发消息 / 无状态 invoke</text>
+  <text x="155.0" y="101" text-anchor="middle" font-size="8" fill="#1d4ed8">查历史 / 归档 / 信息查询 / 状态</text>
+  <rect x="320" y="55" width="250" height="80" rx="6" fill="#dcfce7" stroke="#10b981" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="445.0" y="72" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">六个薄 Controller · 10 端点</text>
+  <text x="445.0" y="87" text-anchor="middle" font-size="8" fill="#166534">统一前缀 /api/v1</text>
+  <text x="445.0" y="101" text-anchor="middle" font-size="8" fill="#166534">校验 / 包装 / 错误——三件事之外不碰</text>
+  <text x="445.0" y="115" text-anchor="middle" font-size="8" fill="#166534">防呆：消息 32KB · 历史 100 条</text>
+  <rect x="610" y="55" width="220" height="80" rx="6" fill="#fecdd3" stroke="#be123c" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="720.0" y="72" text-anchor="middle" font-size="10" font-weight="bold" fill="#9f1239">异常单出口（错误信封）</text>
+  <text x="720.0" y="87" text-anchor="middle" font-size="8" fill="#9f1239">GlobalExceptionHandler</text>
+  <text x="720.0" y="101" text-anchor="middle" font-size="8" fill="#9f1239">400 / 404 / 503 / 504（60s）</text>
+  <text x="720.0" y="115" text-anchor="middle" font-size="8" fill="#9f1239">500 兜底不泄漏内幕（最值钱）</text>
+  <rect x="320" y="175" width="250" height="66" rx="6" fill="#dcfce7" stroke="#10b981" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="445.0" y="192" text-anchor="middle" font-size="10" font-weight="bold" fill="#15803d">AgentService.process</text>
+  <text x="445.0" y="206" text-anchor="middle" font-size="8" fill="#166534">与 CLI 完全同一入口（宪法 VIII）</text>
+  <text x="445.0" y="220" text-anchor="middle" font-size="8" fill="#166534">Controller 零业务逻辑</text>
+  <rect x="30" y="175" width="250" height="66" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="155.0" y="192" text-anchor="middle" font-size="10" font-weight="bold" fill="#1e40af">完整 ReAct 循环</text>
+  <text x="155.0" y="206" text-anchor="middle" font-size="8" fill="#1d4ed8">llm_calls / tool_invocations 审计</text>
+  <text x="155.0" y="220" text-anchor="middle" font-size="8" fill="#1d4ed8">零新增审计逻辑（002 既有路径）</text>
+  <rect x="30" y="280" width="250" height="66" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="155.0" y="297" text-anchor="middle" font-size="10" font-weight="bold" fill="#334155">serve 启动（8080）</text>
+  <text x="155.0" y="311" text-anchor="middle" font-size="8" fill="#475569">virtual thread 直进直出（宪法 VII）</text>
+  <text x="155.0" y="325" text-anchor="middle" font-size="8" fill="#475569">排除 Spring AI eager 装配——单 key 可启动</text>
+  <rect x="320" y="280" width="250" height="66" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="445.0" y="297" text-anchor="middle" font-size="10" font-weight="bold" fill="#334155">/admin 只读管理台（五页）</text>
+  <text x="445.0" y="311" text-anchor="middle" font-size="8" fill="#475569">Vue3 + Vite · 与官网同风格</text>
+  <text x="445.0" y="325" text-anchor="middle" font-size="8" fill="#475569">oryxos-admin-ui skill · 无写按钮</text>
+  <rect x="610" y="280" width="220" height="66" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.2" filter="url(#sh)"/>
+  <text x="720.0" y="297" text-anchor="middle" font-size="10" font-weight="bold" fill="#334155">前端构建（拍板 B）</text>
+  <text x="720.0" y="311" text-anchor="middle" font-size="8" fill="#475569">frontend-maven-plugin 绑进 mvn</text>
+  <text x="720.0" y="325" text-anchor="middle" font-size="8" fill="#475569">产物 static/admin · SPA 回落</text>
+  <rect x="30" y="385" width="800" height="70" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="5,3" filter="url(#sh)"/>
+  <text x="430" y="402" text-anchor="middle" font-size="10" font-weight="bold" fill="#94a3b8">归扩展 / 后续节（本节不做）</text>
+  <text x="430" y="416" text-anchor="middle" font-size="8" fill="#94a3b8">认证 / SSE / WebSocket / 限流 / RBAC · Prometheus · Memory 写端点 · Agent 目录增删改（29·30 节）</text>
+  <text x="430" y="430" text-anchor="middle" font-size="8" fill="#94a3b8">Webhook 触发 · Tool describe 与调用历史 · LLM call 历史 / token 统计 · 调度管理端点（28 节）</text>
+  <line x1="280" y1="88" x2="318" y2="88" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="445" y1="135" x2="445" y2="173" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="320" y1="208" x2="282" y2="208" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="570" y1="95" x2="608" y2="95" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="280" y1="313" x2="318" y2="313" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="570" y1="313" x2="608" y2="313" stroke="#64748b" stroke-width="1.3" marker-end="url(#a)"/>
+  <line x1="320" y1="455" x2="282" y2="455" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#aGray)"/>
+</svg>

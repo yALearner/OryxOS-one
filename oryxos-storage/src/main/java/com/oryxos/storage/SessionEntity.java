@@ -82,6 +82,12 @@ public class SessionEntity {
     this.lastActiveAt = lastActiveAt;
   }
 
+  /** 归档（009-web-service DELETE /sessions/{id} 落点）：状态流转为 archived + 记录归档时间。 */
+  public void archive(Instant archivedAt) {
+    this.status = "archived";
+    this.archivedAt = archivedAt;
+  }
+
   public String getSessionId() {
     return sessionId;
   }

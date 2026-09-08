@@ -6,23 +6,24 @@ import org.springframework.context.ConfigurableApplicationContext;
 import picocli.CommandLine.Command;
 
 /**
- * serve 命令（重命令，启动 Spring）——占位：Web Service 本体归第 26 节（课件 §三"serve 启动 Web Service（26 节细讲）"），本课启动
- * Spring 后输出占位提示并正常退出（用户拍板口径）。
+ * serve 命令（重命令，启动 Spring）——009-web-service FR-3：真启动 Web Service（8080，virtual
+ * thread；application.yaml 已排除 Spring AI eager 装配——只认 DEEPSEEK_API_KEY 一个 key 就起得来）。常驻进程：定时任务（008
+ * AgentScheduler）随 serve 并行运转 （CLAUDE.md「定时任务随 serve/gateway 常驻」契约）。
  */
 @Command(
     name = "serve",
-    description = "启动 HTTP API 服务（Web 本体归第 26 节）",
+    description = "启动 HTTP API 服务（默认 8080，/api/v1 + /admin + /swagger-ui）",
     mixinStandardHelpOptions = true)
 public class ServeCommand implements Runnable {
 
   @Override
   public void run() {
-    try (ConfigurableApplicationContext context =
+    try (ConfigurableApplicationContext ignored =
         new SpringApplicationBuilder(applicationClass())
-            .web(WebApplicationType.NONE) // 占位阶段不起 Web 容器（Web 本体归第 26 节）
+            .web(WebApplicationType.SERVLET) // 009：真起 Web 容器（Web Service 本体）
             .headless(true)
             .run()) {
-      System.out.println("serve 的 Web 服务本体归第 26 节，当前为占位");
+      // 常驻阻塞：Spring 上下文随 Web 容器运行；try-with-resources 关闭时随容器优雅收尾
     }
   }
 
