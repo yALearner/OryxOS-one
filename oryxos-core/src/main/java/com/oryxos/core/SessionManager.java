@@ -93,6 +93,18 @@ public final class SessionManager {
     sessionRepository.save(entity);
   }
 
+  /** 归档会话（009-web-service DELETE /sessions/{id} 落点，拍板 A）：库里行状态流转 archived + 缓存移除。 */
+  public void archive(String sessionId) {
+    sessionRepository
+        .findById(sessionId)
+        .ifPresent(
+            entity -> {
+              entity.archive(Instant.now());
+              sessionRepository.save(entity);
+            });
+    cache.remove(sessionId);
+  }
+
   /** 会话标识拼接——全仓库只有这一个地方（H4 不变量四，SessionManagerTest 架构断言钉死）。 */
   private String sessionIdOf(String channel, String userId, String profileName) {
     return channel + "|" + userId + "|" + profileName;

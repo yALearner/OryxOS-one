@@ -111,4 +111,32 @@ class AgentServiceTest {
         .isInstanceOf(IllegalStateException.class)
         .hasMessageContaining("ops-agent");
   }
+
+  @Test
+  @DisplayName("⑨d：同一 Session 并发 process 串行化（三触发源同场的最小互斥）")
+  void concurrentProcessOnSameSessionIsSerialized() throws Exception {
+    profileRegistry.register(profile);
+    java.util.concurrent.atomic.AtomicInteger active =
+        new java.util.concurrent.atomic.AtomicInteger();
+    java.util.concurrent.atomic.AtomicInteger maxActive =
+        new java.util.concurrent.atomic.AtomicInteger();
+    when(reActLoop.run(any(), anyString(), any()))
+        .thenAnswer(
+            inv -> {
+              int now = active.incrementAndGet();
+              maxActive.accumulateAndGet(now, Math::max);
+              Thread.sleep(100);
+              active.decrementAndGet();
+              return "ok";
+            });
+    AgentService service = service(); // 共享同一实例——sessionLocks 是实例字段
+    Session session = session();
+
+    Thread t1 = Thread.ofVirtual().start(() -> service.process(session, "a"));
+    Thread t2 = Thread.ofVirtual().start(() -> service.process(session, "b"));
+    t1.join();
+    t2.join();
+
+    assertThat(maxActive.get()).isEqualTo(1); // 任何时刻至多一个 process 在跑——同会话串行
+  }
 }

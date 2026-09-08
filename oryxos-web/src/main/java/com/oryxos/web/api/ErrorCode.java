@@ -10,7 +10,9 @@ public enum ErrorCode {
   /** 服务器内部错误。 */
   INTERNAL_ERROR(500),
   /** 服务不可用。 */
-  SERVICE_UNAVAILABLE(503);
+  SERVICE_UNAVAILABLE(503),
+  /** Agent 调用超时（60 秒上限，009-web-service 补值）。 */
+  GATEWAY_TIMEOUT(504);
 
   private final int httpStatus;
 

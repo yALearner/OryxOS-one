@@ -10,6 +10,21 @@ spring:
     virtual:
       enabled: true
 
+  # 宪法 II：禁用 Spring AI 的 eager 模型自动装配。deepseek 走 spring-ai-openai starter，OpenAi*AutoConfiguration
+  # 会急切实例化 ChatModel 并索要 spring.ai.openai.api-key——OryxOS 不用这些自动 Bean（Provider 由
+  # ProviderChatModelFactory 按宪法 III 显式构造）；不排除则 serve 逼运营方配两个 key、卡死 31 节干净部署。
+  # H3 核实（009）：spring-ai 1.1.8 的类名是 org.springframework.ai.model.openai.autoconfigure.*
+  # （课件旧写法 org.springframework.ai.autoconfigure.openai.OpenAiAutoConfiguration 已过时）。
+  autoconfigure:
+    exclude:
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiEmbeddingAutoConfiguration
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiImageAutoConfiguration
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiAudioSpeechAutoConfiguration
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiAudioTranscriptionAutoConfiguration
+      - org.springframework.ai.model.openai.autoconfigure.OpenAiModerationAutoConfiguration
+      - com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeAutoConfiguration
+
   # SQLite 数据源
   datasource:
     url: jdbc:sqlite:.oryxos/oryxos.db
@@ -80,6 +95,10 @@ logging:
     com.oryxos: INFO
 
 # 监控（Actuator + Prometheus）
+# Web Service（009-web-service FR-3）：HTTP 服务端口
+server:
+  port: 8080
+
 management:
   endpoints:
     web:

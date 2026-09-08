@@ -100,6 +100,21 @@ class SessionManagerTest {
   }
 
   @Test
+  @DisplayName("⑨b：发消息后 get 返回缓存实例的最新历史（Web 读侧缓存/库一致性回归钉）")
+  void getReturnsLatestMessagesAfterAppend() {
+    when(repository.findById(any())).thenReturn(Optional.empty());
+    SessionManager manager = manager();
+    Session created = manager.getOrCreate("cli", "alice", "ops-agent");
+    created.append(Message.user("latest"));
+
+    Optional<Session> fetched = manager.get("cli|alice|ops-agent");
+
+    assertThat(fetched).isPresent();
+    assertThat(fetched.get()).isSameAs(created); // 缓存优先——同一实例
+    assertThat(fetched.get().messages()).hasSize(1); // 最新消息可见
+  }
+
+  @Test
   @DisplayName("getOrCreate 未命中缓存但库里命中 → 反序列化重建而不是新建（重启后同三元组恢复历史）")
   void getOrCreateRestoresWhenRepositoryHit() {
     when(repository.findById("cli|alice|ops-agent"))
