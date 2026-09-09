@@ -67,8 +67,13 @@ public record Profile(
    */
   public record ProviderRef(String name, String model, Double temperature) {}
 
-  /** 定时计划（AgentScheduler 到点触发，zone 缺省按系统时区）。 */
-  public record Schedule(String cron, String zone, String message) {}
+  /**
+   * 定时计划（AgentScheduler 到点触发，zone 缺省按系统时区）。
+   *
+   * @param id 任务唯一标识（010-scheduler-mgmt 拍板 A 补入）：锁 key 与 scheduled_tasks.task_id 直接用它 （008 派生 key
+   *     退役）；跨 Profile 冲突与缺失均在启动期报错
+   */
+  public record Schedule(String id, String cron, String zone, String message) {}
 
   /** 运行参数；未配置的项取默认值。 */
   public record Settings(Integer maxIterations, Integer maxHistoryTurns) {

@@ -70,3 +70,35 @@ CREATE TABLE IF NOT EXISTS memory_entries (
     scope      TEXT NOT NULL,
     created_at TEXT NOT NULL
 );
+
+-- scheduled_tasks 定时任务状态表（010-scheduler-mgmt 新增，手工维护，不依赖 hibernate.ddl-auto 自动迁移）。
+-- 定义源是 AGENT.md frontmatter 的 schedules（含 id），本表只存「状态」不作为定义源——重启时从文件重新注册。
+-- task_id = frontmatter id（全局唯一，跨 Profile 冲突注册时报错）；next_run_at/last_run_at 以
+-- ISO-8601 TEXT 存储 UTC（复用 InstantTextConverter）；enabled 停用后到点跳过不记历史。
+
+CREATE TABLE IF NOT EXISTS scheduled_tasks (
+    task_id      TEXT PRIMARY KEY,
+    profile_name TEXT    NOT NULL,
+    cron         TEXT    NOT NULL,
+    zone         TEXT,
+    message      TEXT    NOT NULL,
+    enabled      BOOLEAN NOT NULL DEFAULT TRUE,
+    next_run_at  TEXT,
+    last_run_at  TEXT,
+    last_status  TEXT,
+    run_count    INTEGER NOT NULL DEFAULT 0
+);
+
+-- task_executions 定时任务执行历史表（010-scheduler-mgmt 新增，手工维护）。
+-- 成功失败都记（宪法 V 同源）：success=false 时 error_message 存人可读消息（非堆栈）；
+-- started_at 以 ISO-8601 TEXT 存储 UTC（复用 InstantTextConverter）。
+
+CREATE TABLE IF NOT EXISTS task_executions (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id       TEXT    NOT NULL,
+    session_id    TEXT,
+    started_at    TEXT    NOT NULL,
+    success       BOOLEAN NOT NULL,
+    error_message TEXT,
+    duration_ms   BIGINT
+);

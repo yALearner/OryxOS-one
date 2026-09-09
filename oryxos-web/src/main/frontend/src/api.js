@@ -15,3 +15,27 @@ export async function apiGet(path) {
   }
   return body.data
 }
+
+/** 写操作统一封装（010 定时任务页：POST run / PUT enabled）——与 apiGet 同款双信封解析，错误信封统一抛 message。 */
+export async function apiPost(path) {
+  const res = await fetch(path, { method: 'POST' })
+  const body = await res.json()
+  if (!res.ok || body.errorCode !== undefined) {
+    throw new Error(body.message ?? `HTTP ${res.status}`)
+  }
+  return body.data
+}
+
+/** 写操作统一封装（PUT enabled）——双信封解析同上。 */
+export async function apiPut(path, payload) {
+  const res = await fetch(path, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  const body = await res.json()
+  if (!res.ok || body.errorCode !== undefined) {
+    throw new Error(body.message ?? `HTTP ${res.status}`)
+  }
+  return body.data
+}

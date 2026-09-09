@@ -1,10 +1,10 @@
 ---
 name: oryxos-admin-ui
 description: >-
-  生成 OryxOS 管理台前端页面（Vue 3 + Vite，只读五页调 /api/v1 GET 端点）——固化 OryxOS 官网首页的设计
-  token（深色 + 橙色强调）、工程约定（base '/admin/'、产物落 static/admin、SPA 回落、双信封统一请求封装）、
-  三态规范与验收清单。30 节 Agent 管理页复用同一套。当用户说「生成管理台页面 / 给管理台加一页 / 管理台
-  前端」时使用。
+  生成 OryxOS 管理台前端页面（Vue 3 + Vite，只读五页 + 定时任务页（010 第一个写操作页，⑦d 例外）调
+  /api/v1 端点）——固化 OryxOS 官网首页的设计 token（深色 + 橙色强调）、工程约定（base '/admin/'、
+  产物落 static/admin、SPA 回落、双信封统一请求封装）、三态规范与验收清单。30 节 Agent 管理页复用同一套。
+  当用户说「生成管理台页面 / 给管理台加一页 / 管理台 前端」时使用。
 user-invocable: true
 disable-model-invocation: false
 ---
@@ -29,8 +29,8 @@ OryxOS 管理平台（`/admin`）与官网首页同源的设计语言——本 s
 1. 技术栈 Vue 3 + Vite（与 website/ 同栈），TypeScript 可选但推荐
 2. `vite.config`：`base: '/admin/'`，`build.outDir` 指向 `oryxos-web/src/main/resources/static/admin/`（相对资源路径）
 3. 前端源码落 `oryxos-web/src/main/frontend/`；构建 = `npm ci && npm run build`（frontend-maven-plugin 绑进 mvn package；后端迭代用 `-Dskip.npm` 跳过）
-4. **只读纪律**：任何页面不得出现新建/编辑/删除按钮——「能管」要等 30 节，界面上不出现假按钮
-5. 只调 `/api/v1` 的 GET 端点；SPA 路由刷新回落由后端配置（前端只管 `createWebHistory('/admin/')` 或 hash 路由）
+4. **只读纪律（⑦d 例外，010-scheduler-mgmt）**：除**定时任务页**外，任何页面不得出现写按钮（新建/编辑/删除）——「能管」要等 30 节，界面上不出现假按钮；定时任务页允许「立即执行」（POST /api/v1/schedules/{id}/run）与「启用·停用」（PUT /api/v1/schedules/{id}）两类写操作——课件 28 节点名的第一个写操作页，其余页面仍只读
+5. 除定时任务页外只调 `/api/v1` 的 GET 端点；SPA 路由刷新回落由后端配置（前端只管 `createWebHistory('/admin/')` 或 hash 路由）
 
 ## 三、双信封统一请求封装（009 拍板 B，页面不得手写两套解析）
 
@@ -62,8 +62,8 @@ export async function apiGet<T>(path: string): Promise<T> {
 
 ## 六、验收清单（生成后逐条核对）
 
-- [ ] 五页（会话列表 / Profile 列表 / Tool 列表 / 长期记忆 / 运行状态）各调一个 GET 端点渲染
-- [ ] 全站无任何写按钮
+- [ ] 六页（会话列表 / Profile 列表 / Tool 列表 / 长期记忆 / 定时任务 / 运行状态）各调对应端点渲染
+- [ ] 除定时任务页（立即执行 / 启用·停用）外全站无任何写按钮（⑦d 例外）
 - [ ] 双信封解析只出现在 `api.ts` 一处（页面无手写 fetch/JSON 解析）
 - [ ] 空/加载/错误三态在每页可见路径上可触达
 - [ ] token 值与本文档逐字一致（深色 #000000 系 + 橙 #f97316 仅强调）
