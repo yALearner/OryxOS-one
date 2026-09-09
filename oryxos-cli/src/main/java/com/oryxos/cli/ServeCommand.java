@@ -18,12 +18,18 @@ public class ServeCommand implements Runnable {
 
   @Override
   public void run() {
-    try (ConfigurableApplicationContext ignored =
+    ConfigurableApplicationContext context =
         new SpringApplicationBuilder(applicationClass())
             .web(WebApplicationType.SERVLET) // 009：真起 Web 容器（Web Service 本体）
             .headless(true)
-            .run()) {
-      // 常驻阻塞：Spring 上下文随 Web 容器运行；try-with-resources 关闭时随容器优雅收尾
+            .run();
+    try {
+      Thread.currentThread().join(); // 常驻阻塞：Tomcat 非 daemon 线程保持进程存活；
+      // Ctrl+C 触发 JVM 关闭钩子（Spring 注册）关闭 context——run() 返回即退出的 bug 修复
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    } finally {
+      context.close();
     }
   }
 

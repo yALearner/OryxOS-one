@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
@@ -14,6 +15,14 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
  */
 @Configuration
 public class AdminSpaConfig implements WebMvcConfigurer {
+
+  @Override
+  public void addViewControllers(ViewControllerRegistry registry) {
+    // 根路径 forward 到 index.html——URL 保持不变（302 会把 URL 改成 /admin/index.html，
+    // 与 vue-router 的 history base '/admin/' 不兼容导致路由无匹配空白页）
+    registry.addViewController("/admin").setViewName("forward:/admin/index.html");
+    registry.addViewController("/admin/").setViewName("forward:/admin/index.html");
+  }
 
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -26,8 +35,17 @@ public class AdminSpaConfig implements WebMvcConfigurer {
               @Override
               protected Resource getResource(String resourcePath, Resource location)
                   throws IOException {
-                Resource requested = location.createRelative(resourcePath);
-                if (requested.exists() && requested.isReadable()) {
+                Resource requested;
+                try {
+                  requested = location.createRelative(resourcePath);
+                } catch (IOException e) {
+                  // /admin/ 根路径等空路径 createRelative 会抛异常——直接回落 index.html
+                  return new ClassPathResource("/static/admin/index.html");
+                }
+                // 目录判断用 URL 尾斜杠（isFile() 对嵌套 jar 内资源恒 false——文件系统与 jar 内都成立的判据）
+                if (requested.exists()
+                    && requested.isReadable()
+                    && !requested.getURL().toString().endsWith("/")) {
                   return requested;
                 }
                 return new ClassPathResource("/static/admin/index.html"); // SPA 回落
