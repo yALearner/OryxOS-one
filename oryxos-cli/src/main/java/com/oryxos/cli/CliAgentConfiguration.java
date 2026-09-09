@@ -23,8 +23,12 @@ import com.oryxos.memory.SaveMemoryTool;
 import com.oryxos.memory.SqliteMemoryStore;
 import com.oryxos.provider.ProviderProperties;
 import com.oryxos.provider.ProviderService;
+import com.oryxos.storage.JpaScheduledTaskStore;
 import com.oryxos.storage.NotifyChannelRepository;
+import com.oryxos.storage.ScheduledTaskRepository;
+import com.oryxos.storage.ScheduledTaskStore;
 import com.oryxos.storage.SessionRepository;
+import com.oryxos.storage.TaskExecutionRepository;
 import com.oryxos.storage.ToolInvocationRepository;
 import com.oryxos.tool.AnnotatedMethodToolAdapter;
 import com.oryxos.tool.FileSandboxProperties;
@@ -140,18 +144,28 @@ public class CliAgentConfiguration {
     return scheduler;
   }
 
+  /** 定时任务状态与历史存储（010-scheduler-mgmt，落位拍板：契约与实现同落 storage）——JPA 实现显式 @Bean（宪法 III 哲学不扫描）。 */
+  @Bean
+  public ScheduledTaskStore scheduledTaskStore(
+      ScheduledTaskRepository taskRepository, TaskExecutionRepository executionRepository) {
+    return new JpaScheduledTaskStore(taskRepository, executionRepository);
+  }
+
   /**
    * 钟推入口（008-scheduler FR-5，宪法 VIII 第三种触发源）：装配时显式调 {@code registerAll()} 替代 @PostConstruct （形态机械适配
-   * ②）；31 节两个定时 Demo 的触发源——schedules 定义在 AGENT.md frontmatter，改 cron 需重启生效。
+   * ②）；31 节两个定时 Demo 的触发源——schedules 定义在 AGENT.md frontmatter，改 cron 需重启生效。010：注册同时登记进
+   * scheduled_tasks（状态与历史重启不丢）。
    */
   @Bean
   public AgentScheduler agentScheduler(
       ThreadPoolTaskScheduler taskScheduler,
       ProfileRegistry registry,
       SessionManager sessionManager,
-      AgentService agentService) {
+      AgentService agentService,
+      ScheduledTaskStore scheduledTaskStore) {
     AgentScheduler scheduler =
-        new AgentScheduler(taskScheduler, registry, sessionManager, agentService);
+        new AgentScheduler(
+            taskScheduler, registry, sessionManager, agentService, scheduledTaskStore);
     scheduler.registerAll();
     return scheduler;
   }

@@ -1,10 +1,11 @@
 <script setup>
-// oryxos-admin-ui skill：左侧竖直导航（深色）+ 右侧内容区；只读五页，无任何写按钮
+// oryxos-admin-ui skill：左侧竖直导航（深色）+ 右侧内容区；只读五页 + 定时任务页（010：第一个写操作页，⑦d 例外条款）
 const navItems = [
   { path: '/sessions', label: '会话列表' },
   { path: '/profiles', label: 'Profile 列表' },
   { path: '/tools', label: 'Tool 列表' },
   { path: '/memory', label: '长期记忆' },
+  { path: '/schedules', label: '定时任务' },
   { path: '/status', label: '运行状态' },
 ]
 </script>

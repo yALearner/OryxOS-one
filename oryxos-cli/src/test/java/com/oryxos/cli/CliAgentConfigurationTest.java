@@ -17,7 +17,9 @@ import com.oryxos.memory.MarkdownMemoryStore;
 import com.oryxos.memory.MemoryServiceImpl;
 import com.oryxos.provider.ProviderService;
 import com.oryxos.storage.NotifyChannelRepository;
+import com.oryxos.storage.ScheduledTaskRepository;
 import com.oryxos.storage.SessionRepository;
+import com.oryxos.storage.TaskExecutionRepository;
 import com.oryxos.storage.ToolInvocationRepository;
 import com.oryxos.tool.ToolRegistry;
 import java.util.List;
@@ -61,6 +63,16 @@ class CliAgentConfigurationTest {
     @Bean
     NotifyChannelRepository notifyChannelRepository() {
       return mock(NotifyChannelRepository.class);
+    }
+
+    @Bean
+    ScheduledTaskRepository scheduledTaskRepository() {
+      return mock(ScheduledTaskRepository.class);
+    }
+
+    @Bean
+    TaskExecutionRepository taskExecutionRepository() {
+      return mock(TaskExecutionRepository.class);
     }
 
     @Bean

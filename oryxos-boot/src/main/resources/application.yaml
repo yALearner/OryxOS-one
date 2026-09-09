@@ -76,6 +76,9 @@ oryxos:
 # 空 = 什么都不允许（fail-closed，不是"不校验"）；任一为空启动打 WARN 诊断。
 # 相对根按启动目录解析（构造期 toAbsolutePath）；配置构造期拷贝、不可热更新——改后须重启。
 # 诚实标注：应用层白名单是劝阻级防线——防模型犯傻误操作、防不住蓄意攻击（软链/DNS rebinding 等不覆盖）。
+# 010 FR-7 Demo 前置：http 白名单「加」三样域名（保留 007 既有条目——存量 weather Agent 的 prompt 写死 wttr.in）：
+# ① 天气源 api.open-meteo.com ② 团队通知 webhook 域名（按实际渠道选一：飞书 *.feishu.cn / 企业微信 qyapi.weixin.qq.com）
+# ③ 新闻源域名按需。file/shell 保持 007 原状（两个 Demo 用不上，不新增放开）。
 file:
   allowed_paths:
     - .oryxos/workspace
@@ -88,6 +91,10 @@ http:
   allowed_domains:
     - wttr.in
     - api.example.com
+    - api.open-meteo.com
+    - "*.feishu.cn"
+    # - qyapi.weixin.qq.com   # 企业微信渠道时启用
+    # - news.example.com      # 新闻源域名按需启用
 
 # 日志
 logging:

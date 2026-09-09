@@ -36,7 +36,8 @@ class ProfileLoaderTest {
       bootstrap:
         - AGENTS.md
       schedules:
-        - cron: "0 8 * * *"
+        - id: weather-8am
+          cron: "0 8 * * *"
           zone: Asia/Shanghai
           message: 生成今日天气和穿搭建议
       settings:
@@ -66,6 +67,7 @@ class ProfileLoaderTest {
     assertThat(profile.channels()).containsExactly("cli");
     assertThat(profile.bootstrap()).containsExactly("AGENTS.md");
     assertThat(profile.schedules()).hasSize(1);
+    assertThat(profile.schedules().get(0).id()).isEqualTo("weather-8am");
     assertThat(profile.schedules().get(0).cron()).isEqualTo("0 8 * * *");
     assertThat(profile.schedules().get(0).zone()).isEqualTo("Asia/Shanghai");
     assertThat(profile.settings().maxIterations()).isEqualTo(8);
@@ -118,6 +120,30 @@ class ProfileLoaderTest {
     Map<String, Profile> loaded = new ProfileLoader().loadAll(tmp, Set.of("deepseek"));
 
     assertThat(loaded).containsOnlyKeys("good-agent");
+  }
+
+  @Test
+  @DisplayName("⑦c：schedules 条目缺 id 启动报错（不静默、不派生兜底）")
+  void scheduleWithoutIdFailsWithClearError(@TempDir Path tmp) throws Exception {
+    Path agentDir = Files.createDirectories(tmp.resolve("no-id-agent"));
+    Files.writeString(
+        agentDir.resolve("AGENT.md"),
+        """
+        ---
+        name: no-id-agent
+        provider:
+          name: deepseek
+        schedules:
+          - cron: "0 8 * * *"
+            message: 早安
+        ---
+        正文
+        """);
+
+    assertThatThrownBy(() -> new ProfileLoader().deriveProfile(agentDir, Set.of("deepseek")))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("no-id-agent")
+        .hasMessageContaining("id");
   }
 
   @Test

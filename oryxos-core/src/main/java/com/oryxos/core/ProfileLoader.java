@@ -78,7 +78,7 @@ public final class ProfileLoader {
     List<String> mcpServers = stringList(fm, "mcp_servers");
     List<String> channels = channelNames(fm);
     List<String> bootstrap = stringList(fm, "bootstrap");
-    List<Profile.Schedule> schedules = schedules(fm);
+    List<Profile.Schedule> schedules = schedules(fm, name);
 
     Map<?, ?> settings = mapValue(fm, "settings").orElse(Map.of());
     Integer maxIterations = intValue(settings, "max_iterations").orElse(null);
@@ -214,7 +214,7 @@ public final class ProfileLoader {
     return result;
   }
 
-  private List<Profile.Schedule> schedules(Map<?, ?> map) {
+  private List<Profile.Schedule> schedules(Map<?, ?> map, String agentName) {
     Object value = map.get("schedules");
     if (!(value instanceof List<?> list)) {
       return List.of();
@@ -222,8 +222,14 @@ public final class ProfileLoader {
     List<Profile.Schedule> result = new ArrayList<>();
     for (Object item : list) {
       if (item instanceof Map<?, ?> scheduleMap) {
+        String id = stringValue(scheduleMap, "id").orElse(null);
+        if (id == null || id.isBlank()) {
+          // ⑦c：id 缺失启动报错——不静默、不派生兜底（兜底退回 008 派生 key 即断链风险复活）
+          throw new IllegalArgumentException("Agent [" + agentName + "] schedules 条目缺少必填项 id");
+        }
         result.add(
             new Profile.Schedule(
+                id,
                 stringValue(scheduleMap, "cron").orElse(null),
                 stringValue(scheduleMap, "zone").orElse(null),
                 stringValue(scheduleMap, "message").orElse(null)));
