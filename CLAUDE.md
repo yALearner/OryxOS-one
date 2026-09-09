@@ -207,7 +207,8 @@ settings:
   max_iterations: 10
   max_history_turns: 20
 schedules:                # 可选定时触发（AgentScheduler 钟推）
-  - cron: "0 0 8 * * *"   # Spring 6 六段含秒（008-scheduler 实测：五段启动报错）
+  - id: weather-8am        # 任务唯一标识（010 补入）：锁 key 与 task_id 直接用 id；跨 Profile 冲突、缺失均启动报错
+    cron: "0 0 8 * * *"   # Spring 6 六段含秒（008-scheduler 实测：五段启动报错）
     zone: Asia/Shanghai
     message: 生成今日天气和穿搭建议
 ---
@@ -444,6 +445,12 @@ provider:
 | Memory 跟 Session 合并成一个概念 | ReAct 循环要分别问两个地方拿上下文 | `MemoryService` 统一门面收口，内部委托 SessionManager + LongTermMemory |
 | 安装带脚本的 Agent 后忽略信任边界 | 脚本绕过 HTTP 域名白名单直接发网络请求 | `shell` 跑脚本 = 信任 Agent 作者；白名单只管解释器+脚本目录 |
 | 忽略了定时任务第三种触发源 | 到点不触发 | `AgentScheduler` 基于 `ThreadPoolTaskScheduler` + `CronTrigger` 动态注册 |
+| javadoc 注释里写 `*/` 序列（如 `last_*/run_count`） | 注释被提前终结，编译报「非法字符/找不到符号」且报错行号错位 | 用顿号或空格拆开：`last_*、run_count`（010 实录） |
+| `mvn -pl 单模块` 不带 `-am` | 依赖模块取本地仓库旧 jar → NoClassDefFoundError/找不到符号（新类不可见） | 加 `-am` 或直接跑全 reactor（010 实录） |
+| IDE 自动构建污染 `target/` | 运行时报 `Unresolved compilation problem`（JDT 产物，javac 增量跳过重编译） | `mvn clean` 后重跑（010 实录） |
+| 同模块多个 @SpringBootTest 共用测试工作区 `.oryxos` | 测试类互踩：删除已打开中的 db 文件 Windows 报错、断言被污染 | 每个测试类专属 db 文件（@DynamicPropertySource 覆盖 url）+ agents 目录整体重建（010 实录） |
+| 前端 `npm ci/build` 报 -4048 | `esbuild.exe` 被残留 vite/杀软进程占用，删不掉装不进 | 先 `Get-Process node` 强杀，再删 node_modules 重装（009/010 实录） |
+| Spring `CronExpression.parse/next` 的 @Nullable 契约不判空 | SpotBugs NP 门禁拦（NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE），verify 红 | 两处显式判空抛 IllegalStateException（010 实录） |
 
 ---
 
